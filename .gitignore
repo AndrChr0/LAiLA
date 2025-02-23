@@ -14,3 +14,7 @@ Thumbs.db
 .idea/
 
 vendor/
+# test files
+ng.zip
+ac.zip
+ol.zip
