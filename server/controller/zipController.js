@@ -23,7 +23,7 @@ async function decompressZip(zip, allowedExtensions) {
       const filePath = path.join("dist", file.path);
       // Read the path and content of each file and push it to the allFilesContent array
       const content = fs.readFileSync(filePath, "utf-8");
-      allFilesContent.push({ path: file.path, content });
+      allFilesContent.push(file.path + content);
     }
 
     return allFilesContent;
