@@ -1,7 +1,9 @@
+import StudentAssignmentAssessmentPage from "./views/student/StudentAssignmentAssessmentPage";
+
 function App() {
   return (
     <>
-      <div className='bg-red-500'>Halla</div>
+      <StudentAssignmentAssessmentPage />
     </>
   );
 }
