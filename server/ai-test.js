@@ -115,131 +115,243 @@ const assignmentDetails = `Oblig#1
   Good luck!`;
 
 const jsonSchema = {
-  name: "StudentAssessmentSchema",
-  schema: {
-    type: "object",
-    properties: {
-      grade: { type: "integer", description: "Grade awarded to the student" },
-      navigation: {
-        type: "object",
-        properties: {
-          navigation_menu: {
-            type: "integer",
-            description: "Score for navigation",
+    name: "idg1292_oblig1",
+    schema: {
+      type: "object",
+      properties: {
+        navigation: {
+          type: "object",
+          properties: {
+            navigation_menu_score: {
+              type: "integer",
+              description: "The page has a navigation menu and it is easy to navigate (all pages) 0 -> no navigation menu or not all pages linked, 1 -> navigation menu but not all pages, 2 -> Yes but some improvements (UX, target!=blank, etc.), 3 -> Perfect"
+            },
+            navigation_menu_feedback: {
+              type: "string",
+              description: "Feedback on the navigation menu and ease of navigation"
+            },
+            proper_html_tags_score: {
+              type: "integer",
+              description: "Criteria (0-3) 0 -> bad, validation errors, etc. 1 -> somewhat ok but with many improvements 2 -> good in general but some extra semantic tags could be used (maybe other semantic tags would be better) 3 -> perfect."
+            },
+            proper_html_tags_feedback: {
+              type: "string",
+              description: "Feedback on HTML tag usage"
+            }
           },
-          proper_html_tags: {
-            type: "integer",
-            description: "Score for proper HTML tag usage",
-          },
+          required: ["navigation_menu_score", "navigation_menu_feedback", "proper_html_tags_score", "proper_html_tags_feedback"]
         },
-        required: ["navigation_menu", "proper_html_tags"],
-      },
-      home_page: {
-        type: "object",
-        properties: {
-          content_requirements: {
-            type: "integer",
-            description: "Score for content completeness",
+        home_page: {
+          type: "object",
+          properties: {
+            content_requirements_score: {
+              type: "integer",
+              description: "Criteria (0-3) 0 -> most of the requirements not met, 1 -> few requirements met, 2 -> most of the requirements met, 3 -> all requirements met."
+            },
+            content_requirements_feedback: {
+              type: "string",
+              description: "Fullfils the following requirements: Image and description about you, Text introducing yourself, List of hobbies, A quotation from a book, song, or movie."
+            },
+            proper_html_tags_score: {
+              type: "integer",
+              description: "Criteria (0-3) 0 -> bad, validation errors, etc. 1 -> somewhat ok but with many improvements 2 -> good in general but some extra semantic tags could be used (maybe other semantic tags would be better) 3 -> perfect."
+            },
+            proper_html_tags_feedback: {
+              type: "string",
+              description: "Feedback on semantic HTML usage"
+            }
           },
-          proper_html_tags: {
-            type: "integer",
-            description: "Score for semantic HTML usage",
-          },
+          required: ["content_requirements_score", "content_requirements_feedback", "proper_html_tags_score", "proper_html_tags_feedback"]
         },
-        required: ["content_requirements", "proper_html_tags"],
-      },
-      resume_page: {
-        type: "object",
-        properties: {
-          content_requirements: {
-            type: "integer",
-            description: "Score for completeness",
+        resume_page: {
+          type: "object",
+          properties: {
+            content_requirements_score: {
+              type: "integer",
+              description: "Criteria (0-3) 0 -> most of the requirements not met, 1 -> few requirements met, 2 -> most of the requirements met, 3 -> all requirements met."
+            },
+            content_requirements_feedback: {
+              type: "string",
+              description: "Feedback on to what degree the following requirements is fulfilled: Academic background, Work experience, List of languages you speak, List of skills."
+            },
+            proper_html_tags_score: {
+              type: "integer",
+              description: "Criteria (0-3) 0 -> bad, validation errors, etc. 1 -> very improvable 2 -> ok with very few improvements (maybe other semantic tags would be better) 3 -> perfect."
+            },
+            proper_html_tags_feedback: {
+              type: "string",
+              description: "Feedback on semantic HTML usage"
+            }
           },
-          proper_html_tags: {
-            type: "integer",
-            description: "Score for semantic HTML usage",
-          },
+          required: ["content_requirements_score", "content_requirements_feedback", "proper_html_tags_score", "proper_html_tags_feedback"]
         },
-        required: ["content_requirements", "proper_html_tags"],
-      },
-      portfolio: {
-        type: "object",
-        properties: {
-          projects: {
-            type: "integer",
-            description: "Score for project descriptions",
+        portfolio: {
+          type: "object",
+          properties: {
+            projects_score: {
+              type: "integer",
+              description: "Criteria (0-3) 0 -> most of the requirements not met, 1 -> few requirements met, 2 -> most of the requirements met, 3 -> all requirements met."
+            },
+            projects_feedback: {
+              type: "string",
+              description: "Feedback on project descriptions. There should be three projects with title, short description, and image."
+            },
+            proper_html_tags_score: {
+              type: "integer",
+              description: "Score for proper HTML usage"
+            },
+            proper_html_tags_feedback: {
+              type: "string",
+              description: "Criteria (0-3) 0 -> bad, validation errors, etc. 1 -> very improvable 2 -> ok with very few improvements (maybe other semantic tags would be better) 3 -> perfect."
+            }
           },
-          proper_html_tags: {
-            type: "integer",
-            description: "Score for proper HTML usage",
-          },
+          required: ["projects_score", "projects_feedback", "proper_html_tags_score", "proper_html_tags_feedback"]
         },
-        required: ["projects", "proper_html_tags"],
-      },
-      contact_page: {
-        type: "object",
-        properties: {
-          content_requirements: {
-            type: "integer",
-            description: "Score for completeness of contact info",
+        contact_page: {
+          type: "object",
+          properties: {
+            content_requirements_score: {
+              type: "integer",
+              description: "Criteria (0-3) 0 -> most of the requirements not met, 1 -> few requirements met, 2 -> most of the requirements met, 3 -> all requirements met."
+            },
+            content_requirements_feedback: {
+              type: "string",
+              description: "Show all your contact information as well as links to your social websites (e.g.: Facebook, Twitter, LinkedIn, Instagram, etc.). You must include at least 3 different social networks. The links must work properly. However, you don’t need to link them to your real social networks if you don’t want to do so. A link to the main page of the social platform would suffice. Do not forget to include an email address and phone number."
+            },
+            proper_html_tags_score: {
+              type: "integer",
+              description: "Score for correct HTML elements"
+            },
+            proper_html_tags_feedback: {
+              type: "string",
+              description: "Criteria (0-3) 0 -> bad, validation errors, etc. 1 -> very improvable 2 -> ok with very few improvements (maybe other semantic tags would be better) 3 -> perfect."
+            }
           },
-          proper_html_tags: {
-            type: "integer",
-            description: "Score for correct HTML elements",
-          },
+          required: ["content_requirements_score", "content_requirements_feedback", "proper_html_tags_score", "proper_html_tags_feedback"]
         },
-        required: ["content_requirements", "proper_html_tags"],
-      },
-      about: {
-        type: "object",
-        properties: {
-          reflection: {
-            type: "integer",
-            description: "Score for reflection on design choices",
+        about: {
+          type: "object",
+          properties: {
+            reflection_score: {
+              type: "integer",
+              description: "Criteria (0-3) 0 -> most of the requirements not met, 1 -> few requirements met, 2 -> most of the requirements met, 3 -> all requirements met (sketch is expected)."
+            },
+            reflection_feedback: {
+              type: "string",
+              description: "Feedback on reflection level of process and preperation"
+            }
           },
+          required: ["reflection_score", "reflection_feedback"]
         },
-        required: ["reflection"],
-      },
-      general_comments: {
-        type: "array",
-        items: {
+        general_comments: {
+          type: "object",
+          properties: {
+          use_of_semantic_structural_tags_score: {
+             type: "integer",
+             description: "Criteria (0-1) 0 -> no semantic tags or not fullfilling requirements, 1 -> otherwise"
+           },
+          use_of_semantic_structural_tags_feedback: {
+             type: "string",
+            description: "Feedback on the use of semantic and structural tags"
+          },
+           project_structure_score: {
+             type: "integer",
+             description: "Criteria (0-1) (read about page with reflection) 0 if wrong structure (overstructured and not well reasoned). 1 otherwise."
+          },
+          project_structure_feedback: {
+            type: "string",
+            description: "Feedback on project structure"
+          },
+          bringing_css_and_html_together_score: {
+            type: "integer",
+            description: "Criteria (0-1) 0 -> no external 1 -> use external CSS(no inline or embedded). Embed only under proper circumstances."
+          },
+          bringing_css_and_html_together_feedback: {
+            type: "string",
+            description: "Feedback on bringing CSS and HTML together"
+          },
+          css_optimization_score: {
+            type: "integer",
+            description: "Criteria (0-1) 0 -> hard to maintain CSS, 1 -> good css, grouping things together, reusing CSS rules, good naming conventions, etc."
+          },
+          css_optimization_feedback: {
+            type: "string",
+            description: "Feedback on CSS optimization"
+          },
+          code_readability_score: {
+            type: "integer",
+            description: "Criteria (0-1) 1 -> Very well structured code, easy to read 0-> otherwise"
+          },
+          
+          code_readability_feedback: {
+            type: "string",
+            description: "Feedback on code readability"
+          },
+          user_readability_score: {
+            type: "integer",
+            description: "Criteria (0-1) 0 -> bad (spacing, margins, alignment, overlapping) 1 -> good or very good"
+          },
+          user_readability_feedback: {
+            type: "string",
+            description: "Feedback on user readability"
+          },
+          seo_score: {
+            type: "integer",
+            description: "Criteria (0-1) All pages have a proper title (different per page and meaningful). Each page has a different short description, also meaningful. Files and images have coherent names describing the contents. 0 -> not met 1 -> almost everything above met."
+        },
+        seo_feedback: {
           type: "string",
-          description: "General comments on project quality",
+          description: "Feedback on SEO"
         },
+        naming_conventions_score: {
+          type: "integer",
+          description: "Criteria (0-1) The files are properly named. No capital letters, no spaces, use '-' to split words (but we accept '_'), names describe the content of the file (especially images), etc. 0 -> not met 1 -> most of the criteria above met."
       },
-      final_comments: { type: "string", description: "Final summary feedback" },
-      other_comments: {
+      naming_conventions_feedback: {
         type: "string",
-        description: "Other remarks from the evaluator",
+        description: "Feedback on naming conventions"
       },
-      validation_errors: {
-        type: "string",
-        description:
-          "Errors found in validation (HTML, CSS, etc.) If the HTML or CSS is not valid, the assignment is failed, regardless of overall score",
-      },
-      positioning_problems: {
-        type: "string",
-        description:
-          "Issues related to layout and responsiveness. If overflow is detected, the assignment is failed, regardless of overall score",
-      },
+      design_score: {
+        type: "integer",
+        description: "Criteria (0-1) -> 0 or 1. Use objective facts. Elements well aligned, good spacing, coherent and consistent design (same headings among pages and colors, elements not overflowing parent container)."
     },
-    required: [
-      "grade",
-      "navigation",
-      "home_page",
-      "resume_page",
-      "portfolio",
-      "contact_page",
-      "about",
-      "general_comments",
-      "final_comments",
-      "other_comments",
-      "validation_errors",
-      "positioning_problems",
-    ],
-    additionalProperties: false,
+    design_feedback: {
+      type: "string",
+      description: "Feedback on design"
+    },
+    final_comments: {
+      type: "string",
+      description: "General comments about the project as a whole. What was good, what was bad, what could be improved, etc."
+    }
   },
+
+      required: [
+        "use_of_semantic_structural_tags_score",
+        "use_of_semantic_structural_tags_feedback",
+        "project_structure_score",
+        "project_structure_feedback",
+        "bringing_css_and_html_together_score",
+        "bringing_css_and_html_together_feedback",
+        "css_optimization_score",
+        "css_optimization_feedback",
+        "code_readability_score",
+        "code_readability_feedback",
+        "user_readability_score",
+        "user_readability_feedback",
+        "seo_score",
+        "seo_feedback",
+        "naming_conventions_score",
+        "naming_conventions_feedback",
+        "design_score",
+        "design_feedback",
+        "final_comments"
+      ],
+      additionalProperties: false
+    }
+  }
+},
 };
+  
 
 const completion = await openai.chat.completions.create({
   model: "gpt-4o",
