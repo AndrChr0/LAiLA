@@ -389,27 +389,5 @@ const completion = await openai.chat.completions.create({
   ], 
 });
 
-// const completion = await openai.chat.completions.create({
-//   model: "gpt-4o",
-//   response_format: { type: "json_schema", json_schema: jsonSchema },
-//   messages: [
-//     {
-//       role: "system",
-//       content:
-//         "You are an AI code evaluator. Provide feedback based on the given assessment criteria.",
-//     },
-//     {
-//       role: "user",
-//       content: `Evaluate the following student submission according to the provided assessment criteria. 
-//             Fill out the JSON object and return a response strictly in the given format.
-
-//             Assessment Criteria: ${JSON.stringify(jsonSchema)}
-
-//             Assignment Description: ${assignmentDetails}
-
-//             Student Submission: ${submissionString}`,
-//     },
-//   ],
-// });
 
 console.log(JSON.stringify(completion.choices[0].message.content, null, 2));
