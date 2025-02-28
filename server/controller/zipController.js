@@ -6,7 +6,6 @@ import fs from "fs";
 
 async function decompressZip(zip, allowedExtensions) {
   try {
-    // Ensure the dist directory exists
     if (!fs.existsSync("dist")) {
       fs.mkdirSync("dist");
     }
@@ -16,7 +15,9 @@ async function decompressZip(zip, allowedExtensions) {
       filter: (file) =>
         // EXAMPLE: allowedExtensions = [".js", ".css", ".html"] (include DOTS)
         allowedExtensions.includes(path.extname(file.path)),
+        
     });
+
 
     const allFilesContent = [];
     for (let file of files) {
@@ -24,6 +25,7 @@ async function decompressZip(zip, allowedExtensions) {
       // Read the path and content of each file and push it to the allFilesContent array
       const content = fs.readFileSync(filePath, "utf-8");
       allFilesContent.push(file.path + content);
+      console.log("File path:", file.path);
     }
 
     return allFilesContent;
@@ -44,8 +46,16 @@ const getZipcontents = async (req, res) => {
   }
 
   const zipContents = await decompressZip(zipFile, allowedExtensions);
-  console.log("Zip contents:", zipContents);
-  res.send(zipContents);
+
+  if (zipContents.length > 0) {
+    console.log("Zip contents:", zipContents);
+    res.send(zipContents);
+  } else {
+    console.log("no files found in zip");
+    return res.status(400).send("No files found in zip"); 
+  }
+
+ 
 };
 
 export default getZipcontents;
