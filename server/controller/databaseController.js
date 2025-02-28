@@ -18,10 +18,10 @@ const pool = mysql.createPool({
     // const rows = result[0]
     // console.log(rows)
 
-export async function getUsers() {
+export async function getUsers(req, res) {
 // Desctructuring the result method
     const [rows] = await pool.query("SELECT * FROM users") 
-    return rows
+    res.send(rows);
 }
 
 // ****
