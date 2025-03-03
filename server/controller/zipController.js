@@ -1,6 +1,7 @@
 import decompress from "decompress";
 import path from "path";
 import fs from "fs";
+import evaluateSubmission from "../ai-test.js";
 
 // FOR TESTING: zip has to be in server folder
 
@@ -15,9 +16,7 @@ async function decompressZip(zip, allowedExtensions) {
       filter: (file) =>
         // EXAMPLE: allowedExtensions = [".js", ".css", ".html"] (include DOTS)
         allowedExtensions.includes(path.extname(file.path)),
-        
     });
-
 
     const allFilesContent = [];
     for (let file of files) {
@@ -49,13 +48,14 @@ const getZipcontents = async (req, res) => {
 
   if (zipContents != []) {
     console.log("Zip contents:", zipContents);
-    res.send(zipContents);
+    // res.send(zipContents);
+    const evaluatedSubmission = await evaluateSubmission(zipContents);
+
+    res.send(evaluatedSubmission);
   } else {
     console.log("no files found in zip");
-    return res.status(400).send("No files found in zip"); 
+    return res.status(400).send("No files found in zip");
   }
-
- 
 };
 
 export default getZipcontents;
