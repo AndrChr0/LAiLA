@@ -50,17 +50,16 @@ export const login = async (req, res) => {
     try {
         const email = req.body.email;
         const password = req.body.password;
-
         const [rows] = await pool.query('SELECT * FROM users WHERE email = ?', [email]);
+        const user = rows[0];
+        const validPassword = await bcrypt.compare(password, user.password);
 
         if (rows.length === 0) {
             return res.status(400).json({ message: 'Email could not be found in database.' });
         }
 
-        const user = rows[0];
-
-        const validPassword = await bcrypt.compare(password, user.password);
         if (!validPassword) {
+            console.error(error);
             return res.status(400).json({ message: 'Invalid password.' });
         }
 
