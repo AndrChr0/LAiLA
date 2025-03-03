@@ -28,3 +28,21 @@ CREATE TABLE enrollment (
     FOREIGN KEY (student_id) REFERENCES users(user_id),
     FOREIGN KEY (course_id) REFERENCES courses(course_id)
 );
+
+CREATE TABLE assignments (
+    assignment_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    assignment_name VARCHAR(255) NOT NULL,
+    assignment_start_date DATE NOT NULL,
+    assignment_end_date DATE NOT NULL,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    assignment_description TEXT NOT NULL,
+    assignment_criteria TEXT NOT NULL,
+    course_id SMALLINT NOT NULL,
+    assignment_attempts TINYINT UNSIGNED NOT NULL,
+    PRIMARY KEY (assignment_id),
+    FOREIGN KEY (course_id) REFERENCES courses(course_id),
+    CHECK (assignment_attempts > 0 AND assignment_attempts <= 5)
+);
+
+
+
