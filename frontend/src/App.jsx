@@ -1,9 +1,10 @@
 import StudentAssignmentAssessmentPage from "./views/student/StudentAssignmentAssessmentPage";
+import UploadAssignmentAssessment from "./views/student/UploadAssignmentAssessment";
 
 function App() {
   return (
     <>
-      <StudentAssignmentAssessmentPage />
+      <UploadAssignmentAssessment />
     </>
   );
 }
