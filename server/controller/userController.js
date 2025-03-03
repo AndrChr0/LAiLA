@@ -33,7 +33,7 @@ export async function getUser(id){
         SELECT * FROM users
         WHERE id = ?
         `, [id])
-        return rows[0]
+    return rows[0]
 }
 
 
