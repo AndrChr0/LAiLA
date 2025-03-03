@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import aiZipRoutes from "./routes/zipRoutes.js";
 import databaseRoutes from "./routes/databaseRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
 
 const app = express();
 dotenv.config({ path: "../.env" });
@@ -12,6 +13,8 @@ app.use(express.json());
 app.use("/api/ai", aiZipRoutes);
 
 app.use("/api/users", databaseRoutes);
+
+app.use("/api/auth", authRoutes);
 
 
 app.listen(PORT, () => {
