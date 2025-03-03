@@ -4,6 +4,8 @@ import axios from "axios";
 function UploadAssignmentAssessment() {
   const [feedback, setFeedback] = useState("");
   const [file, setFile] = useState(null);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   // demo - fix selection
   const allowedExtensions = [".css", ".html"];
@@ -12,12 +14,23 @@ function UploadAssignmentAssessment() {
     setFile(e.target.files[0]);
   }
 
+  console.log("file:", file);
+
   async function uploadFile() {
     try {
       if (!file) {
-        alert("Please select a .zip file first!");
+        setError("Please upload a zip file.");
         return;
       }
+
+      if (file.type != "application/x-zip-compressed") {
+        setError("Please upload a zip file.");
+        return;
+      }
+
+      setError("");
+      setLoading(true);
+
       console.log("Uploading file...");
 
       const formData = new FormData();
@@ -37,22 +50,38 @@ function UploadAssignmentAssessment() {
       );
 
       console.log("Server response:", response.data);
+      setFile(null);
       setFeedback(response.data?.final_assessments?.final_comments || "");
+      setLoading(false);
     } catch (error) {
       console.error(error);
+      setError(error.message);
+      setLoading(false);
     }
   }
 
   return (
-    <div className='flex flex-col items-center'>
-      <h2>Upload Project Zip file</h2>
-      <input
-        className='border border-gray-400 p-2'
-        type='file'
-        name='zipUpload'
-        onChange={handleFileChange}
-      />
-      <button onClick={uploadFile}>Submit</button>
+    <div className='flex flex-col'>
+      <h2 className='font-light text-xl'>Upload Project Zip file</h2>
+      <div className='flex flex-col w-4/5'>
+        <input
+          className='p-2 m-2 border border-gray-300 bg-gray-50 rounded hover:bg-gray-100 hover:cursor-pointer'
+          type='file'
+          name='zipUpload'
+          onChange={handleFileChange}
+        />
+        {file && (
+          <button
+            disabled={loading}
+            className='h-10 px-5 m-2 text-white transition-colors duration-150 bg-[#2b6cb0] rounded-lg focus:shadow-outline hover:bg-[#2c5282]'
+            onClick={uploadFile}
+          >
+            Submit
+          </button>
+        )}
+      </div>
+      {error && <p className='text-red-500'>{error}</p>}
+      {loading && <p>Processing...</p>}
       {feedback && (
         <div>
           <h3>Feedback:</h3>

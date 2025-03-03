@@ -1,6 +1,11 @@
+import UploadAssignmentAssessment from "./UploadAssignmentAssessment";
 
 function StudentAssignmentAssessmentPage() {
-  return <div>StudentAssignmentAssessmentPage</div>;
+  return (
+    <>
+      <UploadAssignmentAssessment />
+    </>
+  );
 }
 
 export default StudentAssignmentAssessmentPage;
