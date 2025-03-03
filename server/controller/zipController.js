@@ -1,14 +1,16 @@
 import decompress from "decompress";
 import path from "path";
 import fs from "fs";
-import evaluateSubmission from "../ai-test.js";
+import evaluateSubmission from "../AIFunctionalities/aiZipFunctions.js";
 
+// https://www.geeksforgeeks.org/node-js-fs-rm-method/
 function deleteZipFileContent() {
   fs.rm("zipDist", { recursive: true, force: true }, (err) => {
     if (err) {
       console.error("Error removing zipDist folder:", err);
     } else {
       console.log("Deleted zipDist folder.");
+      fs.mkdirSync("zipDist");
     }
 
     fs.rm("ClientZipUploads", { recursive: true, force: true }, (err2) => {
@@ -16,6 +18,7 @@ function deleteZipFileContent() {
         console.error("Error removing ClientZipUploads folder:", err2);
       } else {
         console.log("Deleted ClientZipUploads folder.");
+        fs.mkdirSync("ClientZipUploads");
       }
     });
   });
@@ -61,8 +64,7 @@ const getZipcontents = async (req, res) => {
     try {
       parsedExtensions = JSON.parse(allowedExtensions);
     } catch (err) {
-      console.warn("Could not parse allowedExtensions as JSON:", err);
-      // fallback or handle error
+      console.log("Could not parse allowedExtensions as JSON:", err);
     }
 
     // Decompress the zip using the uploaded file path
