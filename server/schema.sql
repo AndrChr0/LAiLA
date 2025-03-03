@@ -21,4 +21,10 @@ CREATE TABLE courses (
     FOREIGN KEY (course_coordinator) REFERENCES users(user_id)
 );
 
-
+CREATE TABLE enrollment (
+    student_id SMALLINT NOT NULL,
+    course_id SMALLINT NOT NULL,
+    PRIMARY KEY (student_id, course_id),
+    FOREIGN KEY (student_id) REFERENCES users(user_id),
+    FOREIGN KEY (course_id) REFERENCES courses(course_id)
+);
