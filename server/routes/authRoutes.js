@@ -1,8 +1,8 @@
 import express from "express";
 const router = express.Router();
 import register from "../controller/authController.js";
+import verifyRegisterInput from "../middleware/checkConstraints.js";
 
-// mangler verifyInput middleware. sjekk fullstack exam repo
-router.post("/register", register)
+router.post("/register", verifyRegisterInput, register)
 
 export default router;
