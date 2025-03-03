@@ -1,61 +1,90 @@
 import decompress from "decompress";
 import path from "path";
 import fs from "fs";
+import evaluateSubmission from "../AIFunctionalities/aiZipFunctions.js";
 
-// FOR TESTING: zip has to be in server folder
+// https://www.geeksforgeeks.org/node-js-fs-rm-method/
+function deleteZipFileContent() {
+  fs.rm("zipDist", { recursive: true, force: true }, (err) => {
+    if (err) {
+      console.error("Error removing zipDist folder:", err);
+    } else {
+      console.log("Deleted zipDist folder.");
+      fs.mkdirSync("zipDist");
+    }
 
-async function decompressZip(zip, allowedExtensions) {
+    fs.rm("ClientZipUploads", { recursive: true, force: true }, (err2) => {
+      if (err2) {
+        console.error("Error removing ClientZipUploads folder:", err2);
+      } else {
+        console.log("Deleted ClientZipUploads folder.");
+        fs.mkdirSync("ClientZipUploads");
+      }
+    });
+  });
+}
+
+async function decompressZip(zipPath, allowedExtensions) {
   try {
     if (!fs.existsSync("zipDist")) {
       fs.mkdirSync("zipDist");
     }
 
-    // Decompress the zip file and filter out file types that are not allowed
-    const files = await decompress(zip, "zipDist", {
-      filter: (file) =>
-        // EXAMPLE: allowedExtensions = [".js", ".css", ".html"] (include DOTS)
-        allowedExtensions.includes(path.extname(file.path)),
-        
+    // Decompress the zip file while filtering out unwanted file types
+    const files = await decompress(zipPath, "zipDist", {
+      filter: (file) => allowedExtensions.includes(path.extname(file.path)),
     });
-
 
     const allFilesContent = [];
     for (let file of files) {
       const filePath = path.join("zipDist", file.path);
-      // Read the path and content of each file and push it to the allFilesContent array
       const content = fs.readFileSync(filePath, "utf-8");
-      allFilesContent.push(file.path + content);
-      console.log("File path:", file.path);
+      allFilesContent.push(`${file.path}${content}`);
+      console.log("Decompressed:", file.path);
     }
 
     return allFilesContent;
   } catch (error) {
-    console.log("decompressZip error", error);
+    console.error("decompressZip error:", error);
+    throw error;
   }
 }
 
 const getZipcontents = async (req, res) => {
-  const zipFile = req.body.zipFile;
-  const allowedExtensions = req.body.allowedExtensions;
+  try {
+    const file = req.file;
+    console.log("File uploaded:", file);
+    const { allowedExtensions } = req.body;
+    let parsedExtensions = [];
 
-  if (!zipFile || !allowedExtensions) {
-    console.log("Missing zipFile or allowedExtensions in request body");
-    return res
-      .status(400)
-      .send("Missing zipFile or allowedExtensions in request body");
+    if (!file) {
+      return res.status(400).send("No file was uploaded.");
+    }
+
+    try {
+      parsedExtensions = JSON.parse(allowedExtensions);
+    } catch (err) {
+      console.log("Could not parse allowedExtensions as JSON:", err);
+    }
+
+    // Decompress the zip using the uploaded file path
+    const zipContents = await decompressZip(file.path, parsedExtensions);
+
+    if (!zipContents.length) {
+      console.log("No files found in zip after filtering.");
+      return res.status(400).send("No files found in zip after filtering.");
+    }
+
+    // Evaluate
+    const evaluatedSubmission = await evaluateSubmission(zipContents);
+    if (evaluatedSubmission) {
+      deleteZipFileContent();
+    }
+    res.send(evaluatedSubmission);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("An error occurred while decompressing.");
   }
-
-  const zipContents = await decompressZip(zipFile, allowedExtensions);
-
-  if (zipContents != []) {
-    console.log("Zip contents:", zipContents);
-    res.send(zipContents);
-  } else {
-    console.log("no files found in zip");
-    return res.status(400).send("No files found in zip"); 
-  }
-
- 
 };
 
 export default getZipcontents;
