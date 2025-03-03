@@ -1,1 +1,1 @@
-AI Tutor
+AI Tutor Project
