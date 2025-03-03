@@ -44,5 +44,19 @@ CREATE TABLE assignments (
     CHECK (assignment_attempts > 0 AND assignment_attempts <= 5)
 );
 
+CREATE TABLE assignment_feedback (
+    feedback_id MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    assignment_id SMALLINT NOT NULL,
+    student_id SMALLINT NOT NULL,
+    feedback_contents JSON NOT NULL,
+    attempt_nr TINYINT UNSIGNED NOT NULL,
+    PRIMARY KEY (feedback_id),
+    FOREIGN KEY (assignment_id) REFERENCES assignments(assignment_id),
+    FOREIGN KEY (student_id) REFERENCES users(user_id)
+);
+
+
+
+
 
 
