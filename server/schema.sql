@@ -1,5 +1,5 @@
-CREATE DATABASE ai_tutor_db2;
-USE ai_tutor_db2;
+CREATE DATABASE ai_tutor_db;
+USE ai_tutor_db;
 
 CREATE TABLE users (
     user_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -55,16 +55,16 @@ CREATE TABLE assignment_feedback (
 );
 
 INSERT INTO users (first_name, last_name, role, email, password) VALUES
-('Ola', 'Nsk', 'student', 'olansk@ntnu', '123abc'),
-('Chris', 'NG', 'student', 'chrisng@ntnu', '123abc'),
-('Andy', 'Chr', 'student', 'andychr@ntnu', '123abc'),
-('Car', 'Loss', 'lecturer', 'carlos@ntnu', '123abc'),
-('Left', 'Y', 'lecturer', 'elefths@ntnu', '123abc'),
-('Terje', 'Script', 'lecturer', 'tjts@ntnu', '123abc'),
-('Luvin', 'Ragoo', 'lecturer', 'mrragoo@ntnu', '123abc'),
-('Nipuna', 'Wee', 'lecturer', 'wutang@ntnu', '123abc'),
-('Emil', 'Bakk', 'lecturer', 'emba@ntnu', '123abc'),
-('Paul', 'Knut', 'lecturer', 'apku@ntnu', '123abc');
+('Ola', 'Nsk', 'student', 'olansk@ntnu', '$2b$10$72WZIieimJ17Kmtfo50FXuAbFDybh.fwrbQhsCKwEevrdpxGrrjXS'),
+('Chris', 'NG', 'student', 'chrisng@ntnu', '$2b$10$72WZIieimJ17Kmtfo50FXuAbFDybh.fwrbQhsCKwEevrdpxGrrjXS'),
+('Andy', 'Chr', 'student', 'andychr@ntnu', '$2b$10$72WZIieimJ17Kmtfo50FXuAbFDybh.fwrbQhsCKwEevrdpxGrrjXS'),
+('Car', 'Loss', 'lecturer', 'carlos@ntnu', '$2b$10$72WZIieimJ17Kmtfo50FXuAbFDybh.fwrbQhsCKwEevrdpxGrrjXS'),
+('Left', 'Y', 'lecturer', 'elefths@ntnu', '$2b$10$72WZIieimJ17Kmtfo50FXuAbFDybh.fwrbQhsCKwEevrdpxGrrjXS'),
+('Terje', 'Script', 'lecturer', 'tjts@ntnu', '$2b$10$72WZIieimJ17Kmtfo50FXuAbFDybh.fwrbQhsCKwEevrdpxGrrjXS'),
+('Luvin', 'Ragoo', 'lecturer', 'mrragoo@ntnu', '$2b$10$72WZIieimJ17Kmtfo50FXuAbFDybh.fwrbQhsCKwEevrdpxGrrjXS'),
+('Nipuna', 'Wee', 'lecturer', 'wutang@ntnu', '$2b$10$72WZIieimJ17Kmtfo50FXuAbFDybh.fwrbQhsCKwEevrdpxGrrjXS'),
+('Emil', 'Bakk', 'lecturer', 'emba@ntnu', '$2b$10$72WZIieimJ17Kmtfo50FXuAbFDybh.fwrbQhsCKwEevrdpxGrrjXS'),
+('Paul', 'Knut', 'lecturer', 'apku@ntnu', '$2b$10$72WZIieimJ17Kmtfo50FXuAbFDybh.fwrbQhsCKwEevrdpxGrrjXS');
 
 INSERT INTO courses (course_code, course_name, course_description, course_coordinator) VALUES
 ('IDG1292', 'Webcoding', 'lorem ipsum', 4),
