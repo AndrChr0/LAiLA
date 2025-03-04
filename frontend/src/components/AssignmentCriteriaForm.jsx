@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 
 function AssignmentCriteriaForm() {
-  const [schemaName, setSchemaName] = useState("idg1292_oblig1");
+  const [schemaName, setSchemaName] = useState("new_schema");
   const [sections, setSections] = useState([
     {
-      sectionId: crypto.randomUUID(), // uniqe ID
+      sectionId: crypto.randomUUID(),
       sectionName: "navigation",
       subsections: [
         {
@@ -13,13 +13,6 @@ function AssignmentCriteriaForm() {
           scoreDescription:
             "Criteria (0-3) 0 -> no menu, 1 -> partial, 2 -> good, 3 -> perfect",
           feedbackDescription: "Feedback on navigation menu",
-        },
-        {
-          subsectionId: crypto.randomUUID(),
-          subsectionName: "proper_html_tags",
-          scoreDescription:
-            "Criteria (0-3) 0 -> bad HTML, 1 -> fixable, 2 -> mostly good, 3 -> perfect",
-          feedbackDescription: "Feedback on proper HTML usage",
         },
       ],
     },
@@ -123,8 +116,11 @@ function AssignmentCriteriaForm() {
 
       // for each subsection, create two fields: *_score and *_feedback
       section.subsections.forEach((sub) => {
-        const scoreKey = `${sub.subsectionName}_score`;
-        const feedbackKey = `${sub.subsectionName}_feedback`;
+        const scoreKey = `${sub.subsectionName.replace(/\s+/g, "_")}_score`;
+        const feedbackKey = `${sub.subsectionName.replace(
+          /\s+/g,
+          "_"
+        )}_feedback`;
 
         sectionProperties[scoreKey] = {
           type: "integer",
@@ -147,21 +143,30 @@ function AssignmentCriteriaForm() {
       };
     });
 
+    schemaObject.schema.properties.AI_final_assessment = {
+      type: "object",
+      properties: {
+        AI_final_comments: {
+          type: "string",
+          description:
+            "General comments about the submission as a whole. What was good, what was bad, what could be improved.",
+        },
+      },
+      required: ["AI_final_comments"],
+    };
+
     return schemaObject;
   };
 
   const handleGenerateClick = () => {
     const generated = generateJsonSchema();
     console.log("Generated JSON Schema:", generated);
-    alert("Check your console for the generated JSON schema!");
   };
 
   return (
     <div className='max-w-4xl mx-auto p-6 bg-white shadow-md rounded-md'>
-      {/* Form Title */}
       <h2 className='text-2xl font-bold mb-4'>Assignment Criteria Form</h2>
 
-      {/* Schema Name Section */}
       <div className='mb-4'>
         <label className='block font-semibold mb-1'>Schema Name:</label>
         <input
@@ -174,14 +179,12 @@ function AssignmentCriteriaForm() {
 
       <hr className='my-4' />
 
-      {/* Sections Title */}
       <h3 className='text-xl font-bold mb-2'>Sections</h3>
       {sections.map((section) => (
         <div
           key={section.sectionId}
           className='mb-6 p-4 border border-gray-200 rounded-md'
         >
-          {/* Section Header with Name Input and Remove Button */}
           <div className='flex items-center justify-between mb-2'>
             <div className='flex-1'>
               <label className='block font-medium mb-1'>Section Name:</label>
@@ -202,7 +205,6 @@ function AssignmentCriteriaForm() {
             </button>
           </div>
 
-          {/* Subsections */}
           <div className='mt-4'>
             <h4 className='text-lg font-semibold mb-2'>Subsections</h4>
             {section.subsections.map((sub) => (
@@ -210,7 +212,6 @@ function AssignmentCriteriaForm() {
                 key={sub.subsectionId}
                 className='mb-4 p-4 border border-gray-200 rounded-md'
               >
-                {/* Subsection Name */}
                 <div className='mb-3'>
                   <label className='block font-medium mb-1'>
                     Subsection Name:
@@ -230,7 +231,6 @@ function AssignmentCriteriaForm() {
                   />
                 </div>
 
-                {/* Score Description */}
                 <div className='mb-3'>
                   <label className='block font-medium mb-1'>
                     Score Description:
@@ -250,7 +250,6 @@ function AssignmentCriteriaForm() {
                   />
                 </div>
 
-                {/* Feedback Description */}
                 <div className='mb-3'>
                   <label className='block font-medium mb-1'>
                     Feedback Description:
@@ -270,7 +269,6 @@ function AssignmentCriteriaForm() {
                   />
                 </div>
 
-                {/* Remove Subsection Button */}
                 <button
                   className='bg-red-500 text-white px-3 py-2 rounded-md hover:bg-red-600'
                   onClick={() =>
@@ -282,7 +280,6 @@ function AssignmentCriteriaForm() {
               </div>
             ))}
 
-            {/* Add Subsection Button */}
             <button
               className='bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600'
               onClick={() => handleAddSubsection(section.sectionId)}
@@ -293,7 +290,6 @@ function AssignmentCriteriaForm() {
         </div>
       ))}
 
-      {/* Add Section Button */}
       <button
         className='bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 mb-4'
         onClick={handleAddSection}
@@ -303,7 +299,6 @@ function AssignmentCriteriaForm() {
 
       <hr className='my-4' />
 
-      {/* Generate JSON Schema Button */}
       <button
         className='bg-purple-500 text-white px-6 py-3 rounded-md hover:bg-purple-600'
         onClick={handleGenerateClick}
