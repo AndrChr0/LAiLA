@@ -6,8 +6,8 @@ import NotFoundPage from "./views/shared/NotFoundPage";
 import RegisterPage from "./views/shared/RegisterPage";
 import LoginPage from "./views/shared/LoginPage";
 import StudentHomePage from "./views/student/StudentHomePage";
-
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import ProtectedRoute from "./protectedroute/ProtectedRoute";
 
 function App() {
   return (
@@ -21,7 +21,7 @@ function App() {
 
 
 
-          <Route path='/student-homepage-placeholder' element={<StudentHomePage />}/>
+          <Route path='/student-homepage-placeholder' element={ <ProtectedRoute roles={["student"]}><StudentHomePage /></ProtectedRoute> }/>
           <Route
             path='/assignment-assessment'
             element={<StudentAssignmentAssessmentPage />}

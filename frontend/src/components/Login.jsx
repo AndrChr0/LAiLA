@@ -1,30 +1,46 @@
-import React, { use } from 'react'
+import React from 'react'
+import { useNavigate } from "react-router-dom";
 import { useState } from 'react'
 import axios from 'axios'
+import { useAuth } from '../context/AuthContext' 
+import { jwtDecode } from "jwt-decode"
 
 
 const Login = () => {
-    const [firstName, setFirstName] = useState('')
-    const [lastName, setLastName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [role, setRole] = useState('student')
+    const navigate = useNavigate();
+    const { login } = useAuth();
 
 
-    const handleLoginUser = (e) => {
+    const handleLoginUser = async (e) => {
         e.preventDefault()
-        
-        axios.post('http://localhost:5310/api/auth/login', {
-            email: email,
-            password: password,
-        })
-        .then(response => {
-            console.log(response)
-            window.location.href = '/student-homepage-placeholder'
-        })
-        .catch(error => {
-            console.error('There was an error registering the user:', error)
-        })
+
+
+        try{
+            const response = await axios.post("http://localhost:5310/api/auth/login", {email, password})
+
+            const token = response.data.accessToken
+
+            if (token){
+                login(token)
+                if (token) {
+                    const decoded = jwtDecode(token)
+
+                    const redirectTo =
+                        decoded.role === "lecturer" ? "/lecturer-homepage-placeholder" : "/student-homepage-placeholder"
+                        navigate(redirectTo)
+                }
+            } else {
+                console.error('Token not found in repsonse', response.data)
+            }
+        } catch (error) {
+            if (!email || !password) {
+                const errMessage = "Please log in with email and password."
+            } else {
+                const errMessage = "Invalid email or password."
+            }
+        }
     }
 return (
     <>
@@ -38,7 +54,7 @@ return (
                     <label className="block mb-2" htmlFor="password">Password</label>
                     <input className="w-full p-2 mb-4 border rounded" type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} required/>
                     
-                    <button className="w-full px-4 py-2 text-white bg-blue-500 rounded blue-button hover:bg-blue-700" type='submit'>Register</button>
+                    <button className="w-full px-4 py-2 text-white bg-blue-500 rounded blue-button hover:bg-blue-700" type='submit'>Login</button>
                 </form>
             </div>
             <div><p>Don't have an account? Register <a className='text-blue-700' href="/register">here</a></p></div>
