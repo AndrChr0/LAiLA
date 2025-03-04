@@ -1,6 +1,5 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import mysql from 'mysql2';
 import dotenv from 'dotenv';
 dotenv.config();
 import { pool as SQLpool } from '../utils/SQLPool.js';
@@ -61,13 +60,56 @@ export const login = async (req, res) => {
         const accessToken = jwt.sign(
             { id: user.user_id, role: user.role },
             process.env.ACCESS_TOKEN_SECRET,
-            { expiresIn: '1h' }
+            { expiresIn: '15m' }
         );
 
-        res.status(200).json({ message: 'Login successful', user: { id: user.id, first_name:user.first_name, last_name:user.last_name, email: user.email, role: user.role }, accessToken});
+        const refreshToken = jwt.sign(
+            {"userId": user.user_id},
+            process.env.REFRESH_TOKEN_SECRET,
+            {expiresIn: "7d"}
+        );
+
+        res.cookie("jwt", refreshToken, {
+            httpOnly: true,
+            secure: false,
+            sameSite: "strict",
+            maxAge: 7*24*60*60*1000
+        });
+
+        res.status(200).json({ message: 'Login successful', user: { id: user.id, first_name:user.first_name, last_name:user.last_name, email: user.email, role: user.role }, accessToken, refreshToken });
 
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error' });
     }
 };
+
+export const refresh = (req, res) => {
+    const cookies = req.cookies;
+
+    if (!cookies?.jwt) return res.status(401).json ({message: "Unauthorized"});
+
+    const refreshToken = cookies.jwt
+
+    jwt.verify(
+        refreshToken,
+        process.env.REFRESH_TOKEN_SECRET,
+        async (err, decoded) => {
+            if (err) return res.status(403).json({message: "Forbidden"});
+
+            const [rows] = await pool.query("SELECT * FROM users WHERE user_id = ?", [decoded.userId]);
+            const user = rows[0];
+
+            if (!user) return res.status(401).send("Unauthorized");
+
+            const accessToken = jwt.sign (
+                { id: user.user_id, role: user.role },
+                process.env.ACCESS_TOKEN_SECRET,
+                { expiresIn: '15m' }
+            )
+
+            res.status(200).send(accessToken);
+
+        }
+    )
+}
