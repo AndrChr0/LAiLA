@@ -3,10 +3,8 @@ import dotenv from "dotenv";
 import aiZipRoutes from "./routes/zipRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
-// courses
 import courseRoutes from "./routes/courseRoutes.js";
-// assignments
-// import xRoutes from "./routes/xRoutes.js";
+import assignmentRoutes from "./routes/assignmentRoutes.js";
 // feedback
 // import xRoutes from "./routes/xRoutes.js";
 import cors from "cors";
@@ -22,10 +20,8 @@ app.use(express.json());
 app.use("/api/ai", aiZipRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
-// courses
 app.use("/api/courses", courseRoutes);
-// assignments
-// app.use("/api/path", xRoutes);
+app.use("/api/assignments", assignmentRoutes);
 // feedback
 // app.use("/api/path", xRoutes);
 
