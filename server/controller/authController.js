@@ -63,7 +63,13 @@ export const login = async (req, res) => {
             return res.status(400).json({ message: 'Invalid password.' });
         }
 
-        res.status(200).json({ message: 'Login successful', user: { id: user.id, first_name:user.first_name, last_name:user.last_name, email: user.email, role: user.role }});
+        const accessToken = jwt.sign(
+            { id: user.user_id, role: user.role },
+            process.env.ACCESS_TOKEN_SECRET,
+            { expiresIn: '1h' }
+        );
+
+        res.status(200).json({ message: 'Login successful', user: { id: user.id, first_name:user.first_name, last_name:user.last_name, email: user.email, role: user.role }, accessToken});
 
     } catch (error) {
         console.error(error);
