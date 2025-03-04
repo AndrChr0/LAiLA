@@ -3,13 +3,9 @@ import jwt from 'jsonwebtoken';
 import mysql from 'mysql2';
 import dotenv from 'dotenv';
 dotenv.config();
+import { pool as SQLpool } from '../utils/SQLPool.js';
+const pool = SQLpool;
 
-const pool = mysql.createPool({
-    host: process.env.MYSQL_HOST,
-    user: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PASSWORD,
-    database: process.env.MYSQL_DATABASE
-}).promise(); 
 
 export const register = async (req, res) => {
     // Check if email already exists
