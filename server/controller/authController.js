@@ -117,3 +117,13 @@ export const refresh = (req, res) => {
         }
     )
 }
+
+export const logout = async (req, res) => {
+    if (req.cookies?.jwt){
+        const refreshToken = req.cookies.jwt;
+        res.clearCookie("jwt");
+        return res.status(200).json({message: "Logout successful"});
+    } else {
+        return res.status(400).json({message: "No token found"});
+    }
+}
