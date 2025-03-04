@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function AssignmentCriteriaForm() {
+function AssignmentCriteriaForm({ onHandleCriteria }) {
   const [schemaName, setSchemaName] = useState("new_schema");
   const [sections, setSections] = useState([
     {
@@ -108,7 +108,6 @@ function AssignmentCriteriaForm() {
       },
     };
 
-    // For each section, build the properties
     sections.forEach((section) => {
       const sectionKey = section.sectionName;
       const sectionProperties = {};
@@ -143,6 +142,7 @@ function AssignmentCriteriaForm() {
       };
     });
 
+    // add final assessment to be returned to student
     schemaObject.schema.properties.AI_final_assessment = {
       type: "object",
       properties: {
@@ -160,6 +160,7 @@ function AssignmentCriteriaForm() {
 
   const handleGenerateClick = () => {
     const generated = generateJsonSchema();
+    onHandleCriteria(generated);
     console.log("Generated JSON Schema:", generated);
   };
 

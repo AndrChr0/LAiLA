@@ -10,6 +10,11 @@ function NewAssignmentPage() {
   const [assignment_description, setAssignmentDescription] = useState("");
   const [assignment_filetype, setAssignmentFiletype] = useState("");
   const [assignment_filetypes, setAssignmentFiletypes] = useState([]);
+  const [assignment_criteria, setAssignmentCriteria] = useState({});
+
+  function handleCriteriaChange(criteria) {
+    setAssignmentCriteria(criteria);
+  }
 
   function handleFileChange() {
     if (!assignment_filetype) {
@@ -40,17 +45,18 @@ function NewAssignmentPage() {
     console.log("Assignment Attempts:", assignment_attempts);
     console.log("Assignment Description:", assignment_description);
     console.log("Assignment Filetypes:", assignment_filetypes);
+    console.log("Assignment Criteria:", assignment_criteria);
   }
 
   return (
     <>
-      <h1 className='text-3xl font-semibold'>New Assignment</h1>
-      <form className='flex flex-col md:w-1/3 mx-auto my-0'>
+      <h1 className='text-3xl font-light'>New Assignment</h1>
+      <div className='flex flex-col w-11/12 md:w-1/3 mx-auto my-0 pt-4'>
         <label htmlFor='assignment_title'>Assignment Title</label>
         <input
           onChange={(e) => setAssignmentTitle(e.target.value)}
           value={assignment_title}
-          className='border border-gray-400 p-2'
+          className='border border-gray-400 p-2 mb-4'
           type='text'
           name='assignment_title'
           id='assignment_title'
@@ -60,7 +66,7 @@ function NewAssignmentPage() {
         <input
           onChange={(e) => setAssignmentStart(e.target.value)}
           value={assignment_start}
-          className='border border-gray-400 p-2'
+          className='border border-gray-400 p-2 w-36 mb-4'
           type='date'
           name='assignment_start'
           id='assignment_start'
@@ -70,7 +76,7 @@ function NewAssignmentPage() {
         <input
           onChange={(e) => setAssignmentEnd(e.target.value)}
           value={assignment_end}
-          className='border border-gray-400 p-2'
+          className='border border-gray-400 p-2 w-36 mb-4'
           type='date'
           name='assignment_end'
           id='assignment_end'
@@ -80,7 +86,7 @@ function NewAssignmentPage() {
         <input
           onChange={(e) => setAssignmentAttempts(e.target.value)}
           value={assignment_attempts}
-          className='border border-gray-400 p-2 w-16'
+          className='border border-gray-400 p-2 w-16 mb-4'
           min={0}
           max={5}
           type='number'
@@ -89,10 +95,10 @@ function NewAssignmentPage() {
         />
 
         <label htmlFor='assignment_description'>
-          Upload assignment description
+          Paste assignment description
         </label>
         <textarea
-          className='border border-gray-400 p-2'
+          className='border border-gray-400 p-2 mb-4 h-40'
           onChange={(e) => setAssignmentDescription(e.target.value)}
           name='assignment_description'
           id='assignment_description'
@@ -104,7 +110,7 @@ function NewAssignmentPage() {
         <input
           onChange={(e) => setAssignmentFiletype(e.target.value)}
           value={assignment_filetype}
-          className='border border-gray-400 p-2'
+          className='border border-gray-400 p-2 mb-4'
           type='text'
           name='assignment_filetypes'
           id='assignment_filetypes'
@@ -112,16 +118,16 @@ function NewAssignmentPage() {
         <button
           onClick={handleFileChange}
           type='button'
-          className='border border-gray-400 p-2 w-20'
+          className='border border-gray-400 p-2 w-20 mb-4'
         >
           Add
         </button>
-        <div className='flex flex-row gap-4 pt-4'>
+        <div className='flex flex-wrap gap-2'>
           {assignment_filetypes.map((filetype, index) => (
-            <span key={index} className='border border-gray-400 p-2 '>
-              <p>{filetype}</p>
+            <span key={index} className=''>
+              <span>{filetype}</span>
               <button
-                className='border border-gray-400 w-16'
+                className='border border-gray-400 w-16 mb-4 ml-2'
                 type='button'
                 onClick={() => {
                   setAssignmentFiletypes(
@@ -134,15 +140,15 @@ function NewAssignmentPage() {
             </span>
           ))}
         </div>
+        <AssignmentCriteriaForm onHandleCriteria={handleCriteriaChange} />
         <button
           type='submit'
-          className='border border-gray-400 p-2 w-28'
+          className='border border-gray-400 p-2 w-28 mt-4'
           onClick={handleSubmit}
         >
           Start Assignment
         </button>
-      </form>
-      <AssignmentCriteriaForm />
+      </div>
     </>
   );
 }
