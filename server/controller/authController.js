@@ -13,8 +13,7 @@ export const register = async (req, res) => {
 
     // If email already exists, return error
     if (rows.length > 0) {
-        console.log(rows)
-        return res.status(400).json({ message: 'Email already exists' });
+        return res.status(400).json('Email already exists');
     }
 
     // Encrypt password
@@ -33,10 +32,10 @@ export const register = async (req, res) => {
     // Insert user into database
     try {
         await pool.query(`INSERT INTO users (first_name, last_name, role, email, password) VALUES (?,?,?,?,?)`, [user.first_name, user.last_name, user.role, user.email, user.password]);
-        res.status(201).json({ message: 'User registered successfully' });
+        res.status(201).json('User registered successfully');
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Server error' });
+        res.status(500).json('Server error');
     }
         
 };
@@ -50,11 +49,11 @@ export const login = async (req, res) => {
         const validPassword = await bcrypt.compare(password, user.password);
 
         if (rows.length === 0) {
-            return res.status(400).json({ message: 'Email could not be found in database.' });
+            return res.status(400).json('Email could not be found in database.');
         }
 
         if (!validPassword) {
-            return res.status(400).json({ message: 'Invalid password.' });
+            return res.status(400).json('Invalid password.');
         }
 
         const accessToken = jwt.sign(
@@ -83,14 +82,14 @@ export const login = async (req, res) => {
 
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Server error' });
+        res.status(500).json('Server error');
     }
 };
 
 export const refresh = (req, res) => {
     const cookies = req.cookies;
 
-    if (!cookies?.jwt) return res.status(401).json ({message: "Unauthorized"});
+    if (!cookies?.jwt) return res.status(401).json ("Unauthorized");
 
     const refreshToken = cookies.jwt
 
@@ -98,7 +97,7 @@ export const refresh = (req, res) => {
         refreshToken,
         process.env.REFRESH_TOKEN_SECRET,
         async (err, decoded) => {
-            if (err) return res.status(403).json({message: "Forbidden"});
+            if (err) return res.status(403).json("Forbidden");
 
             const [rows] = await pool.query("SELECT * FROM users WHERE user_id = ?", [decoded.userId]);
             const user = rows[0];
@@ -122,8 +121,8 @@ export const logout = async (req, res) => {
     if (req.cookies?.jwt){
         const refreshToken = req.cookies.jwt;
         res.clearCookie("jwt");
-        return res.status(200).json({message: "Logout successful"});
+        return res.status(200).json("Logout successful");
     } else {
-        return res.status(400).json({message: "No token found"});
+        return res.status(400).json("No token found");
     }
 }
