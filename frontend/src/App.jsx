@@ -3,6 +3,7 @@ import StudentAssignmentAssessmentPage from "./views/student/StudentAssignmentAs
 import Nav from "./shared/Nav";
 import Footer from "./shared/Footer";
 import NotFoundPage from "./views/shared/NotFoundPage";
+import NewAssignmentPage from "./views/lecturer/NewAssignmentPage";
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
@@ -18,6 +19,7 @@ function App() {
             path='/assignment-assessment'
             element={<StudentAssignmentAssessmentPage />}
           />
+          <Route path='/new-assignment' element={<NewAssignmentPage />} />
           <Route path='*' element={<NotFoundPage />} />
         </Routes>
       </div>

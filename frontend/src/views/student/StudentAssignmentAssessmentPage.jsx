@@ -1,4 +1,4 @@
-import UploadAssignmentAssessment from "./UploadAssignmentAssessment";
+import UploadAssignmentAssessment from "../../components/UploadAssignmentAssessment";
 
 function StudentAssignmentAssessmentPage() {
   return (
