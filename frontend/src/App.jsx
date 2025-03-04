@@ -4,6 +4,8 @@ import Nav from "./shared/Nav";
 import Footer from "./shared/Footer";
 import NotFoundPage from "./views/shared/NotFoundPage";
 import RegisterPage from "./views/shared/RegisterPage";
+import LoginPage from "./views/shared/LoginPage";
+import StudentHomePage from "./views/student/StudentHomePage";
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
@@ -15,7 +17,11 @@ function App() {
         <Routes>
           <Route path='/' element={<HeroPage />} />
           <Route path='/register' element={<RegisterPage />} />
+          <Route path='/login' element={<LoginPage />} />
 
+
+
+          <Route path='/student-homepage-placeholder' element={<StudentHomePage />}/>
           <Route
             path='/assignment-assessment'
             element={<StudentAssignmentAssessmentPage />}
