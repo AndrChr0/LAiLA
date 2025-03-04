@@ -3,6 +3,7 @@ import StudentAssignmentAssessmentPage from "./views/student/StudentAssignmentAs
 import Nav from "./shared/Nav";
 import Footer from "./shared/Footer";
 import NotFoundPage from "./views/shared/NotFoundPage";
+import RegisterPage from "./views/shared/RegisterPage";
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
@@ -13,6 +14,7 @@ function App() {
       <div className='md:w-10/12 md:mx-auto md:my-0'>
         <Routes>
           <Route path='/' element={<HeroPage />} />
+          <Route path='/register' element={<RegisterPage />} />
 
           <Route
             path='/assignment-assessment'
