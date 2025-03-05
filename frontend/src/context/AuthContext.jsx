@@ -1,8 +1,8 @@
 import  { createContext, useContext, useState, useEffect } from 'react'
-// import axios from 'axios'
 import { jwtDecode } from 'jwt-decode'
 import { useNavigate } from 'react-router-dom'
 import refreshToken from '../utils/refreshToken'
+import instance from '../utils/axiosInstance'
 
 const AuthContext = createContext()
 
@@ -12,6 +12,8 @@ export const AuthProvider = ({ children }) => {
     const [authState, setAuthState] = useState({ userRole:"", isLoading: true })
     const [token, setToken] = useState(null)
     const navigate = useNavigate()
+
+    
 
     useEffect(() => {
         refreshToken().then((response) => {
@@ -30,6 +32,8 @@ export const AuthProvider = ({ children }) => {
             navigate('/login')
         })
     }, [navigate])
+
+
 
     useEffect(() => {
         const refreshInterval = setInterval(() => {
@@ -57,16 +61,18 @@ export const AuthProvider = ({ children }) => {
         setAuthState({ userRole: decoded.role, isLoading: false });
     };
 
-    // const logout = async () => {
-    //     // remove cookie
-    //     await instance.get("/api/auth/logout")
-    //     setToken(null);
-    //     setAuthState({ userRole: "", isLoading: false });
-    //     navigate("/");
-    // };
+ 
+
+    const logout = async () => {
+        // remove cookie
+        await instance.get("/api/auth/logout")
+        setToken(null);
+        setAuthState({ userRole: "", isLoading: false });
+        navigate("/");
+    };
 
     return (
-        <AuthContext.Provider value={{ ...authState, login, token }}>
+        <AuthContext.Provider value={{ ...authState, login, token, logout }}>
             {children}
         </AuthContext.Provider>
     );

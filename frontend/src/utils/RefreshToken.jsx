@@ -1,9 +1,4 @@
-import axios from 'axios'
-
-const instance = axios.create({
-    baseURL: 'http://localhost:5310/',
-    withCredentials: true,
-  });
+import instance from "./axiosInstance"
 // utility function to refresh the user's access token
 async function RefreshToken() {
     try {
