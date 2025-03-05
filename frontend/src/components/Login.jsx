@@ -1,9 +1,9 @@
 import React from 'react'
 import { useNavigate } from "react-router-dom";
 import { useState } from 'react'
-import axios from 'axios'
 import { useAuth } from '../context/AuthContext' 
 import { jwtDecode } from "jwt-decode"
+import instance from '../utils/axiosInstance'
 
 
 const Login = () => {
@@ -12,10 +12,7 @@ const Login = () => {
     const navigate = useNavigate();
     const { login } = useAuth();
 
-    const instance = axios.create({
-        baseURL: 'http://localhost:5310/',
-        withCredentials: true,
-      });
+    
 
     const handleLoginUser = async (e) => {
         e.preventDefault()
@@ -32,9 +29,10 @@ const Login = () => {
                 if (token) {
                     const decoded = jwtDecode(token)
 
-                    const redirectTo =
-                        decoded.role === "lecturer" ? "/lecturer-homepage-placeholder" : "/student-homepage-placeholder"
-                        navigate(redirectTo)
+                    // const redirectTo =
+                    //     decoded.role === "lecturer" ? "/lecturer-homepage-placeholder" : "/student-homepage-placeholder"
+                        // navigate(redirectTo)
+                        navigate('/home')
                 }
             } else {
                 console.error('Token not found in repsonse', response.data)
