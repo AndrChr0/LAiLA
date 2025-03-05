@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 
 function UploadAssignmentAssessment() {
@@ -15,6 +15,7 @@ function UploadAssignmentAssessment() {
   }
 
   console.log("file:", file);
+  
 
   async function uploadFile() {
     try {
@@ -23,7 +24,7 @@ function UploadAssignmentAssessment() {
         return;
       }
 
-      if (file.type != "application/x-zip-compressed") {
+      if (file.name.split(".").pop() !== "zip") {
         setError("Please upload a zip file.");
         return;
       }
