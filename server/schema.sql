@@ -32,7 +32,7 @@ CREATE TABLE enrollment (
 
 CREATE TABLE assignments (
     assignment_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
-    assignment_name VARCHAR(255) NOT NULL,
+    assignment_title VARCHAR(255) NOT NULL,
     assignment_start_date DATE NOT NULL,
     assignment_end_date DATE NOT NULL,
     is_active BOOLEAN NOT NULL DEFAULT FALSE,
