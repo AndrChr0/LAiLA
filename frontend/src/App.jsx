@@ -6,6 +6,8 @@ import NotFoundPage from "./views/shared/NotFoundPage";
 import RegisterPage from "./views/shared/RegisterPage";
 import LoginPage from "./views/shared/LoginPage";
 import StudentHomePage from "./views/student/StudentHomePage";
+import NewAssignmentPage from "./views/lecturer/NewAssignmentPage";
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./protectedroute/ProtectedRoute";
 
@@ -26,6 +28,7 @@ function App() {
             path='/assignment-assessment'
             element={<StudentAssignmentAssessmentPage />}
           />
+          <Route path='/new-assignment' element={<NewAssignmentPage />} />
           <Route path='*' element={<NotFoundPage />} />
         </Routes>
       </div>

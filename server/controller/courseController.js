@@ -4,6 +4,7 @@ import { pool as SQLpool } from '../utils/SQLPool.js';
 const pool = SQLpool;
 
 // get all courses (you take) - auth(S) (/L if lecturers should be able to see it too?)
+// (req.body would be JWT attribute once authentication is integrated)
 export async function getMyCourses(req, res) {
     if (req.body.course_coordinator) {
         const [rows] = await pool.query(`SELECT * FROM courses WHERE course_coordinator = ?`, [req.body.course_coordinator]);
@@ -16,6 +17,8 @@ export async function getMyCourses(req, res) {
             WHERE enrollment.student_id = ?
             `, [req.body.student_id]);
         res.send(rows);
+    } else {
+        res.send("Unknown user type");
     }
 }
 
