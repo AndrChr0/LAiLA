@@ -14,7 +14,13 @@ import cookieParser from "cookie-parser";
 
 const app = express();
 
-app.use(cors());
+// app.use(cors());
+const corsOptions = {
+  origin: "http://localhost:5173",
+  credentials: true
+}
+// Configures express to use the CORS policy, allowing communication between the frontend and backend
+app.use(cors(corsOptions))
 dotenv.config({ path: "../.env" });
 const PORT = process.env.PORT || 5000;
 app.use(express.json());

@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState, useEffect } from 'react'
-import axios from 'axios'
+import  { createContext, useContext, useState, useEffect } from 'react'
+// import axios from 'axios'
 import { jwtDecode } from 'jwt-decode'
 import { useNavigate } from 'react-router-dom'
 import refreshToken from '../utils/refreshToken'
@@ -17,10 +17,12 @@ export const AuthProvider = ({ children }) => {
         refreshToken().then((response) => {
             if (response){
                 const jwt = response.data
+                console.log(response)
                 setToken(jwt)
                 const decoded = jwtDecode(jwt)
                 setAuthState({ userRole: decoded.role, isLoading: false })
             } else {
+                console.log("No token found")
                 setAuthState({ userRole: "", isLoading: false })
             }
         }).catch(()=> {

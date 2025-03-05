@@ -89,7 +89,7 @@ export const login = async (req, res) => {
 export const refresh = (req, res) => {
     const cookies = req.cookies;
 
-    if (!cookies?.jwt) return res.status(401).json ("Unauthorized");
+    if (!cookies?.jwt) return res.status(401).json ("Unauthorized, no token found");
 
     const refreshToken = cookies.jwt
 
@@ -102,7 +102,7 @@ export const refresh = (req, res) => {
             const [rows] = await pool.query("SELECT * FROM users WHERE user_id = ?", [decoded.userId]);
             const user = rows[0];
 
-            if (!user) return res.status(401).send("Unauthorized");
+            if (!user) return res.status(401).send("Unauthorized, no user found");
 
             const accessToken = jwt.sign (
                 { id: user.user_id, role: user.role },

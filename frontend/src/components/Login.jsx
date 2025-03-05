@@ -12,15 +12,20 @@ const Login = () => {
     const navigate = useNavigate();
     const { login } = useAuth();
 
+    const instance = axios.create({
+        baseURL: 'http://localhost:5310/',
+        withCredentials: true,
+      });
 
     const handleLoginUser = async (e) => {
         e.preventDefault()
 
 
         try{
-            const response = await axios.post("http://localhost:5310/api/auth/login", {email, password})
+            const response = await instance.post("api/auth/login", {email, password})
 
             const token = response.data.accessToken
+            console.log(token)
 
             if (token){
                 login(token)
