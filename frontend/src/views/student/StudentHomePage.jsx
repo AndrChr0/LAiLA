@@ -1,7 +1,50 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
+import Courses from "../../components/Courses";
+import Assignments from "../../components/Assignments";
+import instance from '../../utils/axiosInstance';
 
 function StudentHomePage() {
-  return <div>StudentHomePage</div>;
+  const [assignments, setAssignments] = useState([]);
+  const isLecturer = false;
+  const userId = 2;
+
+  useEffect(() => {
+    const fetchAssignments = async () => {
+      try {
+        const response = await instance.get("api/assignments", {
+          params: {
+            student_id: !isLecturer ? userId : undefined,
+            course_coordinator: isLecturer ? userId : undefined,
+          },
+        });
+        console.log("Assignments API Response:", response.data);
+
+        setAssignments(response.data || []);
+      } catch (error) {
+        console.error("Error fetching assignments:", error);
+        setAssignments([]);
+      }
+    };
+
+    fetchAssignments();
+  }, []);
+
+  const activeAssignments = assignments.filter((assignment) => assignment.is_active === 1);
+  const inactiveAssignments = assignments.filter((assignment) => assignment.is_active === 0);
+
+  return (
+    <>
+      <div className="mb-5">
+        <h2 className="text-4xl font-normal">Assignments</h2>
+        <Assignments assignments={activeAssignments} is_active={1} />
+        <Assignments assignments={inactiveAssignments} is_active={0} />
+      </div>
+
+      <div className="bg-gray-200">  
+        <Courses />
+      </div>
+    </>
+  );
 }
 
 export default StudentHomePage;

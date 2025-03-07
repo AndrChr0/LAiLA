@@ -6,7 +6,7 @@ const pool = SQLpool;
 // get all assignments (for user) - auth(S/L)
 // (req.body would be JWT attribute once authentication is integrated)
 export async function getAllAssignments(req, res) {
-    if (req.body.course_coordinator) {
+    if (req.query.course_coordinator) {
         const [rows] = await pool.query(`
             SELECT a.assignment_id, assignment_title, assignment_start_date, assignment_end_date, is_active, is_public, assignment_description, assignment_criteria, a.course_id, max_score, pass_threshold, GROUP_CONCAT(af.filetype ORDER BY af.filetype SEPARATOR ', ') AS allowed_filetypes, assignment_attempts
             FROM assignments a
@@ -14,13 +14,13 @@ export async function getAllAssignments(req, res) {
             LEFT JOIN assignment_filetypes af ON a.assignment_id = af.assignment_id
             WHERE c.course_coordinator = ?
             GROUP BY a.assignment_id;
-            `, [req.body.course_coordinator]);
+            `, [req.query.course_coordinator]);
         if (rows.length > 0) {
             res.send(rows);
         } else {
             res.send("No assignments found");
         }
-    } else if (req.body.student_id) {
+    } else if (req.query.student_id) {
         const [rows] = await pool.query(`
             SELECT a.assignment_id, assignment_title, assignment_start_date, assignment_end_date, is_active, assignment_description, a.course_id, max_score, pass_threshold, GROUP_CONCAT(af.filetype ORDER BY af.filetype SEPARATOR ', ') AS allowed_filetypes, assignment_attempts
             FROM assignments a
@@ -28,7 +28,7 @@ export async function getAllAssignments(req, res) {
             LEFT JOIN assignment_filetypes af ON a.assignment_id = af.assignment_id
             WHERE e.student_id = ? AND is_public = TRUE
             GROUP BY a.assignment_id;
-            `, [req.body.student_id]);
+            `, [req.query.student_id]);
         if (rows.length > 0) {
             res.send(rows);
         } else {

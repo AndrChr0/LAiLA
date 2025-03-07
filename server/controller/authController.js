@@ -59,7 +59,7 @@ export const login = async (req, res) => {
         const accessToken = jwt.sign(
             { id: user.user_id, role: user.role },
             process.env.ACCESS_TOKEN_SECRET,
-            { expiresIn: '15m' } //real case scenario
+            { expiresIn: '15m' } // real case scenario
             // { expiresIn: '1m' } // testing purposes
         );
 
