@@ -6,10 +6,43 @@ const pool = SQLpool;
 
 // get all feedback (for yourself) - auth(S)
 export async function getAllFeedback(req, res) {
-    const [rows] = await pool.query(``, [req.body.student_id]);
+    if (!req.query.student_id) {
+        return res.status(401).send("Unauthorized");
+    }
+
+    const [rows] = await pool.query(`
+        SELECT feedback_id, assignment_id, general_comment, attempt_nr 
+        FROM feedback
+        WHERE student_id = ?;
+        `, [req.query.student_id]
+    );
+
+    if (rows.length > 0) {
+        res.send(rows);
+    } else {
+        res.send("No assignments found");
+    }
 }
 
 // get one piece of feedback (for yourself) - auth(S)
+export async function getOneFeedback(req, res) {
+    if (!req.query.student_id) {
+        return res.status(401).send("Unauthorized");
+    }
+
+    const [rows] = await pool.query(`
+        SELECT feedback_id, assignment_id, general_comment, attempt_nr 
+        FROM feedback
+        WHERE student_id = ? AND feedback_id = ?;
+        `, [req.query.student_id, req.params.feedback_id]
+    );
+
+    if (rows.length > 0) {
+        res.send(rows[0]);
+    } else {
+        res.send("Assignment not found");
+    }
+}
 
 
 // get all feedback JSON (assignment) - auth(L)
@@ -17,7 +50,4 @@ export async function getAllFeedback(req, res) {
 
 
 // post feedback
-
-
-// delete feedback
 
