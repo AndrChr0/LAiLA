@@ -8,7 +8,7 @@ const pool = SQLpool;
 export async function getAllAssignments(req, res) {
     if (req.body.course_coordinator) {
         const [rows] = await pool.query(`
-            SELECT assignment_id, assignment_name, assignment_start_date, assignment_end_date, is_active, assignment_description, assignment_criteria, assignments.course_id, assignment_attempts 
+            SELECT assignment_id, assignment_title, assignment_start_date, assignment_end_date, is_active, is_public, assignment_description, assignment_criteria, assignments.course_id, max_score, pass_threshold, assignment_attempts 
             FROM assignments
             JOIN courses ON assignments.course_id = courses.course_id 
             WHERE courses.course_coordinator = ?;
@@ -20,10 +20,10 @@ export async function getAllAssignments(req, res) {
         }
     } else if (req.body.student_id) {
         const [rows] = await pool.query(`
-            SELECT assignment_id, assignment_name, assignment_start_date, assignment_end_date, is_active, assignment_description, assignment_criteria, assignments.course_id, assignment_attempts 
+            SELECT assignment_id, assignment_title, assignment_start_date, assignment_end_date, is_active, assignment_description, assignments.course_id, max_score, pass_threshold, assignment_attempts 
             FROM assignments
             JOIN enrollment ON assignments.course_id = enrollment.course_id 
-            WHERE enrollment.student_id = ?;
+            WHERE enrollment.student_id = ? AND is_public = TRUE;
             `, [req.body.student_id]);
         if (rows.length > 0) {
             res.send(rows);
@@ -52,11 +52,11 @@ export async function getAllAssignments(req, res) {
 
 // post assignment - auth(L)
 export async function createAssignment(req, res) {
-    if (req.body.assignment_name && req.body.assignment_start_date && req.body.assignment_end_date && req.body.is_active && req.body.assignment_description && req.body.assignment_criteria && req.body.course_id && req.body.assignment_attempts) {
+    if (req.body.assignment_title && req.body.assignment_start_date && req.body.assignment_end_date && req.body.is_active && req.body.is_public && req.body.assignment_description && req.body.assignment_criteria && req.body.course_id && req.body.max_score && req.body.pass_threshold && req.body.assignment_attempts) {
         const [result] = await pool.query(`
-            INSERT INTO assignments (assignment_name, assignment_start_date, assignment_end_date, is_active, assignment_description, assignment_criteria, course_id, assignment_attempts)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?);
-            `, [req.body.assignment_name, req.body.assignment_start_date, req.body.assignment_end_date, req.body.is_active, req.body.assignment_description, req.body.assignment_criteria, req.body.course_id, req.body.assignment_attempts]);
+            INSERT INTO assignments (assignment_title, assignment_start_date, assignment_end_date, is_active, is_public, assignment_description, assignment_criteria, course_id, max_score, pass_threshold, assignment_attempts)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+            `, [req.body.assignment_title, req.body.assignment_start_date, req.body.assignment_end_date, req.body.is_active, req.body.is_public, req.body.assignment_description, req.body.assignment_criteria, req.body.course_id, req.body.max_score, req.body.pass_threshold, req.body.assignment_attempts]);
         res.send(result);
     } else {
         res.send("Missing attributes")
@@ -78,15 +78,18 @@ export async function updateAssignment(req, res) {
         const [result] = await pool.query(`
             UPDATE assignments
             SET
-                assignment_name = COALESCE(?, assignment_name),
+                assignment_title = COALESCE(?, assignment_title),
                 assignment_start_date = COALESCE(?, assignment_start_date),
                 assignment_end_date = COALESCE(?, assignment_end_date),
                 is_active = COALESCE(?, is_active),
+                is_public = COALESCE(?, is_public),
                 assignment_description = COALESCE(?, assignment_description),
                 assignment_criteria = COALESCE(?, assignment_criteria),
+                max_score = COALESCE(?, max_score),
+                pass_threshold = COALESCE(?, pass_threshold),
                 assignment_attempts = COALESCE(?, assignment_attempts)
             WHERE assignment_id = ?;
-            `, [req.body.assignment_name, req.body.assignment_start_date, req.body.assignment_end_date, req.body.is_active, req.body.assignment_description, req.body.assignment_criteria, req.body.assignment_attempts, req.params.assignment_id]);
+            `, [req.body.assignment_title, req.body.assignment_start_date, req.body.assignment_end_date, req.body.is_active, req.body.is_public, req.body.assignment_description, req.body.assignment_criteria, req.body.max_score, req.body.pass_threshold, req.body.assignment_attempts, req.params.assignment_id]);
         res.send(result);
     } else {
         res.send("No values to alter");

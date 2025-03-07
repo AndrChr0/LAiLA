@@ -88,7 +88,7 @@ INSERT INTO enrollment (student_id, course_id) VALUES
 (2, 1), (2, 4), (2, 5), (2, 6),
 (3, 1), (3, 7), (3, 8), (3, 9);
 
-INSERT INTO assignments (assignment_name, assignment_start_date, assignment_end_date, is_active, is_public, assignment_description, assignment_criteria, course_id, max_score, pass_threshold, assignment_attempts) VALUES
+INSERT INTO assignments (assignment_title, assignment_start_date, assignment_end_date, is_active, is_public, assignment_description, assignment_criteria, course_id, max_score, pass_threshold, assignment_attempts) VALUES
 ('Oblig1', '2025-01-27', '2025-02-13', FALSE, TRUE, 'lorem ipsum', '{}', 1, 42, 0.80, 1),
 ('Oblig 2', '2025-02-20', '2025-03-09', TRUE, TRUE, 'lorem ipsum', '{}', 1, 53, 0.75, 5),
 ('Assignment #3', '2025-01-10', '2025-02-28', TRUE, TRUE, 'lorem ipsum', '{}', 3, 68, 0.70, 2),

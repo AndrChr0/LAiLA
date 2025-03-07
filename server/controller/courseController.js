@@ -7,14 +7,18 @@ const pool = SQLpool;
 // (req.body would be JWT attribute once authentication is integrated)
 export async function getMyCourses(req, res) {
     if (req.body.course_coordinator) {
-        const [rows] = await pool.query(`SELECT * FROM courses WHERE course_coordinator = ?`, [req.body.course_coordinator]);
+        const [rows] = await pool.query(`
+            SELECT course_id, course_code, course_name, course_description, course_link
+            FROM courses
+            WHERE course_coordinator = ?;
+            `, [req.body.course_coordinator]);
         res.send(rows);
     } else if (req.body.student_id) {
         const [rows] = await pool.query(`
-            SELECT courses.course_id, course_code, course_name, course_description, course_coordinator 
+            SELECT courses.course_id, course_code, course_name, course_description, course_link, course_coordinator 
             FROM  courses
             JOIN enrollment ON courses.course_id = enrollment.course_id 
-            WHERE enrollment.student_id = ?
+            WHERE enrollment.student_id = ?;
             `, [req.body.student_id]);
         res.send(rows);
     } else {
@@ -24,6 +28,10 @@ export async function getMyCourses(req, res) {
 
 // get one course
 export async function getOneCourse(req, res) {
-    const [rows] = await pool.query(`SELECT * FROM courses WHERE course_id = ?`, [req.params.course_id]);
+    const [rows] = await pool.query(`
+        SELECT courses.course_id, course_code, course_name, course_description, course_link, course_coordinator
+        FROM courses
+        WHERE course_id = ?;
+        `, [req.params.course_id]);
     res.send(rows[0]);
 }
