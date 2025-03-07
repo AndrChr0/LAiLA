@@ -113,14 +113,6 @@ export async function createAssignment(req, res) {
 }
 
 
-// add is_deleted field to all deletable schemas first
-// delete assignment - auth(L)
-// export async function name(req, res) {
-//     // something
-//     res.send()
-// }
-
-
 // put/patch assignment details - auth(L)   (only before submissions?)
 export async function updateAssignment(req, res) {
     if (!Object.keys(req.body).length) {
@@ -201,3 +193,6 @@ export async function updateAssignment(req, res) {
 
     res.send("Successfully updated assignment");
 }
+
+
+// delete assignment
