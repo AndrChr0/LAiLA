@@ -74,34 +74,9 @@ function NewAssignmentPage() {
   
 
   function handleSubmit(e) {
-  let assignmentData = new FormData();
+  
 
     e.preventDefault();
-    console.log("Assignment Title:", assignment_title);
-    console.log("Assignment Start:", assignment_start_date);
-    console.log("Assignment End:", assignment_end_date);
-    console.log("Assignment Attempts:", assignment_attempts);
-    console.log("Assignment Description:", assignment_description);
-    console.log("Assignment Filetypes:", allowed_filetypes);
-    console.log("Assignment Criteria:", assignment_criteria);
-    console.log("Pass Percentage:", passPercentage);
-    console.log("Is Active:", isActive);
-    console.log("Is Public:", isPublic);
-    console.log("Max Score:", maxScore);
-
-  assignmentData.append("assignment_title", assignment_title);
-   assignmentData.append("assignment_start_date", assignment_start_date);
-   assignmentData.append("assignment_end_date", assignment_end_date);
-   assignmentData.append("is_active", isActive);
-   assignmentData.append("is_public", isPublic);
-   assignmentData.append("assignment_description", assignment_description);
-   assignmentData.append("assignment_criteria", JSON.stringify(assignment_criteria));
-   assignmentData.append("course_id", 1); 
-   assignmentData.append("max_score", maxScore  ); 
-   assignmentData.append("pass_threshold", passPercentage); 
-   assignmentData.append("assignment_attempts", assignment_attempts);
-   assignmentData.append("allowed_filetypes", allowed_filetypes);
-console.log("assignment data", assignmentData);
     axios.post("http://localhost:5310/api/assignments", {
       assignment_title: assignment_title,
       assignment_start_date: assignment_start_date,
@@ -112,7 +87,7 @@ console.log("assignment data", assignmentData);
       assignment_criteria: JSON.stringify(assignment_criteria),
       course_id: 1,
       max_score: maxScore,
-      pass_threshold: passPercentage,
+      pass_threshold: passPercentage/100,
       assignment_attempts: assignment_attempts,
       allowed_filetypes: allowed_filetypes
     })
