@@ -19,8 +19,6 @@ const Courses = () => {
               },
           });
       
-          console.log("API Response:", response.data); 
-      
           setCourses(Array.isArray(response.data) ? response.data : []);
         } catch (error) {
           console.error('Error fetching courses:', error);
