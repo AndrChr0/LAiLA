@@ -5,7 +5,9 @@ const pool = SQLpool;
 
 
 // get all feedback (for yourself) - auth(S)
-
+export async function getAllFeedback(req, res) {
+    const [rows] = await pool.query(``, [req.body.student_id]);
+}
 
 // get one piece of feedback (for yourself) - auth(S)
 

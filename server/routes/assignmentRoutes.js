@@ -3,6 +3,10 @@ import { getAllAssignments, createAssignment, updateAssignment } from "../contro
 const router = express.Router();
 
 // get all assignments (for user) - auth(S/L)
+/*
+    requires req.body.course_coordinator or req.body.student_id with the relevant user ID
+    req.body would be JWT attribute once authentication is integrated
+*/
 router.get("/", getAllAssignments);
 
 
