@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function AssignmentCriteriaForm({ onHandleCriteria }) {
+function AssignmentCriteriaForm({ onHandleCriteria, onHandleMaxScoreChange }) {
   const [isSaved, setIsSaved] = useState("");
   const [schemaName, setSchemaName] = useState("new_schema");
   const [sections, setSections] = useState([
@@ -146,6 +146,8 @@ function AssignmentCriteriaForm({ onHandleCriteria }) {
           default: sub.maxScore || 3,
         };
 
+  
+
         requiredFields.push(scoreKey, feedbackKey);
       });
 
@@ -174,6 +176,17 @@ function AssignmentCriteriaForm({ onHandleCriteria }) {
 
   const handleGenerateClick = () => {
     const generated = generateJsonSchema();
+
+    // calc max score
+    let totalMaxScore = 0;
+    sections.forEach((section) => {
+      section.subsections.forEach((sub) => {
+        totalMaxScore += Number(sub.maxScore || 0);
+      });
+    });
+  
+    onHandleMaxScoreChange(totalMaxScore);
+
     onHandleCriteria(generated);
     setIsSaved("Criterias saved successfully");
     console.log("Generated JSON Schema:", generated);
