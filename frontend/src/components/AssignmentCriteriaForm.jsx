@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 function AssignmentCriteriaForm({ onHandleCriteria }) {
+  const [isSaved, setIsSaved] = useState("");
   const [schemaName, setSchemaName] = useState("new_schema");
   const [sections, setSections] = useState([
     {
@@ -174,11 +175,12 @@ function AssignmentCriteriaForm({ onHandleCriteria }) {
   const handleGenerateClick = () => {
     const generated = generateJsonSchema();
     onHandleCriteria(generated);
+    setIsSaved("Criterias saved successfully");
     console.log("Generated JSON Schema:", generated);
   };
 
   return (
-    <div className='max-w-4xl md:max-w-full mx-auto p-6 bg-white shadow-md rounded-md'>
+    <div className='w-full mx-auto p-6 bg-white shadow-md rounded-md'>
       <h2 className='text-2xl font-bold mb-4'>Assignment Criteria Form</h2>
 
       <div className='mb-4'>
@@ -334,8 +336,9 @@ function AssignmentCriteriaForm({ onHandleCriteria }) {
         className='bg-purple-500 text-white px-6 py-3 rounded-md hover:bg-purple-600'
         onClick={handleGenerateClick}
       >
-        Generate JSON Schema
+        Save Criterias      
       </button>
+      {isSaved && <p className='text-green-500 mt-2'>{isSaved}</p>}
     </div>
   );
 }
