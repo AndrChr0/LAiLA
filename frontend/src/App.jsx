@@ -21,16 +21,21 @@ const { userRole } = useAuth();
       <div className='md:w-10/12 md:mx-auto md:my-0'>
         <Routes>
           {!userRole ? <Route path='/' element={<HeroPage />} /> : null}
+
           {userRole === "lecturer" ? (
             <Route path='/home' element={<ProtectedRoute roles={["lecturer"]}><LecturerHomePage /></ProtectedRoute>} />
           ) : null
           }
+          
           {userRole === "student" ? (
             <Route path='/home' element={<ProtectedRoute roles={["student"]}><StudentHomePage /></ProtectedRoute>} />
           ) : null}
+          
           <Route path='/' element={<HeroPage />} />
           <Route path='/register' element={<RegisterPage />} />
           <Route path='/login' element={<LoginPage />} />
+
+          <Route path='/courses/:id'></Route>
 
 
 
