@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
-function AssignmentCriteriaForm({ onHandleCriteria }) {
+function AssignmentCriteriaForm({ onHandleCriteria, onHandleMaxScoreChange }) {
+  const [isSaved, setIsSaved] = useState("");
   const [schemaName, setSchemaName] = useState("new_schema");
   const [sections, setSections] = useState([
     {
@@ -13,10 +14,13 @@ function AssignmentCriteriaForm({ onHandleCriteria }) {
           scoreDescription:
             "Criteria (0-3) 0 -> no menu, 1 -> partial, 2 -> good, 3 -> perfect",
           feedbackDescription: "Feedback on navigation menu",
+          maxScore: 3,
         },
       ],
     },
   ]);
+
+  console.log(sections);
 
   // add new section
   const handleAddSection = () => {
@@ -26,6 +30,7 @@ function AssignmentCriteriaForm({ onHandleCriteria }) {
         sectionId: crypto.randomUUID(),
         sectionName: `section_${prev.length + 1}`,
         subsections: [],
+
       },
     ]);
   };
@@ -57,6 +62,7 @@ function AssignmentCriteriaForm({ onHandleCriteria }) {
             subsectionName: `subsection_${s.subsections.length + 1}`,
             scoreDescription: "Criteria (0-3) ...",
             feedbackDescription: "Feedback on ...",
+            maxScore: 3,
           };
           return { ...s, subsections: [...s.subsections, newSub] };
         }
@@ -82,7 +88,7 @@ function AssignmentCriteriaForm({ onHandleCriteria }) {
 
   // change subsection name/score/feedback
   const handleSubsectionChange = (sectionId, subsectionId, field, value) => {
-    // field: "subsectionName", "scoreDescription" or "feedbackDescription"
+    // field: "subsectionName", "scoreDescription", "feedbackDescription" etc.
     setSections((prev) => {
       return prev.map((s) => {
         if (s.sectionId === sectionId) {
@@ -112,14 +118,16 @@ function AssignmentCriteriaForm({ onHandleCriteria }) {
       const sectionKey = section.sectionName;
       const sectionProperties = {};
       const requiredFields = [];
+     
 
-      // for each subsection, create two fields: *_score and *_feedback
+      // for each subsection, create two fields: *_score, *_feedback and *_max_score 
       section.subsections.forEach((sub) => {
         const scoreKey = `${sub.subsectionName.replace(/\s+/g, "_")}_score`;
         const feedbackKey = `${sub.subsectionName.replace(
           /\s+/g,
           "_"
         )}_feedback`;
+
 
         sectionProperties[scoreKey] = {
           type: "integer",
@@ -131,6 +139,14 @@ function AssignmentCriteriaForm({ onHandleCriteria }) {
           description:
             sub.feedbackDescription || "No feedback description provided.",
         };
+
+        sectionProperties[`${sub.subsectionName.replace(/\s+/g, "_")}_max_score`] = {
+          type: "integer",  
+          description: "Maximum score for this subsection.",
+          default: sub.maxScore || 3,
+        };
+
+  
 
         requiredFields.push(scoreKey, feedbackKey);
       });
@@ -160,12 +176,24 @@ function AssignmentCriteriaForm({ onHandleCriteria }) {
 
   const handleGenerateClick = () => {
     const generated = generateJsonSchema();
+
+    // calc max score
+    let totalMaxScore = 0;
+    sections.forEach((section) => {
+      section.subsections.forEach((sub) => {
+        totalMaxScore += Number(sub.maxScore || 0);
+      });
+    });
+  
+    onHandleMaxScoreChange(totalMaxScore);
+
     onHandleCriteria(generated);
+    setIsSaved("Criterias saved successfully");
     console.log("Generated JSON Schema:", generated);
   };
 
   return (
-    <div className='max-w-4xl mx-auto p-6 bg-white shadow-md rounded-md'>
+    <div className='w-full mx-auto p-6 bg-white shadow-md rounded-md'>
       <h2 className='text-2xl font-bold mb-4'>Assignment Criteria Form</h2>
 
       <div className='mb-4'>
@@ -270,6 +298,23 @@ function AssignmentCriteriaForm({ onHandleCriteria }) {
                   />
                 </div>
 
+                <div className='mb-3'>
+                  <label className='block font-medium mb-1'>Max Score:</label>
+                  <input
+                    className='w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
+                    type='number'
+                    value={sub.maxScore}
+                    onChange={(e) =>
+                      handleSubsectionChange(
+                        section.sectionId,
+                        sub.subsectionId,
+                        "maxScore",
+                        e.target.value
+                      )
+                    }
+                  />
+                </div>
+
                 <button
                   className='bg-red-500 text-white px-3 py-2 rounded-md hover:bg-red-600'
                   onClick={() =>
@@ -304,8 +349,9 @@ function AssignmentCriteriaForm({ onHandleCriteria }) {
         className='bg-purple-500 text-white px-6 py-3 rounded-md hover:bg-purple-600'
         onClick={handleGenerateClick}
       >
-        Generate JSON Schema
+        Save Criterias      
       </button>
+      {isSaved && <p className='text-green-500 mt-2'>{isSaved}</p>}
     </div>
   );
 }

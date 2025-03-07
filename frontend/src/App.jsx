@@ -39,7 +39,7 @@ const { userRole } = useAuth();
 
 
 
-          <Route path='/student-homepage-placeholder' element={ <ProtectedRoute roles={["student"]}><StudentHomePage /></ProtectedRoute> }/>
+          {/* <Route path='/student-homepage-placeholder' element={ <ProtectedRoute roles={["student"]}><StudentHomePage /></ProtectedRoute> }/> */}
           <Route
             path='/assignment-assessment'
             element={<StudentAssignmentAssessmentPage />}
