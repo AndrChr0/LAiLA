@@ -11,6 +11,7 @@ function NewAssignmentPage() {
   const [assignment_filetype, setAssignmentFiletype] = useState("");
   const [assignment_filetypes, setAssignmentFiletypes] = useState([]);
   const [assignment_criteria, setAssignmentCriteria] = useState({});
+  const [passPercentage, setPassPercentage] = useState(70);
 
   function handleCriteriaChange(criteria) {
     setAssignmentCriteria(criteria);
@@ -46,12 +47,13 @@ function NewAssignmentPage() {
     console.log("Assignment Description:", assignment_description);
     console.log("Assignment Filetypes:", assignment_filetypes);
     console.log("Assignment Criteria:", assignment_criteria);
+    console.log("Pass Percentage:", passPercentage);
   }
 
   return (
     <>
       <h1 className='text-3xl font-light'>New Assignment</h1>
-      <div className='flex flex-col w-11/12 md:w-1/3 mx-auto my-0 pt-4'>
+      <div className='flex flex-col w-11/12 md:w-2/3 mx-auto my-0 pt-4'>
         <label htmlFor='assignment_title'>Assignment Title</label>
         <input
           onChange={(e) => setAssignmentTitle(e.target.value)}
@@ -140,6 +142,18 @@ function NewAssignmentPage() {
             </span>
           ))}
         </div>
+
+        <label htmlFor='passPercentage'>Pass Percentage</label>
+        <input
+          onChange={(e) => setPassPercentage(e.target.value)}
+          value={passPercentage}
+          className='border border-gray-400 p-2 w-16 mb-4'
+          min={0}
+          max={100}
+          type='number'
+          name='passPercentage'
+          id='passPercentage'
+        />
         <AssignmentCriteriaForm onHandleCriteria={handleCriteriaChange} />
         <button
           type='submit'
