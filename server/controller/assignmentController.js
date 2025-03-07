@@ -6,25 +6,25 @@ const pool = SQLpool;
 // get all assignments (for user) - auth(S/L)
 // (req.body would be JWT attribute once authentication is integrated)
 export async function getAllAssignments(req, res) {
-    if (req.body.course_coordinator) {
+    if (req.query.course_coordinator) {
         const [rows] = await pool.query(`
             SELECT assignment_id, assignment_name, assignment_start_date, assignment_end_date, is_active, assignment_description, assignment_criteria, assignments.course_id, assignment_attempts 
             FROM assignments
             JOIN courses ON assignments.course_id = courses.course_id 
             WHERE courses.course_coordinator = ?;
-            `, [req.body.course_coordinator]);
+            `, [req.query.course_coordinator]);
         if (rows.length > 0) {
             res.send(rows);
         } else {
             res.send("No assignments found");
         }
-    } else if (req.body.student_id) {
+    } else if (req.query.student_id) {
         const [rows] = await pool.query(`
             SELECT assignment_id, assignment_name, assignment_start_date, assignment_end_date, is_active, assignment_description, assignment_criteria, assignments.course_id, assignment_attempts 
             FROM assignments
             JOIN enrollment ON assignments.course_id = enrollment.course_id 
             WHERE enrollment.student_id = ?;
-            `, [req.body.student_id]);
+            `, [req.query.student_id]);
         if (rows.length > 0) {
             res.send(rows);
         } else {

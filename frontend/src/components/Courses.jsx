@@ -3,9 +3,11 @@ import axios from 'axios';
 import instance from '../utils/axiosInstance'
 import { useNavigate } from 'react-router-dom';
 
-const Courses = ({ userId, isLecturer }) => {
+const Courses = () => {
   const [courses, setCourses] = useState([]);
   const navigate = useNavigate();
+  const isLecturer = false; 
+  const userId = 2; 
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -38,7 +40,7 @@ const Courses = ({ userId, isLecturer }) => {
         {courses.length > 0 ? (
           courses.map(course => (
             <div className='w-[200px] h-[200px] bg-fuchsia-500 hover:cursor-pointer' key={course.course_id} onClick={() => navigate(`/courses/${course.course_id}`)}>
-              {course.course_name} ({course.course_code})
+              {course.course_name} ({course.course_code}) (Course id:{course.course_id})
             </div>
           ))
         ) : (
