@@ -59,23 +59,23 @@ export const login = async (req, res) => {
         const accessToken = jwt.sign(
             { id: user.user_id, role: user.role },
             process.env.ACCESS_TOKEN_SECRET,
-            // { expiresIn: '15m' } real case scenario
-            { expiresIn: '1m' } // testing purposes
+            { expiresIn: '15m' } //real case scenario
+            // { expiresIn: '1m' } // testing purposes
         );
 
         const refreshToken = jwt.sign(
             {"userId": user.user_id},
             process.env.REFRESH_TOKEN_SECRET,
-            // {expiresIn: "7d"} real case scenario
-            {expiresIn: "1m"} // testing purposes
+            {expiresIn: "7d"} // real case scenario
+            // {expiresIn: "1m"} // testing purposes
         );
 
         res.cookie("jwt", refreshToken, {
             httpOnly: true,
             secure: false,
             sameSite: "strict",
-            // maxAge: 7*24*60*60*1000 real case scenario (7 days)
-            maxAge: 1*60*1000 // testing purposes (1 minute)
+            maxAge: 7*24*60*60*1000 // real case scenario (7 days)
+            // maxAge: 1*60*1000 // testing purposes (1 minute)
         });
 
         res.status(200).json({ message: 'Login successful', user: { id: user.id, first_name:user.first_name, last_name:user.last_name, email: user.email, role: user.role }, accessToken, refreshToken });
@@ -107,8 +107,8 @@ export const refresh = (req, res) => {
             const accessToken = jwt.sign (
                 { id: user.user_id, role: user.role },
                 process.env.ACCESS_TOKEN_SECRET,
-                // { expiresIn: '15m' } real case scenario 
-                { expiresIn: '1m' } // testing purposes
+                { expiresIn: '15m' } // real case scenario 
+                // { expiresIn: '1m' } // testing purposes
             )
 
             res.status(200).send(accessToken);
