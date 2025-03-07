@@ -48,6 +48,13 @@ CREATE TABLE assignments (
     FOREIGN KEY (course_id) REFERENCES courses(course_id)
 );
 
+CREATE TABLE assignment_filetypes (
+    assignment_id SMALLINT UNSIGNED NOT NULL,
+    filetype VARCHAR(16),
+    PRIMARY KEY (assignment_id, filetype),
+    FOREIGN KEY (assignment_id) REFERENCES assignments(assignment_id)
+);
+
 CREATE TABLE feedback (
     feedback_id MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT,
     assignment_id SMALLINT UNSIGNED NOT NULL,
@@ -95,6 +102,21 @@ INSERT INTO assignments (assignment_title, assignment_start_date, assignment_end
 ('Obligatory assignment 2', '2025-01-12', '2025-02-12', FALSE, TRUE, 'lorem ipsum', '{}', 4, 50, 0.50, 3),
 ('Oblig 1 - Web component', '2025-02-26', '2025-03-30', TRUE, TRUE, 'lorem ipsum', '{}', 6, 69, 0.42, 3),
 ('Assignment 1', '2025-01-10', '2025-04-10', TRUE, TRUE, 'lorem ipsum', '{}', 9, 24, 0.50, 3);
+
+INSERT INTO assignment_filetypes (assignment_id, filetype) VALUES
+(1, '.css'),
+(1, '.html'),
+(2, '.css'),
+(2, '.html'),
+(3, '.css'),
+(3, '.html'),
+(3, '.js'),
+(4, '.css'),
+(4, '.html'),
+(5, '.css'),
+(5, '.html'),
+(6, '.css'),
+(6, '.html');
 
 INSERT INTO feedback (assignment_id, student_id, feedback_contents, general_comment, attempt_nr) VALUES
 (1, 1, '{"general_comments": {
