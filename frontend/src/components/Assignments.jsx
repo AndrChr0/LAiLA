@@ -39,7 +39,7 @@ const Assignments = ({ assignments, is_active }) => {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h2 className="font-normal text-gray-800 text-1xl">{is_active === 1 ? 'Active assignments' : 'Inactive assignments'}</h2>
+        <h2 className="text-4xl font-normal text-gray-800">{is_active === 1 ? 'Active assignments' : 'Inactive assignments'}</h2>
         <div className="text-sm text-gray-500">
           {/* {is_active === 1 ? 'Showing active assignments' : 'Showing inactive assignments'} */}
         </div>
@@ -54,7 +54,7 @@ const Assignments = ({ assignments, is_active }) => {
             <div 
               key={assignment.assignment_id} 
               className={`p-4 border rounded-lg transition-all  flex items-center justify-between mb-4
-                ${overdue ? 'border-gray-200 bg-white' : 
+                ${overdue ? 'border-red-300 bg-red-50' : 
                   dueSoon ? 'border-yellow-300 bg-yellow-50' : 
                   'border-gray-200 bg-white '}`}
             >
