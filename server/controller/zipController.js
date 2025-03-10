@@ -2,7 +2,7 @@ import decompress from "decompress";
 import path from "path";
 import fs from "fs";
 import evaluateSubmission from "../AIFunctionalities/aiZipFunctions.js";
-import { pool as SQLpool } from '../utils/SQLPool.js';
+import { pool as SQLpool } from "../utils/SQLPool.js";
 const pool = SQLpool;
 
 // https://www.geeksforgeeks.org/node-js-fs-rm-method/
@@ -96,10 +96,16 @@ const getZipcontents = async (req, res) => {
     }
 
     // save to DB
-    const [result] = await pool.query(`
+    const [result] = await pool.query(
+      `
       INSERT INTO feedback (assignment_id, student_id, feedback_contents, general_comment, attempt_nr)
       VALUES (?, ?, ?, "AAAAAAAAAAAAAAAAAAA", 1);
-      `, [req.body.assignment_id, req.body.student_id, evaluatedSubmission]
+      `,
+      [
+        req.body.assignment_id,
+        req.body.student_id,
+        JSON.stringify(evaluatedSubmission),
+      ]
     );
 
     // only send general_comment(?)
