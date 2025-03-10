@@ -196,3 +196,32 @@ export async function updateAssignment(req, res) {
 
 
 // delete assignment
+export async function deleteAssignment(req, res) {
+    if (!req.query.course_coordinator) {
+        return res.status(401).send("Unauthorized");
+    }
+
+    const [results] = await pool.query(`
+        UPDATE assignments
+        SET is_deleted = 1
+        WHERE assignment_id = ?;
+        `, [req.params.assignment_id]
+    );
+
+    res.send("Successfully deleted assignment");
+}
+
+export async function undeleteAssignment(req, res) {
+    if (!req.query.course_coordinator) {
+        return res.status(401).send("Unauthorized");
+    }
+
+    const [results] = await pool.query(`
+        UPDATE assignments
+        SET is_deleted = 0
+        WHERE assignment_id = ?;
+        `, [req.params.assignment_id]
+    );
+
+    res.send("Successfully undeleted assignment");
+}
