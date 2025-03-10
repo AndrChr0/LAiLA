@@ -99,7 +99,7 @@ const getZipcontents = async (req, res) => {
     const [result] = await pool.query(`
       INSERT INTO feedback (assignment_id, student_id, feedback_contents, general_comment, attempt_nr)
       VALUES (?, ?, ?, "AAAAAAAAAAAAAAAAAAA", 1);
-      `, [req.body.assignment_id, req.body.student_id, evaluateSubmission]
+      `, [req.body.assignment_id, req.body.student_id, evaluatedSubmission]
     );
 
     // only send general_comment(?)
