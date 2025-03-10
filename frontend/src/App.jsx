@@ -55,14 +55,26 @@ function App() {
           <Route path='/courses/:id'></Route>
 
           {/* <Route path='/student-homepage-placeholder' element={ <ProtectedRoute roles={["student"]}><StudentHomePage /></ProtectedRoute> }/> */}
-          <Route
+          {/* <Route
             path='/assignment-assessment'
             element={
               <ProtectedRoute roles={["student"]}>
                 <StudentAssignmentAssessmentPage />
               </ProtectedRoute>
             }
+          /> */}
+
+          <Route
+            path='/assignment-assessment/:id'
+            element={
+              <ProtectedRoute roles={["student"]}>
+                <UserProvider>
+                  <StudentAssignmentAssessmentPage />
+                </UserProvider>
+              </ProtectedRoute>
+            }
           />
+
           <Route
             path='/new-assignment'
             element={
