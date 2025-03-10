@@ -2,6 +2,8 @@ import decompress from "decompress";
 import path from "path";
 import fs from "fs";
 import evaluateSubmission from "../AIFunctionalities/aiZipFunctions.js";
+import { pool as SQLpool } from '../utils/SQLPool.js';
+const pool = SQLpool;
 
 // https://www.geeksforgeeks.org/node-js-fs-rm-method/
 function deleteZipFileContent() {
@@ -51,7 +53,19 @@ async function decompressZip(zipPath, allowedExtensions) {
 }
 
 const getZipcontents = async (req, res) => {
+  // check that req has everything it needs
+  // return error if not
+  if (!req.body.assignment_id || !req.body.assignment_attempts) {
+    return res.status(400).send("Missing attributes");
+  } else if (!req.body.student_id) {
+    return res.status(401).send("Unauthorized");
+  }
+
   try {
+    // get attempt_nr for assignment and user
+    // error if too high
+    // save num for later
+
     const file = req.file;
     console.log("File uploaded:", file);
     const { allowedExtensions } = req.body;
@@ -80,6 +94,15 @@ const getZipcontents = async (req, res) => {
     if (evaluatedSubmission) {
       deleteZipFileContent();
     }
+
+    // save to DB
+    const [result] = await pool.query(`
+      INSERT INTO feedback (assignment_id, student_id, feedback_contents, general_comment, attempt_nr)
+      VALUES (?, ?, ?, "AAAAAAAAAAAAAAAAAAA", 1);
+      `, [req.body.assignment_id, req.body.student_id, evaluateSubmission]
+    );
+
+    // only send general_comment(?)
     res.send(evaluatedSubmission);
   } catch (error) {
     console.error(error);

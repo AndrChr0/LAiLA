@@ -47,7 +47,21 @@ export async function getOneFeedback(req, res) {
 
 // get all feedback JSON (assignment) - auth(L)
     // threshold to get report (e.g. every 20% participation), each report is standalone (@20% "X% have trouble with Y...", @40% (new)"X% have trouble with Y...")
+export async function getFeedbackForSummary(req, res) {
+    if (!req.query.course_coordinator) {
+        return res.status(401).send("Unauthorized");
+    }
 
+    const [rows] = await pool.query(`
+        SELECT feedback_contents
+        FROM feedback
+        WHERE assignment_id = ?;
+        `, [req.params.assignment_id]
+    );
 
-// post feedback
-
+    if (rows.length > 0) {
+        res.send(rows);
+    } else {
+        res.send("No feedback found");
+    }
+}

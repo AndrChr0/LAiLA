@@ -9,6 +9,10 @@ function UploadAssignmentAssessment() {
 
   // demo - fix selection
   const allowedExtensions = [".css", ".html"];
+  // placeholders, get from DB later
+  const assignment_id = 1;
+  const student_id = 1;
+  const maxAttempts = 3;
 
   function handleFileChange(e) {
     setFile(e.target.files[0]);
@@ -39,6 +43,10 @@ function UploadAssignmentAssessment() {
       formData.append("zipUpload", file);
 
       formData.append("allowedExtensions", JSON.stringify(allowedExtensions));
+
+      formData.append("assignment_id", assignment_id);
+      formData.append("student_id", student_id);
+      formData.append("assignment_attempts", maxAttempts);
 
       const response = await axios.post(
         "http://localhost:5310/api/ai/decompress",
