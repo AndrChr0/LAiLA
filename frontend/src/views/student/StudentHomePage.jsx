@@ -7,6 +7,7 @@ import { useUserData } from "../../context/UserContext";
 
 function StudentHomePage() {
   const { assignments, setAssignments } = useUserData();
+  const { courses, setCourses } = useUserData();
   const { userId, userRole } = useAuth();
   const isLecturer = userRole === "lecturer";
 
@@ -19,7 +20,6 @@ function StudentHomePage() {
             course_coordinator: isLecturer ? userId : undefined,
           },
         });
-        // console.log("Assignments API Response:", response.data);
 
         setAssignments(response.data || []);
       } catch (error) {
@@ -30,6 +30,25 @@ function StudentHomePage() {
 
     fetchAssignments();
   }, [userId]);
+
+  useEffect(() => {
+      const fetchCourses = async () => {
+          try {
+            const response = await instance.get('api/courses', {
+              params: { 
+                  student_id: !isLecturer ? userId : undefined,
+                  course_coordinator: isLecturer ? userId : undefined,
+                },
+            });
+        
+            setCourses(Array.isArray(response.data) ? response.data : []);
+          } catch (error) {
+            console.error('Error fetching courses:', error);
+          }
+        };
+      
+        fetchCourses();
+    }, [userId]);
 
   console.log("Assignments:", assignments);
 
@@ -47,16 +66,18 @@ const inactiveAssignments = Array.isArray(assignments)
 
 
 
+
+
   return (
     <>
       <div className='mb-5'>
         <h2 className='text-4xl font-normal'>Assignments</h2>
         <Assignments assignments={activeAssignments} is_active={1} />
-        <Assignments assignments={inactiveAssignments} is_active={0} />
+        {/* <Assignments assignments={inactiveAssignments} is_active={0} /> */}
       </div>
 
       <div >
-        <Courses />
+        <Courses courses={courses} />
       </div>
     </>
   );
