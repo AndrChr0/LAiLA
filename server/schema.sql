@@ -61,6 +61,7 @@ CREATE TABLE feedback (
     student_id SMALLINT UNSIGNED NOT NULL,
     feedback_contents JSON NOT NULL,
     general_comment TEXT NOT NULL,
+    suggested_result ENUM('pass', 'fail') NOT NULL,
     attempt_nr TINYINT UNSIGNED NOT NULL,
     PRIMARY KEY (feedback_id),
     FOREIGN KEY (assignment_id) REFERENCES assignments(assignment_id),
@@ -118,7 +119,7 @@ INSERT INTO assignment_filetypes (assignment_id, filetype) VALUES
 (6, '.css'),
 (6, '.html');
 
-INSERT INTO feedback (assignment_id, student_id, feedback_contents, general_comment, attempt_nr) VALUES
+INSERT INTO feedback (assignment_id, student_id, feedback_contents, general_comment, suggested_result, attempt_nr) VALUES
 (1, 1, '{"general_comments": {
         "use_of_semantic_structural_tags_score": 1,
         "use_of_semantic_structural_tags_feedback": "Semantic tags are extensively used throughout the project where applicable.",
@@ -143,13 +144,13 @@ INSERT INTO feedback (assignment_id, student_id, feedback_contents, general_comm
         "validation_errors_check": "No validation errors detected in the HTML or CSS code.",
         "positioning_errors_check": "All elements are well-aligned with no overflow issues. Spacing is consistently applied.",
         "final_comments": "The student submission displays a high level of competence in web design fundamentals. Each requirement was clearly addressed and executed with attention to detail. Semantic HTML usage is strong, the site is well-structured, and the styles are coherent. There are no critical issues, and the project effectively meets the assignment criteria."
-    }}', 'The student submission displays a high level of competence in web design fundamentals. Each requirement was clearly addressed and executed with attention to detail. Semantic HTML usage is strong, the site is well-structured, and the styles are coherent. There are no critical issues, and the project effectively meets the assignment criteria.', 1),
-(6, 3, '{}', 'Please improve.', 1),
-(4, 2, '{}', 'I can see only a few trees in your group CodePen.', 1),
-(6, 3, '{}', 'One of the best work done.', 2),
-(6, 3, '{}', 'It is illegal to sell guns in Norway.', 3),
-(2, 1, '{}', ' I will forward this concern further to your study program leaders.', 1),
-(4, 2, '{}', 'If you have questions regarding the feedback, please take contact.', 2),
-(3, 1, '{}', 'Several potential issues and areas for improvement.', 1),
-(3, 1, '{}', 'Good job!', 2),
-(5, 2, '{}', 'Good acknowledgements and judgements in your reflection.', 1);
+    }}', 'The student submission displays a high level of competence in web design fundamentals. Each requirement was clearly addressed and executed with attention to detail. Semantic HTML usage is strong, the site is well-structured, and the styles are coherent. There are no critical issues, and the project effectively meets the assignment criteria.', 'pass', 1),
+(6, 3, '{}', 'Please improve.', 'fail', 1),
+(4, 2, '{}', 'I can see only a few trees in your group CodePen.', 'fail', 1),
+(6, 3, '{}', 'One of the best work done.', 'pass', 2),
+(6, 3, '{}', 'It is illegal to sell guns in Norway.', 'fail', 3),
+(2, 1, '{}', ' I will forward this concern further to your study program leaders.', 'fail', 1),
+(4, 2, '{}', 'If you have questions regarding the feedback, please take contact.', 'fail', 2),
+(3, 1, '{}', 'Several potential issues and areas for improvement.', 'fail', 1),
+(3, 1, '{}', 'Good job!', 'fail', 2),
+(5, 2, '{}', 'Good acknowledgements and judgements in your reflection.', 'pass', 1);
