@@ -13,7 +13,7 @@ const pool = SQLpool;
 
 export async function getUsers(req, res) {
 // Desctructuring the result method
-    const [rows] = await pool.query("SELECT * FROM users") 
+    const [rows] = await pool.query("SELECT user_id, first_name, last_name, role, email FROM users") 
     res.send(rows);
 }
 
@@ -23,7 +23,7 @@ export async function getUsers(req, res) {
 // prepared statement. prevent sql injection
 export async function getUser(id){
     const [rows] = await pool.query(`
-        SELECT * FROM users
+        SELECT user_id, first_name, last_name, role, email FROM users
         WHERE id = ?
         `, [id])
     return rows[0]
