@@ -4,7 +4,6 @@ import AssignmentCriteriaForm from "../../components/AssignmentCriteriaForm";
 import axios from "axios";
 
 function NewAssignmentPage() {
-
   // propably refactor state usage
   const [assignment_title, setAssignmentTitle] = useState("");
   const [assignment_start_date, setAssignmentStart] = useState("");
@@ -30,12 +29,11 @@ function NewAssignmentPage() {
   }
 
   function handleIsActiveChange() {
-    setIsActive(!isActive); 
+    setIsActive(!isActive);
   }
 
-
   function handleIsPublicChange() {
-    setIsPublic(prev => {
+    setIsPublic((prev) => {
       const newIsPublic = !prev;
       if (!newIsPublic) {
         setIsActive(false);
@@ -45,8 +43,7 @@ function NewAssignmentPage() {
   }
 
   console.log("isPublic:", isPublic);
-    console.log("isActive:", isActive);
-
+  console.log("isActive:", isActive);
 
   function handleFileChange() {
     if (!allowed_filetype) {
@@ -60,42 +57,33 @@ function NewAssignmentPage() {
     if (allowed_filetype.startsWith(".")) {
       setAssignmentFiletypes([...allowed_filetypes, allowed_filetype]);
     } else {
-      setAssignmentFiletypes([
-        ...allowed_filetypes,
-        `.${allowed_filetype}`,
-      ]);
+      setAssignmentFiletypes([...allowed_filetypes, `.${allowed_filetype}`]);
     }
     setAssignmentFiletype("");
   }
   console.log("filetypes:", allowed_filetypes);
 
-
-
-  
-
   function handleSubmit(e) {
-  
-
     e.preventDefault();
-    axios.post("http://localhost:5310/api/assignments", {
-      assignment_title: assignment_title,
-      assignment_start_date: assignment_start_date,
-      assignment_end_date: assignment_end_date,
-      is_active: isActive,
-      is_public: isPublic,
-      assignment_description: assignment_description,
-      assignment_criteria: JSON.stringify(assignment_criteria),
-      course_id: 1,
-      max_score: maxScore,
-      pass_threshold: passPercentage/100,
-      assignment_attempts: assignment_attempts,
-      allowed_filetypes: allowed_filetypes
-    })
-    .then((response) => {
-      console.log(response.data);
-    })
-
-  } 
+    axios
+      .post("http://localhost:5310/api/assignments", {
+        assignment_title: assignment_title,
+        assignment_start_date: assignment_start_date,
+        assignment_end_date: assignment_end_date,
+        is_active: isActive,
+        is_public: isPublic,
+        assignment_description: assignment_description,
+        assignment_criteria: JSON.stringify(assignment_criteria),
+        course_id: 1, // hardcoded for now
+        max_score: maxScore,
+        pass_threshold: passPercentage / 100,
+        assignment_attempts: assignment_attempts,
+        allowed_filetypes: allowed_filetypes,
+      })
+      .then((response) => {
+        console.log(response.data);
+      });
+  }
 
   return (
     <>
@@ -130,32 +118,31 @@ function NewAssignmentPage() {
           name='assignment_end'
           id='assignment_end'
         />
-    <div className="flex items-center py-8">
-        <label htmlFor='is_public'>Make Public</label>
-        <input
-          onChange={handleIsPublicChange}
-          checked={isPublic}
-          className='border border-gray-400 w-16'
-          type='checkbox'
-          name='is_public'
-          id='is_public'
-        />
-    </div>
+        <div className='flex items-center py-8'>
+          <label htmlFor='is_public'>Make Public</label>
+          <input
+            onChange={handleIsPublicChange}
+            checked={isPublic}
+            className='border border-gray-400 w-16'
+            type='checkbox'
+            name='is_public'
+            id='is_public'
+          />
+        </div>
 
-    {isPublic && (
-      <div className="flex items-center py-8">
-        <label htmlFor='is_active'>Is Active</label>
-        <input
-          onChange={handleIsActiveChange}
-
-          checked={isActive}
-          className='border border-gray-400 w-16'
-          type='checkbox'
-          name='is_active'
-          id='is_active'
-        />
-      </div>
-    )}
+        {isPublic && (
+          <div className='flex items-center py-8'>
+            <label htmlFor='is_active'>Is Active</label>
+            <input
+              onChange={handleIsActiveChange}
+              checked={isActive}
+              className='border border-gray-400 w-16'
+              type='checkbox'
+              name='is_active'
+              id='is_active'
+            />
+          </div>
+        )}
 
         <label htmlFor='assignment_attempts'>Assignment Attempts</label>
         <input
@@ -227,7 +214,10 @@ function NewAssignmentPage() {
           name='passPercentage'
           id='passPercentage'
         />
-        <AssignmentCriteriaForm onHandleCriteria={handleCriteriaChange} onHandleMaxScoreChange={handleMaxScoreChange} />
+        <AssignmentCriteriaForm
+          onHandleCriteria={handleCriteriaChange}
+          onHandleMaxScoreChange={handleMaxScoreChange}
+        />
         <button
           type='submit'
           className='border border-gray-400 p-2 w-28 mt-4'

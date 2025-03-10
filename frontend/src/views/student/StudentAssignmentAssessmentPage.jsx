@@ -41,7 +41,12 @@ function StudentAssignmentAssessmentPage() {
       )}
 
       {currentAssignment && currentAssignment.is_active === 1 ? (
-        <UploadAssignmentAssessment />
+        <UploadAssignmentAssessment
+          assignmentId={currentAssignment.assignment_id}
+          filetypes={currentAssignment.allowed_filetypes}
+          description={currentAssignment.assignment_description}
+          criteria={currentAssignment.assignment_criteria}
+        />
       ) : null}
     </>
   );
