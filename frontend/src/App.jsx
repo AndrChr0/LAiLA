@@ -11,9 +11,9 @@ import NewAssignmentPage from "./views/lecturer/NewAssignmentPage";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./protectedroute/ProtectedRoute";
 import { useAuth } from "./context/AuthContext";
+import { UserProvider } from "./context/UserContext";
 function App() {
-
-const { userRole } = useAuth();
+  const { userRole } = useAuth();
 
   return (
     <div className='App'>
@@ -23,28 +23,54 @@ const { userRole } = useAuth();
           {!userRole ? <Route path='/' element={<HeroPage />} /> : null}
 
           {userRole === "lecturer" ? (
-            <Route path='/home' element={<ProtectedRoute roles={["lecturer"]}><LecturerHomePage /></ProtectedRoute>} />
-          ) : null
-          }
-          
-          {userRole === "student" ? (
-            <Route path='/home' element={<ProtectedRoute roles={["student"]}><StudentHomePage /></ProtectedRoute>} />
+            <Route
+              path='/home'
+              element={
+                <ProtectedRoute roles={["lecturer"]}>
+                  <UserProvider>
+                    <LecturerHomePage />
+                  </UserProvider>
+                </ProtectedRoute>
+              }
+            />
           ) : null}
-          
+
+          {userRole === "student" ? (
+            <Route
+              path='/home'
+              element={
+                <ProtectedRoute roles={["student"]}>
+                  <UserProvider>
+                    <StudentHomePage />
+                  </UserProvider>
+                </ProtectedRoute>
+              }
+            />
+          ) : null}
+
           <Route path='/' element={<HeroPage />} />
           <Route path='/register' element={<RegisterPage />} />
           <Route path='/login' element={<LoginPage />} />
 
           <Route path='/courses/:id'></Route>
 
-
-
           {/* <Route path='/student-homepage-placeholder' element={ <ProtectedRoute roles={["student"]}><StudentHomePage /></ProtectedRoute> }/> */}
           <Route
             path='/assignment-assessment'
-            element={<StudentAssignmentAssessmentPage />}
+            element={
+              <ProtectedRoute roles={["student"]}>
+                <StudentAssignmentAssessmentPage />
+              </ProtectedRoute>
+            }
           />
-          <Route path='/new-assignment' element={<NewAssignmentPage />} />
+          <Route
+            path='/new-assignment'
+            element={
+              <ProtectedRoute roles={["lecturer"]}>
+                <NewAssignmentPage />
+              </ProtectedRoute>
+            }
+          />
           <Route path='*' element={<NotFoundPage />} />
         </Routes>
       </div>
