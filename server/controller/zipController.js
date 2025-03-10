@@ -2,6 +2,8 @@ import decompress from "decompress";
 import path from "path";
 import fs from "fs";
 import evaluateSubmission from "../AIFunctionalities/aiZipFunctions.js";
+import { pool as SQLpool } from "../utils/SQLPool.js";
+const pool = SQLpool;
 
 // https://www.geeksforgeeks.org/node-js-fs-rm-method/
 function deleteZipFileContent() {
@@ -51,21 +53,40 @@ async function decompressZip(zipPath, allowedExtensions) {
 }
 
 const getZipcontents = async (req, res) => {
+  // check that req has everything it needs
+  // return error if not
+  if (!req.body.assignment_id || !req.body.assignment_attempts) {
+    return res.status(400).send("Missing attributes");
+  } else if (!req.body.student_id) {
+    return res.status(401).send("Unauthorized");
+  }
+
   try {
+    // get attempt_nr for assignment and user
+    // error if too high
+    // save num for later
+
     const file = req.file;
     console.log("File uploaded:", file);
-    const { allowedExtensions } = req.body;
-    let parsedExtensions = [];
+    const { allowedExtensions, assignmentId, criteriaString, description } =
+      req.body;
+
+    // console.log("Allowed extensions:", allowedExtensions);
+    // console.log("Assignment ID:", assignmentId);
+    // console.log("Criteria string:", criteriaString);
+    // console.log("Description:", description);
+    const parsedExtensions = allowedExtensions.replaceAll('"', "").split(", ");
+    console.log("Parsed extensions:", parsedExtensions);
 
     if (!file) {
       return res.status(400).send("No file was uploaded.");
     }
 
-    try {
-      parsedExtensions = JSON.parse(allowedExtensions);
-    } catch (err) {
-      console.log("Could not parse allowedExtensions as JSON:", err);
-    }
+    // try {
+    //   // parsedExtensions = JSON.parse(allowedExtensions);
+    // } catch (err) {
+    //   console.log("Could not parse allowedExtensions as JSON:", err);
+    // }
 
     // Decompress the zip using the uploaded file path
     const zipContents = await decompressZip(file.path, parsedExtensions);
@@ -76,10 +97,33 @@ const getZipcontents = async (req, res) => {
     }
 
     // Evaluate
-    const evaluatedSubmission = await evaluateSubmission(zipContents);
+    const evaluatedSubmission = await evaluateSubmission(
+      zipContents,
+      criteriaString,
+      description
+    );
     if (evaluatedSubmission) {
       deleteZipFileContent();
     }
+    console.log(
+      "Evaluated submission:",
+      evaluatedSubmission.AI_final_assessment.AI_final_comments
+    );
+
+    // save to DB
+    // const [result] = await pool.query(
+    //   `
+    //   INSERT INTO feedback (assignment_id, student_id, feedback_contents, general_comment, attempt_nr)
+    //   VALUES (?, ?, ?, "AAAAAAAAAAAAAAAAAAA", 1);
+    //   `,
+    //   [
+    //     req.body.assignment_id,
+    //     req.body.student_id,
+    //     JSON.stringify(evaluatedSubmission),
+    //   ]
+    // );
+
+    // only send general_comment(?)
     res.send(evaluatedSubmission);
   } catch (error) {
     console.error(error);

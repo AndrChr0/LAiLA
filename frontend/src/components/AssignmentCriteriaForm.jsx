@@ -30,7 +30,6 @@ function AssignmentCriteriaForm({ onHandleCriteria, onHandleMaxScoreChange }) {
         sectionId: crypto.randomUUID(),
         sectionName: `section_${prev.length + 1}`,
         subsections: [],
-
       },
     ]);
   };
@@ -118,16 +117,14 @@ function AssignmentCriteriaForm({ onHandleCriteria, onHandleMaxScoreChange }) {
       const sectionKey = section.sectionName;
       const sectionProperties = {};
       const requiredFields = [];
-     
 
-      // for each subsection, create two fields: *_score, *_feedback and *_max_score 
+      // for each subsection, create two fields: *_score, *_feedback and *_max_score
       section.subsections.forEach((sub) => {
         const scoreKey = `${sub.subsectionName.replace(/\s+/g, "_")}_score`;
         const feedbackKey = `${sub.subsectionName.replace(
           /\s+/g,
           "_"
         )}_feedback`;
-
 
         sectionProperties[scoreKey] = {
           type: "integer",
@@ -140,13 +137,13 @@ function AssignmentCriteriaForm({ onHandleCriteria, onHandleMaxScoreChange }) {
             sub.feedbackDescription || "No feedback description provided.",
         };
 
-        sectionProperties[`${sub.subsectionName.replace(/\s+/g, "_")}_max_score`] = {
-          type: "integer",  
+        sectionProperties[
+          `${sub.subsectionName.replace(/\s+/g, "_")}_max_score`
+        ] = {
+          type: "integer",
           description: "Maximum score for this subsection.",
           default: sub.maxScore || 3,
         };
-
-  
 
         requiredFields.push(scoreKey, feedbackKey);
       });
@@ -184,7 +181,7 @@ function AssignmentCriteriaForm({ onHandleCriteria, onHandleMaxScoreChange }) {
         totalMaxScore += Number(sub.maxScore || 0);
       });
     });
-  
+
     onHandleMaxScoreChange(totalMaxScore);
 
     onHandleCriteria(generated);
@@ -197,7 +194,7 @@ function AssignmentCriteriaForm({ onHandleCriteria, onHandleMaxScoreChange }) {
       <h2 className='text-2xl font-bold mb-4'>Assignment Criteria Form</h2>
 
       <div className='mb-4'>
-        <label className='block font-semibold mb-1'>Schema Name:</label>
+        <label className='block font-semibold mb-1'>Assignment Name:</label>
         <input
           className='w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
           type='text'
@@ -349,7 +346,7 @@ function AssignmentCriteriaForm({ onHandleCriteria, onHandleMaxScoreChange }) {
         className='bg-purple-500 text-white px-6 py-3 rounded-md hover:bg-purple-600'
         onClick={handleGenerateClick}
       >
-        Save Criterias      
+        Save Criterias
       </button>
       {isSaved && <p className='text-green-500 mt-2'>{isSaved}</p>}
     </div>

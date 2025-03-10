@@ -1,15 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import Courses from "../../components/Courses";
 import Assignments from "../../components/Assignments";
-import instance from '../../utils/axiosInstance';
+import instance from "../../utils/axiosInstance";
 import { useAuth } from "../../context/AuthContext";
 import { useUserData } from "../../context/UserContext";
+import { useNavigate } from "react-router-dom";
 
 function LecturerHomePage() {
   const { assignments, setAssignments } = useUserData();
+
    const { courses, setCourses } = useUserData();
   const { userId, userRole} = useAuth();
   const isLecturer = userRole === "lecturer";
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchAssignments = async () => {
@@ -52,17 +55,24 @@ function LecturerHomePage() {
   }, [userId]);
 
   const activeAssignments = Array.isArray(assignments)
-  ? assignments.filter((assignment) => assignment.is_active === 1)
-  : [];
+    ? assignments.filter((assignment) => assignment.is_active === 1)
+    : [];
 
-const inactiveAssignments = Array.isArray(assignments)
-  ? assignments.filter((assignment) => assignment.is_active === 0)
-  : [];
+  const inactiveAssignments = Array.isArray(assignments)
+    ? assignments.filter((assignment) => assignment.is_active === 0)
+    : [];
   if (!assignments) {
     return <p>No assignments found.</p>;
   }
   return (
   <>
+    <button
+        onClick={() => navigate("/new-assignment")}
+        className='hover:cursor-pointer bg-white text-gray-800 border border-gray-400 px-4 py-2 rounded hover:bg-gray-100'
+      >
+        New Assignment
+      </button>
+
     <div className="mb-5">  
       <Courses courses={courses} />
     </div>
@@ -72,7 +82,7 @@ const inactiveAssignments = Array.isArray(assignments)
       <Assignments assignments={activeAssignments} is_active={1} />
     </div>
     </>
-  
-  )}
+  );
+}
 
 export default LecturerHomePage;

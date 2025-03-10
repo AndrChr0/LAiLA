@@ -3,6 +3,8 @@ import {
   getAllAssignments,
   createAssignment,
   updateAssignment,
+  deleteAssignment,
+  undeleteAssignment,
   getOneAssignment,
 } from "../controller/assignmentController.js";
 const router = express.Router();
@@ -27,5 +29,7 @@ router.post("/", createAssignment);
 router.patch("/:assignment_id", updateAssignment);
 
 // delete assignment
+router.delete("/:assignment_id", deleteAssignment);
+router.patch("/ohno/:assignment_id", undeleteAssignment); // remove later
 
 export default router;

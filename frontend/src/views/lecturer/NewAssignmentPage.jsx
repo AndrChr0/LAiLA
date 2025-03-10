@@ -1,9 +1,12 @@
-import React from "react";
-import { useState } from "react";
+import React, { use } from "react";
+import { useState, useEffect } from "react";
 import AssignmentCriteriaForm from "../../components/AssignmentCriteriaForm";
 import axios from "axios";
+import instance from "../../utils/axiosInstance";
+import { useAuth } from "../../context/AuthContext";
 
 function NewAssignmentPage() {
+  const { userId } = useAuth();
 
   // propably refactor state usage
   const [assignment_title, setAssignmentTitle] = useState("");
@@ -18,8 +21,19 @@ function NewAssignmentPage() {
   const [assignment_criteria, setAssignmentCriteria] = useState({});
   const [passPercentage, setPassPercentage] = useState(70);
   const [maxScore, setMaxScore] = useState(0);
+  const [lecturerCourses, setLecturerCourses] = useState([]);
+  const [courseId, setCourseId] = useState(0);
 
-  console.log("Max Score:", maxScore);
+  useEffect(() => {
+    instance
+      .get(`api/courses?course_coordinator=${userId}`)
+      .then((response) => {
+        setLecturerCourses(response.data);
+        setCourseId(response.data[0].course_id);
+      });
+  }, [userId]);
+
+  console.log("Courses:", lecturerCourses);
 
   function handleMaxScoreChange(newScore) {
     setMaxScore(newScore);
@@ -30,12 +44,11 @@ function NewAssignmentPage() {
   }
 
   function handleIsActiveChange() {
-    setIsActive(!isActive); 
+    setIsActive(!isActive);
   }
 
-
   function handleIsPublicChange() {
-    setIsPublic(prev => {
+    setIsPublic((prev) => {
       const newIsPublic = !prev;
       if (!newIsPublic) {
         setIsActive(false);
@@ -45,8 +58,7 @@ function NewAssignmentPage() {
   }
 
   console.log("isPublic:", isPublic);
-    console.log("isActive:", isActive);
-
+  console.log("isActive:", isActive);
 
   function handleFileChange() {
     if (!allowed_filetype) {
@@ -60,47 +72,53 @@ function NewAssignmentPage() {
     if (allowed_filetype.startsWith(".")) {
       setAssignmentFiletypes([...allowed_filetypes, allowed_filetype]);
     } else {
-      setAssignmentFiletypes([
-        ...allowed_filetypes,
-        `.${allowed_filetype}`,
-      ]);
+      setAssignmentFiletypes([...allowed_filetypes, `.${allowed_filetype}`]);
     }
     setAssignmentFiletype("");
   }
   console.log("filetypes:", allowed_filetypes);
 
-
-
-  
-
   function handleSubmit(e) {
-  
-
     e.preventDefault();
-    axios.post("http://localhost:5310/api/assignments", {
-      assignment_title: assignment_title,
-      assignment_start_date: assignment_start_date,
-      assignment_end_date: assignment_end_date,
-      is_active: isActive,
-      is_public: isPublic,
-      assignment_description: assignment_description,
-      assignment_criteria: JSON.stringify(assignment_criteria),
-      course_id: 1,
-      max_score: maxScore,
-      pass_threshold: passPercentage/100,
-      assignment_attempts: assignment_attempts,
-      allowed_filetypes: allowed_filetypes
-    })
-    .then((response) => {
-      console.log(response.data);
-    })
+    axios
+      .post("http://localhost:5310/api/assignments", {
+        assignment_title: assignment_title,
+        assignment_start_date: assignment_start_date,
+        assignment_end_date: assignment_end_date,
+        is_active: isActive,
+        is_public: isPublic,
+        assignment_description: assignment_description,
+        assignment_criteria: JSON.stringify(assignment_criteria),
+        course_id: courseId,
+        max_score: maxScore,
+        pass_threshold: passPercentage / 100,
+        assignment_attempts: assignment_attempts,
+        allowed_filetypes: allowed_filetypes,
+      })
+      .then((response) => {
+        console.log(response.data);
+      });
+  }
 
-  } 
-
+  console.log("course ID", courseId);
   return (
     <>
       <h1 className='text-3xl font-light'>New Assignment</h1>
       <div className='flex flex-col w-11/12 md:w-2/3 mx-auto my-0 pt-4'>
+        <label htmlFor='course'>Select Course</label>
+        <select
+          className='border border-gray-400 p-2 mb-4'
+          name='course'
+          id='course'
+          onChange={(e) => setCourseId(e.target.value)}
+        >
+          {lecturerCourses.map((course) => (
+            <option key={course.course_id} value={course.course_id}>
+              {course.course_name}
+            </option>
+          ))}
+        </select>
+
         <label htmlFor='assignment_title'>Assignment Title</label>
         <input
           onChange={(e) => setAssignmentTitle(e.target.value)}
@@ -130,32 +148,31 @@ function NewAssignmentPage() {
           name='assignment_end'
           id='assignment_end'
         />
-    <div className="flex items-center py-8">
-        <label htmlFor='is_public'>Make Public</label>
-        <input
-          onChange={handleIsPublicChange}
-          checked={isPublic}
-          className='border border-gray-400 w-16'
-          type='checkbox'
-          name='is_public'
-          id='is_public'
-        />
-    </div>
+        <div className='flex items-center py-8'>
+          <label htmlFor='is_public'>Make Public</label>
+          <input
+            onChange={handleIsPublicChange}
+            checked={isPublic}
+            className='border border-gray-400 w-16'
+            type='checkbox'
+            name='is_public'
+            id='is_public'
+          />
+        </div>
 
-    {isPublic && (
-      <div className="flex items-center py-8">
-        <label htmlFor='is_active'>Is Active</label>
-        <input
-          onChange={handleIsActiveChange}
-
-          checked={isActive}
-          className='border border-gray-400 w-16'
-          type='checkbox'
-          name='is_active'
-          id='is_active'
-        />
-      </div>
-    )}
+        {isPublic && (
+          <div className='flex items-center py-8'>
+            <label htmlFor='is_active'>Is Active</label>
+            <input
+              onChange={handleIsActiveChange}
+              checked={isActive}
+              className='border border-gray-400 w-16'
+              type='checkbox'
+              name='is_active'
+              id='is_active'
+            />
+          </div>
+        )}
 
         <label htmlFor='assignment_attempts'>Assignment Attempts</label>
         <input
@@ -227,7 +244,10 @@ function NewAssignmentPage() {
           name='passPercentage'
           id='passPercentage'
         />
-        <AssignmentCriteriaForm onHandleCriteria={handleCriteriaChange} onHandleMaxScoreChange={handleMaxScoreChange} />
+        <AssignmentCriteriaForm
+          onHandleCriteria={handleCriteriaChange}
+          onHandleMaxScoreChange={handleMaxScoreChange}
+        />
         <button
           type='submit'
           className='border border-gray-400 p-2 w-28 mt-4'
