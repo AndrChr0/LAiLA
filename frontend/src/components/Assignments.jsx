@@ -62,7 +62,7 @@ const Assignments = ({ assignments, is_active }) => {
           return (
             <div
               key={assignment.assignment_id}
-              className={`p-4 border rounded-lg transition-all hover:shadow-md flex items-center justify-between mb-4
+              className={`p-4 border rounded-lg transition-all  flex items-center justify-between mb-4
                 ${
                   overdue
                     ? "border-red-300 bg-red-50"

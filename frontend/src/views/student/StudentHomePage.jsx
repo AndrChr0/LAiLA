@@ -7,10 +7,8 @@ import { useUserData } from "../../context/UserContext";
 
 function StudentHomePage() {
   const { assignments, setAssignments } = useUserData();
-  const { userId } = useAuth();
-  // const [assignments, setAssignments] = useState([]);
-  const isLecturer = false;
-  // const userId = 2;
+  const { userId, userRole } = useAuth();
+  const isLecturer = userRole === "lecturer";
 
   useEffect(() => {
     const fetchAssignments = async () => {
@@ -31,20 +29,24 @@ function StudentHomePage() {
     };
 
     fetchAssignments();
-  }, []);
+  }, [userId]);
 
   console.log("Assignments:", assignments);
-
-  const activeAssignments = assignments.filter(
-    (assignment) => assignment.is_active === 1
-  );
-  const inactiveAssignments = assignments.filter(
-    (assignment) => assignment.is_active === 0
-  );
 
   if (!assignments) {
     return <p>No assignments found.</p>;
   }
+
+  const activeAssignments = Array.isArray(assignments)
+  ? assignments.filter((assignment) => assignment.is_active === 1)
+  : [];
+
+const inactiveAssignments = Array.isArray(assignments)
+  ? assignments.filter((assignment) => assignment.is_active === 0)
+  : [];
+
+
+
   return (
     <>
       <div className='mb-5'>
@@ -53,7 +55,7 @@ function StudentHomePage() {
         <Assignments assignments={inactiveAssignments} is_active={0} />
       </div>
 
-      <div className='bg-gray-200'>
+      <div >
         <Courses />
       </div>
     </>
