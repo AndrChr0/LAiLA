@@ -5,37 +5,15 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from "../context/AuthContext";
 import { useUserData } from "../context/UserContext";
 
-const Courses = () => {
-  const { courses, setCourses } = useUserData();
+const Courses = ({courses, isLecturer}) => {
   const navigate = useNavigate();
-  const { userId, userRole } = useAuth();
-   const isLecturer = userRole === "lecturer";
-
-  useEffect(() => {
-    const fetchCourses = async () => {
-        try {
-          const response = await instance.get('api/courses', {
-            params: { 
-                student_id: !isLecturer ? userId : undefined,
-                course_coordinator: isLecturer ? userId : undefined,
-              },
-          });
-      
-          setCourses(Array.isArray(response.data) ? response.data : []);
-        } catch (error) {
-          console.error('Error fetching courses:', error);
-        }
-      };
-      
-
-    if (userId) {
-      fetchCourses();
-    }
-  }, [userId, isLecturer]);
+  const { setCourses } = useUserData();
+  // const { userId, userRole } = useAuth();
+  //  const isLecturer = userRole === "lecturer";
 
   return (
     <div className="">
-    <h2 className="mb-8 text-4xl font-semibold text-gray-800">{isLecturer ? 'Courses You Manage' : 'Enrolled Courses'}</h2>
+    {/* <h2 className="mb-8 text-4xl font-semibold text-gray-800">{isLecturer ? 'Courses You Manage' : 'Enrolled Courses'}</h2> */}
     
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
       {courses.length > 0 ? (
@@ -55,7 +33,9 @@ const Courses = () => {
           return (
             <div 
               key={course.course_id} 
-              onClick={() => navigate(`/courses/${course.course_id}`)}
+              onClick={() => {
+                navigate(`/courses/${course.course_id}`);
+              }}
               className="bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl hover:translate-y-[-4px] cursor-pointer border border-gray-100"
             >
               <div className={`flex items-center justify-center h-32 bg-gradient-to-r ${gradient.from} ${gradient.to}`}>

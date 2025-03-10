@@ -8,7 +8,9 @@ import { useNavigate } from "react-router-dom";
 
 function LecturerHomePage() {
   const { assignments, setAssignments } = useUserData();
-  const { userId, userRole } = useAuth();
+
+   const { courses, setCourses } = useUserData();
+  const { userId, userRole} = useAuth();
   const isLecturer = userRole === "lecturer";
   const navigate = useNavigate();
 
@@ -33,6 +35,25 @@ function LecturerHomePage() {
     fetchAssignments();
   }, [userId]);
 
+  useEffect(() => {
+    const fetchCourses = async () => {
+        try {
+          const response = await instance.get('api/courses', {
+            params: { 
+                student_id: !isLecturer ? userId : undefined,
+                course_coordinator: isLecturer ? userId : undefined,
+              },
+          });
+      
+          setCourses(Array.isArray(response.data) ? response.data : []);
+        } catch (error) {
+          console.error('Error fetching courses:', error);
+        }
+      };
+    
+      fetchCourses();
+  }, [userId]);
+
   const activeAssignments = Array.isArray(assignments)
     ? assignments.filter((assignment) => assignment.is_active === 1)
     : [];
@@ -44,23 +65,22 @@ function LecturerHomePage() {
     return <p>No assignments found.</p>;
   }
   return (
-    <>
-      <button
+  <>
+    <button
         onClick={() => navigate("/new-assignment")}
         className='hover:cursor-pointer bg-white text-gray-800 border border-gray-400 px-4 py-2 rounded hover:bg-gray-100'
       >
         New Assignment
       </button>
 
-      <div className='mb-5'>
-        <Courses />
-      </div>
-
-      <div className=''>
-        <h2 className='text-4xl font-normal'>Active Assignments</h2>
-        <Assignments assignments={activeAssignments} is_active={1} />
-        <Assignments assignments={inactiveAssignments} is_active={0} />
-      </div>
+    <div className="mb-5">  
+      <Courses courses={courses} />
+    </div>
+    
+    <div className="">
+      <h2 className="text-4xl font-normal">Active Assignments</h2>
+      <Assignments assignments={activeAssignments} is_active={1} />
+    </div>
     </>
   );
 }
