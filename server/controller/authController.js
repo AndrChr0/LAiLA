@@ -9,7 +9,7 @@ const pool = SQLpool;
 export const register = async (req, res) => {
     // Check if email already exists
     const email = req.body.email;
-    const [rows] = await pool.query('SELECT * FROM users WHERE email = ?', [email]);
+    const [rows] = await pool.query('SELECT email FROM users WHERE email = ?', [email]);
 
     // If email already exists, return error
     if (rows.length > 0) {
@@ -44,7 +44,7 @@ export const login = async (req, res) => {
     try {
         const email = req.body.email;
         const password = req.body.password;
-        const [rows] = await pool.query('SELECT * FROM users WHERE email = ?', [email]);
+        const [rows] = await pool.query('SELECT user_id, email, password, role FROM users WHERE email = ?', [email]);
         const user = rows[0];
         const validPassword = await bcrypt.compare(password, user.password);
 
@@ -99,7 +99,7 @@ export const refresh = (req, res) => {
         async (err, decoded) => {
             if (err) return res.status(403).json("Forbidden");
 
-            const [rows] = await pool.query("SELECT * FROM users WHERE user_id = ?", [decoded.userId]);
+            const [rows] = await pool.query("SELECT user_id, role FROM users WHERE user_id = ?", [decoded.userId]);
             const user = rows[0];
 
             if (!user) return res.status(401).send("Unauthorized, no user found");

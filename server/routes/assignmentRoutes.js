@@ -1,5 +1,12 @@
 import express from "express";
-import { getAllAssignments, createAssignment, updateAssignment, deleteAssignment, undeleteAssignment } from "../controller/assignmentController.js";
+import {
+  getAllAssignments,
+  createAssignment,
+  updateAssignment,
+  deleteAssignment,
+  undeleteAssignment,
+  getOneAssignment,
+} from "../controller/assignmentController.js";
 const router = express.Router();
 
 // get all assignments (for user) - auth(S/L)
@@ -9,13 +16,11 @@ const router = express.Router();
 */
 router.get("/", getAllAssignments);
 
-
 // removed, might want eventually, but not for now
 // // get one assignment - auth(S/L)[w/ course]
 // // frontend would determine which we use
-// // router.get("/:assignment_id", getOneAssignment);
+router.get("/:assignment_id", getOneAssignment);
 // router.get("/:course_id/:assignment_id", getOneAssignment);
-
 
 // post assignment - auth(L)
 router.post("/", createAssignment);
@@ -26,6 +31,5 @@ router.patch("/:assignment_id", updateAssignment);
 // delete assignment
 router.delete("/:assignment_id", deleteAssignment);
 router.patch("/ohno/:assignment_id", undeleteAssignment); // remove later
-
 
 export default router;
