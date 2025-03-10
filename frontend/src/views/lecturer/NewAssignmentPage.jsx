@@ -1,9 +1,13 @@
-import React from "react";
-import { useState } from "react";
+import React, { use } from "react";
+import { useState, useEffect } from "react";
 import AssignmentCriteriaForm from "../../components/AssignmentCriteriaForm";
 import axios from "axios";
+import instance from "../../utils/axiosInstance";
+import { useAuth } from "../../context/AuthContext";
 
 function NewAssignmentPage() {
+  const { userId } = useAuth();
+
   // propably refactor state usage
   const [assignment_title, setAssignmentTitle] = useState("");
   const [assignment_start_date, setAssignmentStart] = useState("");
@@ -17,8 +21,19 @@ function NewAssignmentPage() {
   const [assignment_criteria, setAssignmentCriteria] = useState({});
   const [passPercentage, setPassPercentage] = useState(70);
   const [maxScore, setMaxScore] = useState(0);
+  const [lecturerCourses, setLecturerCourses] = useState([]);
+  const [courseId, setCourseId] = useState(0);
 
-  console.log("Max Score:", maxScore);
+  useEffect(() => {
+    instance
+      .get(`api/courses?course_coordinator=${userId}`)
+      .then((response) => {
+        setLecturerCourses(response.data);
+        setCourseId(response.data[0].course_id);
+      });
+  }, [userId]);
+
+  console.log("Courses:", lecturerCourses);
 
   function handleMaxScoreChange(newScore) {
     setMaxScore(newScore);
@@ -74,7 +89,7 @@ function NewAssignmentPage() {
         is_public: isPublic,
         assignment_description: assignment_description,
         assignment_criteria: JSON.stringify(assignment_criteria),
-        course_id: 1, // hardcoded for now
+        course_id: courseId,
         max_score: maxScore,
         pass_threshold: passPercentage / 100,
         assignment_attempts: assignment_attempts,
@@ -85,10 +100,25 @@ function NewAssignmentPage() {
       });
   }
 
+  console.log("course ID", courseId);
   return (
     <>
       <h1 className='text-3xl font-light'>New Assignment</h1>
       <div className='flex flex-col w-11/12 md:w-2/3 mx-auto my-0 pt-4'>
+        <label htmlFor='course'>Select Course</label>
+        <select
+          className='border border-gray-400 p-2 mb-4'
+          name='course'
+          id='course'
+          onChange={(e) => setCourseId(e.target.value)}
+        >
+          {lecturerCourses.map((course) => (
+            <option key={course.course_id} value={course.course_id}>
+              {course.course_name}
+            </option>
+          ))}
+        </select>
+
         <label htmlFor='assignment_title'>Assignment Title</label>
         <input
           onChange={(e) => setAssignmentTitle(e.target.value)}
