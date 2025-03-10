@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import instance from '../utils/axiosInstance'
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from "../context/AuthContext";
+import { useUserData } from "../context/UserContext";
 
 const Courses = () => {
-  const [courses, setCourses] = useState([]);
+  const { courses, setCourses } = useUserData();
   const navigate = useNavigate();
-  const isLecturer = false; 
-  const userId = 2; 
+  const { userId, userRole } = useAuth();
+   const isLecturer = userRole === "lecturer";
 
   useEffect(() => {
     const fetchCourses = async () => {

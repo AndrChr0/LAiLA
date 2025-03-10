@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import Courses from "../../components/Courses";
 import Assignments from "../../components/Assignments";
 import instance from '../../utils/axiosInstance';
+import { useAuth } from "../../context/AuthContext";
+import { useUserData } from "../../context/UserContext";
 
 function LecturerHomePage() {
-
-  const [assignments, setAssignments] = useState([]);
-  const isLecturer = true;
-  const userId = 4;
+  const { assignments, setAssignments } = useUserData();
+  const { userId, userRole} = useAuth();
+  const isLecturer = userRole === "lecturer";
 
   useEffect(() => {
     const fetchAssignments = async () => {
@@ -28,13 +29,21 @@ function LecturerHomePage() {
     };
 
     fetchAssignments();
-  }, []);
+  }, [userId]);
 
-  const activeAssignments = assignments.filter((assignment) => assignment.is_active === 1);
-  const inactiveAssignments = assignments.filter((assignment) => assignment.is_active === 0);
+  const activeAssignments = Array.isArray(assignments)
+  ? assignments.filter((assignment) => assignment.is_active === 1)
+  : [];
+
+const inactiveAssignments = Array.isArray(assignments)
+  ? assignments.filter((assignment) => assignment.is_active === 0)
+  : [];
+  if (!assignments) {
+    return <p>No assignments found.</p>;
+  }
   return (
   <>
-    <div className="mb-5 bg-gray-200" >  
+    <div className="mb-5">  
       <Courses/>
     </div>
     
