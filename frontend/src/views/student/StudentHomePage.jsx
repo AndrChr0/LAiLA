@@ -42,6 +42,9 @@ function StudentHomePage() {
     (assignment) => assignment.is_active === 0
   );
 
+  if (!assignments) {
+    return <p>No assignments found.</p>;
+  }
   return (
     <>
       <div className='mb-5'>
