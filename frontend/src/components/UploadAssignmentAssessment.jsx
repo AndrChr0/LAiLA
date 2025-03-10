@@ -1,21 +1,27 @@
 import { useState } from "react";
 import axios from "axios";
 
-function UploadAssignmentAssessment() {
+function UploadAssignmentAssessment({
+  assignmentId,
+  filetypes,
+  description,
+  criteria,
+}) {
   const [feedback, setFeedback] = useState("");
   const [file, setFile] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const criteriaString = JSON.stringify(criteria);
+
   // demo - fix selection
-  const allowedExtensions = [".css", ".html"];
+  // const allowedExtensions = [".css", ".html"];
 
   function handleFileChange(e) {
     setFile(e.target.files[0]);
   }
 
   console.log("file:", file);
-  
 
   async function uploadFile() {
     try {
@@ -38,7 +44,13 @@ function UploadAssignmentAssessment() {
       // zipUpload - see multer config in zipRoutes.js
       formData.append("zipUpload", file);
 
-      formData.append("allowedExtensions", JSON.stringify(allowedExtensions));
+      formData.append("allowedExtensions", JSON.stringify(filetypes));
+
+      formData.append("assignmentId", assignmentId);
+
+      formData.append("criteriaString", criteriaString);
+
+      formData.append("description", description);
 
       const response = await axios.post(
         "http://localhost:5310/api/ai/decompress",
@@ -52,7 +64,7 @@ function UploadAssignmentAssessment() {
 
       console.log("Server response:", response.data);
       setFile(null);
-      setFeedback(response.data?.final_assessments?.final_comments || "");
+      setFeedback(response.data?.AI_final_assessment.AI_final_comments || "");
       setLoading(false);
     } catch (error) {
       console.error(error);
@@ -63,6 +75,12 @@ function UploadAssignmentAssessment() {
 
   return (
     <div className='flex flex-col'>
+      <ul className='text-red-900'>
+        <li>ID: {assignmentId}</li>
+        <li>Filetypes: {filetypes}</li>
+        <li>Description: {description}</li>
+        <li>Criteria: {JSON.stringify(criteria)}</li>
+      </ul>
       <h2 className='font-light text-xl'>Upload Project Zip file</h2>
       <div className='flex flex-col w-4/5'>
         <input
@@ -71,7 +89,7 @@ function UploadAssignmentAssessment() {
           name='zipUpload'
           onChange={handleFileChange}
         />
-        {file && (
+        {file && !loading && (
           <button
             disabled={loading}
             className='h-10 px-5 m-2 text-white transition-colors duration-150 bg-[#2b6cb0] rounded-lg focus:shadow-outline hover:bg-[#2c5282]'

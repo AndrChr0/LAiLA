@@ -54,18 +54,25 @@ const getZipcontents = async (req, res) => {
   try {
     const file = req.file;
     console.log("File uploaded:", file);
-    const { allowedExtensions } = req.body;
-    let parsedExtensions = [];
+    const { allowedExtensions, assignmentId, criteriaString, description } =
+      req.body;
+
+    // console.log("Allowed extensions:", allowedExtensions);
+    // console.log("Assignment ID:", assignmentId);
+    // console.log("Criteria string:", criteriaString);
+    // console.log("Description:", description);
+    const parsedExtensions = allowedExtensions.replaceAll('"', "").split(", ");
+    console.log("Parsed extensions:", parsedExtensions);
 
     if (!file) {
       return res.status(400).send("No file was uploaded.");
     }
 
-    try {
-      parsedExtensions = JSON.parse(allowedExtensions);
-    } catch (err) {
-      console.log("Could not parse allowedExtensions as JSON:", err);
-    }
+    // try {
+    //   // parsedExtensions = JSON.parse(allowedExtensions);
+    // } catch (err) {
+    //   console.log("Could not parse allowedExtensions as JSON:", err);
+    // }
 
     // Decompress the zip using the uploaded file path
     const zipContents = await decompressZip(file.path, parsedExtensions);
@@ -76,10 +83,18 @@ const getZipcontents = async (req, res) => {
     }
 
     // Evaluate
-    const evaluatedSubmission = await evaluateSubmission(zipContents);
+    const evaluatedSubmission = await evaluateSubmission(
+      zipContents,
+      criteriaString,
+      description
+    );
     if (evaluatedSubmission) {
       deleteZipFileContent();
     }
+    console.log(
+      "Evaluated submission:",
+      evaluatedSubmission.AI_final_assessment.AI_final_comments
+    );
     res.send(evaluatedSubmission);
   } catch (error) {
     console.error(error);
