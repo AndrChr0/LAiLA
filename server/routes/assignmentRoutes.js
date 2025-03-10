@@ -20,11 +20,10 @@ router.get("/", getAllAssignments);
 // post assignment - auth(L)
 router.post("/", createAssignment);
 
-// delete assignment - auth(L)
-// router.method("path", function);
-
 // put/patch assignment details - auth(L)   (only before submissions?)
 router.patch("/:assignment_id", updateAssignment);
+
+// delete assignment
 
 
 export default router;

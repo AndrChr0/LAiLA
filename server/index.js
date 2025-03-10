@@ -5,8 +5,7 @@ import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import courseRoutes from "./routes/courseRoutes.js";
 import assignmentRoutes from "./routes/assignmentRoutes.js";
-// feedback
-// import xRoutes from "./routes/xRoutes.js";
+import feedbackRoutes from "./routes/feedbackRoutes.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
@@ -30,8 +29,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/courses", courseRoutes);
 app.use("/api/assignments", assignmentRoutes);
-// feedback
-// app.use("/api/path", xRoutes);
+app.use("/api/feedback", feedbackRoutes);
 
 app.listen(PORT, () => {
   console.log("Server is jogging on port " + PORT);
