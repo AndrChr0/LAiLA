@@ -82,8 +82,8 @@ function UploadAssignmentAssessment({
       <ul className='text-red-900'>
         <li>ID: {assignmentId}</li>
         <li>Filetypes: {filetypes}</li>
-        <li>Description: {description}</li>
-        <li>Criteria: {JSON.stringify(criteria)}</li>
+        {/* <li>Description: {description}</li>
+        <li>Criteria: {JSON.stringify(criteria)}</li> */}
       </ul>
       <h2 className='font-light text-xl'>Upload Project Zip file</h2>
       <div className='flex flex-col w-4/5'>
