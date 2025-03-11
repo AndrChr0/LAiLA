@@ -1,6 +1,6 @@
 import { useState } from "react";
-import axios from "axios";
 import { useAuth } from "../context/AuthContext";
+import instance from "../utils/axiosInstance";
 
 function UploadAssignmentAssessment({
   assignmentId,
@@ -56,15 +56,11 @@ function UploadAssignmentAssessment({
 
       formData.append("student_id", userId);
 
-      const response = await axios.post(
-        "http://localhost:5310/api/ai/decompress",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await instance.post("api/ai/decompress", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       console.log("Server response:", response.data);
       setFile(null);
