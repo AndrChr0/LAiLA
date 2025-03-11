@@ -10,22 +10,9 @@ import { useFetchAssignments } from "../../utils/fetches/useFetchAssignments";
 
 
 const LecturerCoursePage = () => {
-    const [currentCourse, setCurrentCourse] = useState({});
-      const { assignments, setAssignments } = useUserData();
+      const { assignments } = useFetchAssignments();
       const path = useParams();
       const courseId = path.id;
-    
-      useEffect(() => {
-        instance
-          .get(`api/courses/${courseId}`)
-          .then((response) => {
-            setCurrentCourse(response.data);
-          })
-          .catch((error) => {
-            console.error("Error fetching assignment:", error);
-          });
-      }, [courseId]);
-    
     
       const activeAssignmentInCourse = (courseId) => {
         return assignments.filter((assignment) => assignment.course_id === Number(courseId) && assignment.is_active === 1);
