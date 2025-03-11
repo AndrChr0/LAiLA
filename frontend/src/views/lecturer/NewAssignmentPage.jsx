@@ -1,7 +1,6 @@
-import React, { use } from "react";
+import React from "react";
 import { useState, useEffect } from "react";
 import AssignmentCriteriaForm from "../../components/AssignmentCriteriaForm";
-import axios from "axios";
 import instance from "../../utils/axiosInstance";
 import { useAuth } from "../../context/AuthContext";
 import ToolTip from "../../shared/ToolTip";
@@ -81,8 +80,8 @@ function NewAssignmentPage() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    axios
-      .post("http://localhost:5310/api/assignments", {
+    instance
+      .post("api/assignments", {
         assignment_title: assignment_title,
         assignment_start_date: assignment_start_date,
         assignment_end_date: assignment_end_date,

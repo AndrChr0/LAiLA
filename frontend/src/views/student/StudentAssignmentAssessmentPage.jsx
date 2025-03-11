@@ -1,11 +1,8 @@
-import axios from "axios";
 import UploadAssignmentAssessment from "../../components/UploadAssignmentAssessment";
-import { useUserData } from "../../context/UserContext";
 import { useAuth } from "../../context/AuthContext";
 import instance from "../../utils/axiosInstance";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import getOneAssignment from "../../utils/fetches/getOneAssignment";
 
 function StudentAssignmentAssessmentPage() {
   const [currentAssignment, setCurrentAssignment] = useState(null);
