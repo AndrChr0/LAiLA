@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { useAuth } from "../context/AuthContext";
 
 function UploadAssignmentAssessment({
   assignmentId,
@@ -11,15 +12,12 @@ function UploadAssignmentAssessment({
   const [file, setFile] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const { userId, userRole } = useAuth();
 
   const criteriaString = JSON.stringify(criteria);
 
   // demo - fix selection
   // const allowedExtensions = [".css", ".html"];
-  // placeholders, get from DB later
-  const assignment_id = 1;
-  const student_id = 1;
-  const maxAttempts = 3;
 
   function handleFileChange(e) {
     setFile(e.target.files[0]);
@@ -50,15 +48,13 @@ function UploadAssignmentAssessment({
 
       formData.append("allowedExtensions", JSON.stringify(filetypes));
 
-      formData.append("assignmentId", assignmentId);
-
       formData.append("criteriaString", criteriaString);
 
       formData.append("description", description);
 
-      formData.append("assignment_id", assignment_id);
-      formData.append("student_id", student_id);
-      formData.append("assignment_attempts", maxAttempts);
+      formData.append("assignment_id", assignmentId);
+
+      formData.append("student_id", userId);
 
       const response = await axios.post(
         "http://localhost:5310/api/ai/decompress",

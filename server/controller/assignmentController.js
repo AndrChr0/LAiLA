@@ -45,31 +45,16 @@ export async function getAllAssignments(req, res) {
   }
 }
 
-// removed, might want eventually, but not for now
-// // get one assignment - auth(S/L)[w/ course]
-// export async function getOneAssignment(req, res) {
-//   // frontend would determine which we use
-//   // const [rows] = await pool.query(`SELECT * FROM assignments WHERE course_id = ?`, [req.body.course_id]); // is not using course_id in path
-//   const [rows] = await pool.query(
-//     `SELECT * FROM assignments WHERE assignment_id = ?`,
-//     [req.params.assignment_id]
-//   );
-//   if (rows.length > 0 && req.params.assignment_id - 1 < rows.length) {
-//     res.send(rows[req.params.assignment_id - 1]);
-//   } else {
-//     res.send("This assignment does not exist");
-//   }
-// }
-
-// OLANSK - can you please look over??
+// get one assignment
 export async function getOneAssignment(req, res) {
   try {
     const [rows] = await pool.query(
-      `SELECT a.assignment_id, assignment_title, assignment_start_date, assignment_end_date, is_active, is_public, assignment_description, assignment_criteria, a.course_id, max_score, pass_threshold, assignment_attempts, GROUP_CONCAT(af.filetype ORDER BY af.filetype SEPARATOR ', ') AS allowed_filetypes
-       FROM assignments a
-       LEFT JOIN assignment_filetypes af ON a.assignment_id = af.assignment_id
-       WHERE a.assignment_id = ?`,
-      [req.params.assignment_id]
+        `
+        SELECT a.assignment_id, assignment_title, assignment_start_date, assignment_end_date, is_active, assignment_description, assignment_criteria, a.course_id, max_score, pass_threshold, assignment_attempts, GROUP_CONCAT(af.filetype ORDER BY af.filetype SEPARATOR ', ') AS allowed_filetypes
+        FROM assignments a
+        LEFT JOIN assignment_filetypes af ON a.assignment_id = af.assignment_id
+        WHERE a.assignment_id = ? AND is_public = TRUE
+        `, [req.params.assignment_id]
     );
 
     if (rows.length > 0) {
