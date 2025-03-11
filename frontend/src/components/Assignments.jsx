@@ -1,11 +1,23 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { MdOpenInNew } from "react-icons/md";
+import { CiEdit } from "react-icons/ci";
 
-const Assignments = ({ assignments, is_active }) => {
+const Assignments = ({ assignments }) => {
   const navigate = useNavigate();
+  const { userRole } = useAuth();
 
   const handleViewDetails = (assignmentId) => {
     navigate(`/assignment-assessment/${assignmentId}`);
+  };
+
+  const handleViewReport = (assignmentId) => {
+    navigate(`/assignment-report/${assignmentId}`);
+  };
+
+  const handleEditAssignment = (assignmentId) => {
+    navigate(`/edit-assignment/${assignmentId}`);
   };
 
   const formatDate = (dateString) => {
@@ -45,15 +57,6 @@ const Assignments = ({ assignments, is_active }) => {
 
   return (
     <div className='mb-[100px]'>
-      <div className='flex items-center justify-between'>
-        {/* <h2 className='font-normal text-gray-800 text-1xl'>
-          {is_active === 1 ? "Active assignments" : "Inactive assignments"}
-        </h2> */}
-        <div className='text-sm text-gray-500'>
-          {/* {is_active === 1 ? 'Showing active assignments' : 'Showing inactive assignments'} */}
-        </div>
-      </div>
-
       {assignments.length > 0 ? (
         assignments.map((assignment) => {
           const dueSoon = isDueSoon(assignment.assignment_end_date);
@@ -62,14 +65,16 @@ const Assignments = ({ assignments, is_active }) => {
           return (
             <div
               key={assignment.assignment_id}
-              className={`p-4 border rounded-lg transition-all  flex items-center justify-between mb-4
-                ${
-                  overdue
-                    ? "border-red-300 bg-red-50"
-                    : dueSoon
-                    ? "border-yellow-300 bg-yellow-50"
-                    : "border-gray-200 bg-white "
-                }`}
+              // className={`p-4 border rounded-lg transition-all  flex items-center justify-between mb-4
+              //   ${
+              //     overdue
+              //       ? "border-red-300 bg-red-50"
+              //       : dueSoon
+              //       ? "border-yellow-300 bg-yellow-50"
+              //       : "border-gray-200 bg-white "
+              //   }`}
+
+              className={`p-4 border rounded-lg transition-all  flex items-center justify-between mb-4 border-gray-200 bg-white `}
             >
               <div>
                 <div className='flex items-center gap-2 mb-2'>
@@ -89,13 +94,15 @@ const Assignments = ({ assignments, is_active }) => {
                 </div>
 
                 <div
-                  className={`text-sm font-medium ${
-                    overdue
-                      ? "text-red-600"
-                      : dueSoon
-                      ? "text-yellow-600"
-                      : "text-gray-600"
-                  }`}
+                  // className={`text-sm font-medium  ${
+                  //   overdue
+                  //     ? "text-red-600"
+                  //     : dueSoon
+                  //     ? "text-yellow-600"
+                  //     : "text-gray-600"
+                  // }`}
+
+                  className="text-sm font-medium text-gray-600"
                 >
                   Due: {formatDate(assignment.assignment_end_date)}
                   {overdue && " (Overdue)"}
@@ -104,12 +111,30 @@ const Assignments = ({ assignments, is_active }) => {
               </div>
 
               <div className=''>
+                {userRole === "student" ?(
+                   <button
+                   onClick={() => handleViewDetails(assignment.assignment_id)}
+                   className='flex items-center gap-1 px-3 py-1 text-sm text-black transition-colors bg-white border border-gray-300 rounded hover:cursor-pointer'
+                 >
+                   View Details
+                 </button>
+                ) : (
+                  <div className="flex gap-2">
+                
                 <button
-                  onClick={() => handleViewDetails(assignment.assignment_id)}
-                  className='px-3 py-1 text-sm text-white transition-colors bg-blue-600 rounded hover:bg-blue-700'
-                >
-                  View Details
+                  onClick={() => handleViewReport(assignment.assignment_id)}
+                  className='flex items-center gap-1 px-3 py-1 text-sm text-black transition-colors bg-white border border-gray-300 rounded hover:cursor-pointer'
+                >View report <MdOpenInNew />
                 </button>
+
+                <button
+                onClick={() => handleEditAssignment(assignment.assignment_id)}
+                className='flex items-center gap-1 px-3 py-1 text-sm text-black transition-colors bg-white border border-gray-300 rounded hover:cursor-pointer'
+                >Edit <CiEdit />
+                </button>
+                </div>
+              )}
+               
               </div>
             </div>
           );

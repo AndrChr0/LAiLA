@@ -5,16 +5,11 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from "../context/AuthContext";
 import { useUserData } from "../context/UserContext";
 
-const Courses = ({courses, isLecturer}) => {
+const Courses = ({courses}) => {
   const navigate = useNavigate();
   const { setCourses } = useUserData();
-  // const { userId, userRole } = useAuth();
-  //  const isLecturer = userRole === "lecturer";
 
-  return (
-    <div className="">
-    {/* <h2 className="mb-8 text-4xl font-semibold text-gray-800">{isLecturer ? 'Courses You Manage' : 'Enrolled Courses'}</h2> */}
-    
+  return (    
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
       {courses.length > 0 ? (
         courses.map((course, index) => {
@@ -56,7 +51,6 @@ const Courses = ({courses, isLecturer}) => {
         </div>
       )}
     </div>
-  </div>
   );
 };
 
