@@ -10,7 +10,9 @@ function Nav({ role = "" }) {
     <nav className='border-b border-gray-200 mb-4'>
       <ul className='flex justify-between  p-5 bg-white px-[5dvw] font-semibold text-sm'>
         <div className='flex gap-4 md:gap-8 items-center'>
-          <img className='h-8' src='/athea_logo_svg.svg' alt='athea logo' />
+          <Link to='/home'>
+            <img className='h-8' src='/athea_logo_svg.svg' alt='athea logo' />
+          </Link>
           <li>
             <NavLink
               className={({ isActive }) =>

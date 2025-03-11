@@ -2,7 +2,7 @@ import React from "react";
 
 export default function Footer() {
   return (
-    <footer className='flex flex-col items-center justify-center text-sm font-bold gap-2'>
+    <footer className='flex flex-col items-center justify-center text-sm font-bold gap-2 mb-4'>
       <p> NTNU Gjøvik bachelor project group 10</p>
       <a
         href='https://www.ntnu.no/studier/bwu'
