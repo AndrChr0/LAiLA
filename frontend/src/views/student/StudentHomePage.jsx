@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Courses from "../../components/Courses";
 import Assignments from "../../components/Assignments";
-import instance from "../../utils/axiosInstance";
-import { useAuth } from "../../context/AuthContext";
-import { useUserData } from "../../context/UserContext";
 import { useFetchAssignments } from "../../utils/fetches/useFetchAssignments";
 import { useFetchCourses } from "../../utils/fetches/useFetchCourses";
 

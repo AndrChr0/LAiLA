@@ -78,7 +78,7 @@ function StudentAssignmentAssessmentPage() {
             <div key={feedback.feedback_id}>
               <h3>Attempt #{feedback.attempt_nr}</h3>
               <div className='flex'>
-                <div className='border-r-2 border-gray-300 pr-4'>
+                <div className='pr-4 border-r-2 border-gray-300'>
                   <h4>Feedback:</h4>
                   <p>{feedback.general_comment}</p>
                 </div>

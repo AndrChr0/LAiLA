@@ -1,12 +1,11 @@
 import React from 'react';
-import { useUserData } from '../../context/UserContext';
 import { useParams } from "react-router-dom";
 import instance from "../../utils/axiosInstance";
 import { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
 import Assignments from '../../components/Assignments';
-import { useAuth } from "../../context/AuthContext";
 import { useFetchAssignments } from "../../utils/fetches/useFetchAssignments";
+import { Link } from 'react-router-dom';
+import { FaArrowLeft } from "react-icons/fa";
 
 
 const StudentCoursePage = () => {
@@ -37,6 +36,7 @@ const [currentCourse, setCurrentCourse] = useState({});
 
   return (
     <>
+    <Link className='flex items-center gap-1' to="/home"><FaArrowLeft />Go back</Link>
     {currentCourse ? (
         <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-800">{currentCourse.course_name}</h1> 
