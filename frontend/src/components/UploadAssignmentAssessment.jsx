@@ -68,7 +68,7 @@ function UploadAssignmentAssessment({
 
       console.log("Server response:", response.data);
       setFile(null);
-      setFeedback(response.data?.AI_final_assessment.AI_final_comments || "");
+      setFeedback(response.data || "");
       setLoading(false);
     } catch (error) {
       console.error(error);
