@@ -68,7 +68,7 @@ function UploadAssignmentAssessment({
 
       console.log("Server response:", response.data);
       setFile(null);
-      setFeedback(response.data?.AI_final_assessment.AI_final_comments || "");
+      setFeedback(response.data || "");
       setLoading(false);
     } catch (error) {
       console.error(error);
@@ -82,8 +82,8 @@ function UploadAssignmentAssessment({
       <ul className='text-red-900'>
         <li>ID: {assignmentId}</li>
         <li>Filetypes: {filetypes}</li>
-        <li>Description: {description}</li>
-        <li>Criteria: {JSON.stringify(criteria)}</li>
+        {/* <li>Description: {description}</li>
+        <li>Criteria: {JSON.stringify(criteria)}</li> */}
       </ul>
       <h2 className='font-light text-xl'>Upload Project Zip file</h2>
       <div className='flex flex-col w-4/5'>
@@ -107,9 +107,16 @@ function UploadAssignmentAssessment({
       {loading && <p>Processing...</p>}
       {feedback && (
         <div>
-          <h3>Feedback:</h3>
-          <p>{feedback}</p>
+          <h3 className='font-bold'>Feedback comment:</h3>
+          <p>{feedback.general_comment}</p>
+          <h3 className='font-bold'>Suggested grade</h3>
+          {feedback.result_string === "pass" ? (
+            <p className='text-green-500'>Pass</p>
+          ) : (
+            <p className='text-red-500'>Fail</p>
+          )}
         </div>
+        // general_comment, result_string
       )}
     </div>
   );

@@ -136,6 +136,18 @@ export async function updateAssignment(req, res) {
     return res.status(400).send("No values to alter");
   }
 
+	// check if answered
+	const [answers] = await pool.query(`
+		SELECT feedback_id
+		FROM feedback
+		WHERE assignment_id = ?
+		`, [req.params.assignment_id]
+	);
+
+	if (answers.length) {
+		return res.status(403).send("Assignment has already been answered");
+	}
+
   // update assignment
   const [result] = await pool.query(
     `
@@ -228,6 +240,18 @@ export async function deleteAssignment(req, res) {
   if (!req.query.course_coordinator) {
     return res.status(401).send("Unauthorized");
   }
+
+	// check if answered
+	const [answers] = await pool.query(`
+		SELECT feedback_id
+		FROM feedback
+		WHERE assignment_id = ?
+		`, [req.params.assignment_id]
+	);
+
+	if (answers.length) {
+		return res.status(403).send("Assignment has already been answered");
+	}
 
   const [results] = await pool.query(
     `
