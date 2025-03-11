@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { VscFeedback } from "react-icons/vsc";
+import { GoTrophy } from "react-icons/go";
+import { PiSignatureThin, PiRoadHorizonLight } from "react-icons/pi";
 
 function AssignmentCriteriaForm({ onHandleCriteria, onHandleMaxScoreChange }) {
   const [isSaved, setIsSaved] = useState("");
@@ -191,7 +194,35 @@ function AssignmentCriteriaForm({ onHandleCriteria, onHandleMaxScoreChange }) {
 
   return (
     <div className='w-full mx-auto p-6 bg-white shadow-md rounded-md'>
-      <h2 className='text-2xl font-bold mb-4'>Assignment Criteria Form</h2>
+      <h2 className='text-2xl font-bold mb-2'>Assignment Criteria Form</h2>
+      <p className='w-[80ch]'>
+        Create guidlines for the Athea AI tutor to follow. A section references
+        a larger piece of work, while subsections are smaller parts of the
+        section.
+      </p>
+
+      <ul className='mb-4'>
+        Each subsection needs the following:
+        <li>
+          <PiSignatureThin className='inline-block mr-2' />A
+          <span className='font-bold'> name </span>
+        </li>
+        <li>
+          <VscFeedback className='inline-block mr-2' />A
+          <span className='font-bold'> feedback description </span>
+          telling the AI what to provide feedback on.
+        </li>
+        <li>
+          <GoTrophy className='inline-block mr-2' />A
+          <span className='font-bold'> max score </span>representng the highest
+          score that can be given to a student.
+        </li>
+        <li>
+          <PiRoadHorizonLight className='inline-block mr-2' />A
+          <span className='font-bold'> score description </span>detailing the
+          requirements to achieve different scores.
+        </li>
+      </ul>
 
       <div className='mb-4'>
         <label className='block font-semibold mb-1'>Assignment Name:</label>

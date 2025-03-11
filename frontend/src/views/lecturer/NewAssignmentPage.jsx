@@ -4,6 +4,7 @@ import AssignmentCriteriaForm from "../../components/AssignmentCriteriaForm";
 import axios from "axios";
 import instance from "../../utils/axiosInstance";
 import { useAuth } from "../../context/AuthContext";
+import ToolTip from "../../shared/ToolTip";
 
 function NewAssignmentPage() {
   const { userId } = useAuth();
@@ -107,7 +108,7 @@ function NewAssignmentPage() {
       <div className='flex flex-col w-11/12 md:w-2/3 mx-auto my-0 pt-4'>
         <label htmlFor='course'>Select Course</label>
         <select
-          className='border border-gray-400 p-2 mb-4'
+          className='bg-white border border-gray-400 p-2 mb-4'
           name='course'
           id='course'
           onChange={(e) => setCourseId(e.target.value)}
@@ -123,7 +124,7 @@ function NewAssignmentPage() {
         <input
           onChange={(e) => setAssignmentTitle(e.target.value)}
           value={assignment_title}
-          className='border border-gray-400 p-2 mb-4'
+          className='bg-white border border-gray-400 p-2 mb-4'
           type='text'
           name='assignment_title'
           id='assignment_title'
@@ -133,7 +134,7 @@ function NewAssignmentPage() {
         <input
           onChange={(e) => setAssignmentStart(e.target.value)}
           value={assignment_start_date}
-          className='border border-gray-400 p-2 w-36 mb-4'
+          className='bg-white border border-gray-400 p-2 w-36 mb-4'
           type='date'
           name='assignment_start'
           id='assignment_start'
@@ -143,17 +144,21 @@ function NewAssignmentPage() {
         <input
           onChange={(e) => setAssignmentEnd(e.target.value)}
           value={assignment_end_date}
-          className='border border-gray-400 p-2 w-36 mb-4'
+          className='bg-white border border-gray-400 p-2 w-36 mb-4'
           type='date'
           name='assignment_end'
           id='assignment_end'
         />
         <div className='flex items-center py-8'>
-          <label htmlFor='is_public'>Make Public</label>
+          <div className='flex gap-4'>
+            <ToolTip toolText='Assignment is publically viewable by students in your course' />
+            <label htmlFor='is_public'>Make Public</label>
+          </div>
+
           <input
             onChange={handleIsPublicChange}
             checked={isPublic}
-            className='border border-gray-400 w-16'
+            className='bg-white border border-gray-400 w-16'
             type='checkbox'
             name='is_public'
             id='is_public'
@@ -162,7 +167,10 @@ function NewAssignmentPage() {
 
         {isPublic && (
           <div className='flex items-center py-8'>
-            <label htmlFor='is_active'>Is Active</label>
+            <div className='flex gap-4'>
+              <ToolTip toolText='Students can recieve feedback on their assignments by Athea AI' />
+              <label htmlFor='is_active'>Is Active</label>
+            </div>
             <input
               onChange={handleIsActiveChange}
               checked={isActive}
@@ -174,11 +182,12 @@ function NewAssignmentPage() {
           </div>
         )}
 
+        <ToolTip toolText='Number of attempts allowed for this assignment' />
         <label htmlFor='assignment_attempts'>Assignment Attempts</label>
         <input
           onChange={(e) => setAssignmentAttempts(e.target.value)}
           value={assignment_attempts}
-          className='border border-gray-400 p-2 w-16 mb-4'
+          className='bg-white border border-gray-400 p-2 w-16 mb-4'
           min={0}
           max={5}
           type='number'
@@ -190,19 +199,20 @@ function NewAssignmentPage() {
           Paste assignment description
         </label>
         <textarea
-          className='border border-gray-400 p-2 mb-4 h-40'
+          className='bg-white border border-gray-400 p-2 mb-4 h-40'
           onChange={(e) => setAssignmentDescription(e.target.value)}
           name='assignment_description'
           id='assignment_description'
         ></textarea>
 
+        <ToolTip toolText='Add filetypes that will be assessed. Filtypes that are not specified will not be accessed Athea AI.' />
         <label htmlFor='assignment_filetypes'>
           Add filetypes to be analyzed
         </label>
         <input
           onChange={(e) => setAssignmentFiletype(e.target.value)}
           value={allowed_filetype}
-          className='border border-gray-400 p-2 mb-4'
+          className='bg-white border border-gray-400 p-2 mb-4'
           type='text'
           name='assignment_filetypes'
           id='assignment_filetypes'
@@ -210,7 +220,7 @@ function NewAssignmentPage() {
         <button
           onClick={handleFileChange}
           type='button'
-          className='border border-gray-400 p-2 w-20 mb-4'
+          className='bg-white border border-gray-400 p-2 w-20 mb-4'
         >
           Add
         </button>
@@ -219,7 +229,7 @@ function NewAssignmentPage() {
             <span key={index} className=''>
               <span>{filetype}</span>
               <button
-                className='border border-gray-400 w-16 mb-4 ml-2'
+                className='bg-white border border-gray-400 w-16 mb-4 ml-2'
                 type='button'
                 onClick={() => {
                   setAssignmentFiletypes(
@@ -233,11 +243,12 @@ function NewAssignmentPage() {
           ))}
         </div>
 
+        <ToolTip toolText='Percentage value required to indicate a pass or fail grade' />
         <label htmlFor='passPercentage'>Pass Percentage</label>
         <input
           onChange={(e) => setPassPercentage(e.target.value)}
           value={passPercentage}
-          className='border border-gray-400 p-2 w-16 mb-4'
+          className='bg-white border border-gray-400 p-2 w-16 mb-4'
           min={0}
           max={100}
           type='number'
