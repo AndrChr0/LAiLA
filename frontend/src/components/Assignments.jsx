@@ -44,8 +44,8 @@ const Assignments = ({ assignments, is_active }) => {
   };
 
   return (
-    <div className="mb-[100px]">
-      <div className='flex items-center justify-between mb-6'>
+    <div className='mb-[100px]'>
+      <div className='flex items-center justify-between'>
         {/* <h2 className='font-normal text-gray-800 text-1xl'>
           {is_active === 1 ? "Active assignments" : "Inactive assignments"}
         </h2> */}
