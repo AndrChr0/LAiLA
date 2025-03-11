@@ -185,7 +185,14 @@ const getZipcontents = async (req, res) => {
 
     // only send general_comment(?)
     // to be updated
-    res.send(evaluatedSubmission.AI_final_assessment.AI_final_comments);
+
+    const responseObj = {
+      general_comment:
+        evaluatedSubmission.AI_final_assessment.AI_final_comments,
+      result_string: resultString,
+    };
+
+    res.send(responseObj);
   } catch (error) {
     console.error(error);
     res.status(500).send("An error occurred while decompressing.");

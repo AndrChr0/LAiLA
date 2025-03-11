@@ -107,9 +107,16 @@ function UploadAssignmentAssessment({
       {loading && <p>Processing...</p>}
       {feedback && (
         <div>
-          <h3>Feedback:</h3>
-          <p>{feedback}</p>
+          <h3 className='font-bold'>Feedback comment:</h3>
+          <p>{feedback.general_comment}</p>
+          <h3 className='font-bold'>Suggested grade</h3>
+          {feedback.result_string === "pass" ? (
+            <p className='text-green-500'>Pass</p>
+          ) : (
+            <p className='text-red-500'>Fail</p>
+          )}
         </div>
+        // general_comment, result_string
       )}
     </div>
   );
