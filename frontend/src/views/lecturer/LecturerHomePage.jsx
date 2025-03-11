@@ -68,18 +68,18 @@ function LecturerHomePage() {
     <>
       <button
         onClick={() => navigate("/new-assignment")}
-        className='hover:cursor-pointer bg-white text-gray-800 border border-gray-400 px-4 py-2 mb-2 rounded hover:bg-gray-100'
+        className='px-4 py-2 mb-2 text-gray-800 bg-white border border-gray-400 rounded hover:cursor-pointer hover:bg-gray-100'
       >
         New Assignment
       </button>
 
-      <div className='mb-5'>
+      <div className='mb-[4.5em]'>
         <Courses courses={courses} />
       </div>
 
       <div className=''>
-        <h2 className='text-4xl font-normal'>Active Assignments</h2>
-        <Assignments assignments={activeAssignments} is_active={1} />
+        <h2 className='text-4xl font-normal mb-[1.5em]'>Active Assignments</h2>
+        <Assignments assignments={activeAssignments} />
       </div>
     </>
   );

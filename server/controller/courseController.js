@@ -29,9 +29,11 @@ export async function getMyCourses(req, res) {
 // get one course
 export async function getOneCourse(req, res) {
     const [rows] = await pool.query(`
-        SELECT courses.course_id, course_code, course_name, course_description, course_link, course_coordinator
-        FROM courses
-        WHERE course_id = ?;
+
+        SELECT c.course_id, c.course_code, c.course_name, c.course_description, CONCAT(u.first_name, ' ', u.last_name) AS course_coordinator
+        FROM  courses c
+        JOIN users u ON c.course_coordinator = u.user_id
+        WHERE c.course_id = ?;
         `, [req.params.course_id]);
     res.send(rows[0]);
 }

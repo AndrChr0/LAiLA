@@ -68,9 +68,9 @@ const LecturerCoursePage = () => {
     
         <div className=''>
         <h2 className="text-2xl font-medium text-gray-800">Active assignments</h2>
-        <Assignments assignments={activeAssignmentInCourse(courseId)} is_active={1} />
+        <Assignments assignments={activeAssignmentInCourse(courseId)} />
         <h2 className="mt-4 text-2xl font-medium text-gray-800">Old assignments</h2>
-        <Assignments assignments={inActiveAssignmentInCourse(courseId)} is_active={0} />
+        <Assignments assignments={inActiveAssignmentInCourse(courseId)} />
         </div>
       </>
     );

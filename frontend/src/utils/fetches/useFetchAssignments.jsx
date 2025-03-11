@@ -1,0 +1,32 @@
+import { useEffect } from "react";
+import instance from "../../utils/axiosInstance";
+import { useUserData } from "../../context/UserContext";
+import { useAuth } from "../../context/AuthContext";
+
+export const useFetchAssignments = () => {
+  const { assignments, setAssignments } = useUserData();
+  const { userId, userRole } = useAuth();
+  const isLecturer = userRole === "lecturer";
+
+  useEffect(() => {
+    const fetchAssignments = async () => {
+      try {
+        const response = await instance.get("api/assignments", {
+          params: {
+            student_id: !isLecturer ? userId : undefined,
+            course_coordinator: isLecturer ? userId : undefined,
+          },
+        });
+
+        setAssignments(response.data || []);
+      } catch (error) {
+        console.error("Error fetching assignments:", error);
+        setAssignments([]);
+      }
+    };
+
+    fetchAssignments();
+  }, [userId, setAssignments]);
+
+  return { assignments };
+};

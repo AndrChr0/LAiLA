@@ -21,6 +21,7 @@ const [currentCourse, setCurrentCourse] = useState({});
       .get(`api/courses/${courseId}`)
       .then((response) => {
         setCurrentCourse(response.data);
+        console.log("fjdisajfdosafs", response.data);
       })
       .catch((error) => {
         console.error("Error fetching assignment:", error);
@@ -66,15 +67,15 @@ const [currentCourse, setCurrentCourse] = useState({});
             <p className="text-gray-600">Course Code: {currentCourse.course_code}</p>
             <p className="mt-2 text-gray-700">{currentCourse.course_description}</p> 
             <a href={currentCourse.course_link} target="_blank" rel="noopener noreferrer">Course link</a> 
-            <p>Course coordinator: {currentCourse.course_coordinator} (må gjør en join her or wha eva for å få navn)</p>
+            <p>Course coordinator: {currentCourse.course_coordinator}</p>
         </div>
     ) : (<p>Loading...</p>)}
 
     <div>
         <h2 className="text-2xl font-medium text-gray-800">Active assignments</h2>
-        <Assignments assignments={activeAssignmentInCourse(courseId)} is_active={1} />
+        <Assignments assignments={activeAssignmentInCourse(courseId)} />
         <h2 className="text-2xl font-medium text-gray-800">Old assignments</h2>
-        <Assignments assignments={inActiveAssignmentInCourse(courseId)} is_active={0} />
+        <Assignments assignments={inActiveAssignmentInCourse(courseId)} />
     </div>
 
    
