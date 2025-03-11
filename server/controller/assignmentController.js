@@ -9,12 +9,12 @@ export async function getAllAssignments(req, res) {
   if (req.query.course_coordinator) {
     const [rows] = await pool.query(
       `
-            SELECT a.assignment_id, assignment_title, assignment_start_date, assignment_end_date, is_active, is_public, assignment_description, assignment_criteria, a.course_id, max_score, pass_threshold, GROUP_CONCAT(af.filetype ORDER BY af.filetype SEPARATOR ', ') AS allowed_filetypes, assignment_attempts
+            SELECT a.assignment_id, assignment_title, assignment_start_date, assignment_end_date, is_active, is_public, assignment_description, assignment_criteria, a.course_id, c.course_name, c.course_code, max_score, pass_threshold, GROUP_CONCAT(af.filetype ORDER BY af.filetype SEPARATOR ', ') AS allowed_filetypes, assignment_attempts
             FROM assignments a
             JOIN courses c ON a.course_id = c.course_id
             LEFT JOIN assignment_filetypes af ON a.assignment_id = af.assignment_id
             WHERE c.course_coordinator = ?
-            GROUP BY a.assignment_id;
+            GROUP BY a.assignment_id, c.course_name;
             `,
       [req.query.course_coordinator]
     );
@@ -26,12 +26,13 @@ export async function getAllAssignments(req, res) {
   } else if (req.query.student_id) {
     const [rows] = await pool.query(
       `
-            SELECT a.assignment_id, assignment_title, assignment_start_date, assignment_end_date, is_active, assignment_description, a.course_id, max_score, pass_threshold, GROUP_CONCAT(af.filetype ORDER BY af.filetype SEPARATOR ', ') AS allowed_filetypes, assignment_attempts
+            SELECT a.assignment_id, assignment_title, assignment_start_date, assignment_end_date, is_active, assignment_description, a.course_id, c.course_name, c.course_code, max_score, pass_threshold, GROUP_CONCAT(af.filetype ORDER BY af.filetype SEPARATOR ', ') AS allowed_filetypes, assignment_attempts
             FROM assignments a
             JOIN enrollment e ON a.course_id = e.course_id
+            JOIN courses c ON a.course_id = c.course_id
             LEFT JOIN assignment_filetypes af ON a.assignment_id = af.assignment_id
             WHERE e.student_id = ? AND is_public = TRUE
-            GROUP BY a.assignment_id;
+            GROUP BY a.assignment_id, c.course_name;
             `,
       [req.query.student_id]
     );
