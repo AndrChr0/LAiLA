@@ -5,65 +5,20 @@ import instance from "../../utils/axiosInstance";
 import { useAuth } from "../../context/AuthContext";
 import { useUserData } from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
+import { useFetchAssignments } from "../../utils/fetches/useFetchAssignments";
+import { useFetchCourses } from "../../utils/fetches/useFetchCourses";
 
 function LecturerHomePage() {
-  const { assignments, setAssignments } = useUserData();
-
-  const { courses, setCourses } = useUserData();
-  const { userId, userRole } = useAuth();
-  const isLecturer = userRole === "lecturer";
+  const { assignments } = useFetchAssignments();
+  const { courses } = useFetchCourses();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchAssignments = async () => {
-      try {
-        const response = await instance.get("api/assignments", {
-          params: {
-            student_id: !isLecturer ? userId : undefined,
-            course_coordinator: isLecturer ? userId : undefined,
-          },
-        });
-        console.log("Assignments API Response:", response.data);
-
-        setAssignments(response.data || []);
-      } catch (error) {
-        console.error("Error fetching assignments:", error);
-        setAssignments([]);
-      }
-    };
-
-    fetchAssignments();
-  }, [userId]);
-
-  useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        const response = await instance.get("api/courses", {
-          params: {
-            student_id: !isLecturer ? userId : undefined,
-            course_coordinator: isLecturer ? userId : undefined,
-          },
-        });
-
-        setCourses(Array.isArray(response.data) ? response.data : []);
-      } catch (error) {
-        console.error("Error fetching courses:", error);
-      }
-    };
-
-    fetchCourses();
-  }, [userId]);
 
   const activeAssignments = Array.isArray(assignments)
     ? assignments.filter((assignment) => assignment.is_active === 1)
     : [];
 
-  const inactiveAssignments = Array.isArray(assignments)
-    ? assignments.filter((assignment) => assignment.is_active === 0)
-    : [];
-  if (!assignments) {
-    return <p>No assignments found.</p>;
-  }
+
   return (
     <>
       <button

@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import Assignments from '../../components/Assignments';
 import { useAuth } from "../../context/AuthContext";
+import { useFetchAssignments } from "../../utils/fetches/useFetchAssignments";
 
 
 const LecturerCoursePage = () => {
@@ -13,8 +14,6 @@ const LecturerCoursePage = () => {
       const { assignments, setAssignments } = useUserData();
       const path = useParams();
       const courseId = path.id;
-      const { userId, userRole } = useAuth();
-      const isLecturer = userRole === "lecturer";
     
       useEffect(() => {
         instance
@@ -27,27 +26,6 @@ const LecturerCoursePage = () => {
           });
       }, [courseId]);
     
-    
-      useEffect(() => {
-        const fetchAssignments = async () => {
-          try {
-            const response = await instance.get("api/assignments", {
-              params: {
-                student_id: !isLecturer ? userId : undefined,
-                course_coordinator: isLecturer ? userId : undefined,
-              },
-            });
-            // console.log("Assignments API Response:", response.data);
-    
-            setAssignments(response.data || []);
-          } catch (error) {
-            console.error("Error fetching assignments:", error);
-            setAssignments([]);
-          }
-        };
-    
-        fetchAssignments();
-      }, [userId]);
     
       const activeAssignmentInCourse = (courseId) => {
         return assignments.filter((assignment) => assignment.course_id === Number(courseId) && assignment.is_active === 1);
