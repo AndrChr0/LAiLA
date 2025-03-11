@@ -16,11 +16,8 @@ const router = express.Router();
 */
 router.get("/", getAllAssignments);
 
-// removed, might want eventually, but not for now
-// // get one assignment - auth(S/L)[w/ course]
-// // frontend would determine which we use
+// get one assignment
 router.get("/:assignment_id", getOneAssignment);
-// router.get("/:course_id/:assignment_id", getOneAssignment);
 
 // post assignment - auth(L)
 router.post("/", createAssignment);
