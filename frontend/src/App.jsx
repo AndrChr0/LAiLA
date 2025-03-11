@@ -14,6 +14,10 @@ import { useAuth } from "./context/AuthContext";
 import { UserProvider } from "./context/UserContext";
 import StudentCoursePage from "./views/student/StudentCoursePage";
 import LecturerCoursePage from "./views/lecturer/LecturerCoursePage";
+import LecturerReportPage from "./views/lecturer/LecturerReportPage";
+import LecturerEditAssignmentPage from "./views/lecturer/LecturerEditAssignmentPage";
+
+
 function App() {
   const { userRole } = useAuth();
 
@@ -92,6 +96,25 @@ function App() {
             element={
               <ProtectedRoute roles={["lecturer"]}>
                 <NewAssignmentPage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/edit-assignment/:id"
+            element={
+              <ProtectedRoute roles={["lecturer"]}>
+                <LecturerEditAssignmentPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="*" element={<NotFoundPage />} />
+
+          <Route
+            path="/assignment-report/:id"
+            element={
+              <ProtectedRoute roles={["lecturer"]}>
+                <LecturerReportPage />
               </ProtectedRoute>
             }
           />
