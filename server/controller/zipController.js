@@ -65,35 +65,33 @@ const getZipcontents = async (req, res) => {
     // get attempt_nr for assignment and user
     // error if too high
     // save num for later
-    const [maxAttempts] = await pool.query(`
+    const [maxAttempts] = await pool.query(
+      `
         SELECT assignment_attempts
         FROM assignments
         WHERE assignment_id = ?;
-        `, [req.body.assignment_id]
+        `,
+      [req.body.assignment_id]
     );
     const DBAttempts = maxAttempts[0]["assignment_attempts"];
-    const [highestAttempt] = await pool.query(`
+    const [highestAttempt] = await pool.query(
+      `
         SELECT MAX(attempt_nr)
         FROM feedback
         WHERE assignment_id = ? AND student_id = ?;
-        `, [req.body.assignment_id, req.body.student_id]
+        `,
+      [req.body.assignment_id, req.body.student_id]
     );
     const currentAttempt = highestAttempt[0]["MAX(attempt_nr)"] || 0;
 
     if (currentAttempt == DBAttempts) {
-        return res.status(403).send("Max attempts reached");
+      return res.status(403).send("Max attempts reached");
     }
-
 
     const file = req.file;
     console.log("File uploaded:", file);
-    const { allowedExtensions, criteriaString, description } =
-      req.body;
+    const { allowedExtensions, criteriaString, description } = req.body;
 
-    // console.log("Allowed extensions:", allowedExtensions);
-    // console.log("Assignment ID:", assignmentId);
-    // console.log("Criteria string:", criteriaString);
-    // console.log("Description:", description);
     const parsedExtensions = allowedExtensions.replaceAll('"', "").split(", ");
     console.log("Parsed extensions:", parsedExtensions);
 
@@ -129,23 +127,72 @@ const getZipcontents = async (req, res) => {
       evaluatedSubmission.AI_final_assessment.AI_final_comments
     );
 
+    // get pass threshold and max score
+    const [assignmentEvaluationData] = await pool.query(
+      `
+    SELECT pass_threshold, max_score
+    FROM assignments
+    WHERE assignment_id = ?;
+    `,
+      [req.body.assignment_id]
+    );
+
+    const passThreshold = assignmentEvaluationData[0]["pass_threshold"];
+    const maxScore = assignmentEvaluationData[0]["max_score"];
+
+    // loop through object and calculate total score
+    function calculateTotalScore(obj) {
+      let totalScore = 0;
+      for (const key in obj) {
+        // if object, recurse
+        if (typeof obj[key] === "object") {
+          totalScore += calculateTotalScore(obj[key]);
+          // if key is a score, add to total
+        } else if (key.endsWith("_score") && !key.endsWith("_max_score")) {
+          totalScore += obj[key];
+        }
+      }
+      return totalScore;
+    }
+
+    const totalEvaluationScore = calculateTotalScore(evaluatedSubmission);
+
+    // calculate pass/fail
+    let resultString;
+    if (totalEvaluationScore >= maxScore * passThreshold) {
+      resultString = "pass";
+    } else {
+      resultString = "fail";
+    }
+
     // save to DB
     const [result] = await pool.query(
       `
-      INSERT INTO feedback (assignment_id, student_id, feedback_contents, general_comment, attempt_nr)
-      VALUES (?, ?, ?, ?, ?);
+      INSERT INTO feedback (assignment_id, student_id, feedback_contents, general_comment, suggested_result, attempt_nr)
+      VALUES (?, ?, ?, ?, ?, ?);
       `,
       [
         req.body.assignment_id,
         req.body.student_id,
         JSON.stringify(evaluatedSubmission),
-        JSON.stringify(evaluatedSubmission.AI_final_assessment.AI_final_comments),
-        currentAttempt+1
+        JSON.stringify(
+          evaluatedSubmission.AI_final_assessment.AI_final_comments
+        ),
+        resultString,
+        currentAttempt + 1,
       ]
     );
 
     // only send general_comment(?)
-    res.send(evaluatedSubmission);
+    // to be updated
+
+    const responseObj = {
+      general_comment:
+        evaluatedSubmission.AI_final_assessment.AI_final_comments,
+      result_string: resultString,
+    };
+
+    res.send(responseObj);
   } catch (error) {
     console.error(error);
     res.status(500).send("An error occurred while decompressing.");
