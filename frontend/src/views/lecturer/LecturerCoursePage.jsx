@@ -9,40 +9,23 @@ import { useAuth } from "../../context/AuthContext";
 import { useFetchAssignments } from "../../utils/fetches/useFetchAssignments";
 
 const LecturerCoursePage = () => {
-  const [currentCourse, setCurrentCourse] = useState({});
-  const { assignments, setAssignments } = useUserData();
-  const path = useParams();
-  const courseId = path.id;
-
-  useEffect(() => {
-    instance
-      .get(`api/courses/${courseId}`)
-      .then((response) => {
-        setCurrentCourse(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching assignment:", error);
-      });
-  }, [courseId]);
-
-  const activeAssignmentInCourse = (courseId) => {
-    return assignments.filter(
-      (assignment) =>
-        assignment.course_id === Number(courseId) && assignment.is_active === 1
-    );
-  };
-
-  const inActiveAssignmentInCourse = (courseId) => {
-    return assignments.filter(
-      (assignment) =>
-        assignment.course_id === Number(courseId) && assignment.is_active === 0
-    );
-  };
-
-  return (
-    <>
-      <div className='flex gap-3'>
-        <Link to='/new-assignment' className='p-3 bg-white rounded shadow'>
+      const { assignments } = useFetchAssignments();
+      const path = useParams();
+      const courseId = path.id;
+    
+      const activeAssignmentInCourse = (courseId) => {
+        return assignments.filter((assignment) => assignment.course_id === Number(courseId) && assignment.is_active === 1);
+      };
+    
+      const inActiveAssignmentInCourse = (courseId) => {
+        return assignments.filter((assignment) => assignment.course_id === Number(courseId) && assignment.is_active === 0);
+      }
+      
+    
+    return (
+      <>
+        <div className='flex gap-3'>
+         <Link to='/new-assignment' className='p-3 bg-white rounded shadow'>
           New Assignment
         </Link>
         <div className='p-3 bg-white rounded shadow'>Course chatbot</div>

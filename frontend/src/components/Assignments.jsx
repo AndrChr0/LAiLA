@@ -63,6 +63,7 @@ const Assignments = ({ assignments }) => {
           const overdue = isOverdue(assignment.assignment_end_date);
 
           return (
+            
             <div
               key={assignment.assignment_id}
               // className={`p-4 border rounded-lg transition-all  flex items-center justify-between mb-4
@@ -73,9 +74,11 @@ const Assignments = ({ assignments }) => {
               //       ? "border-yellow-300 bg-yellow-50"
               //       : "border-gray-200 bg-white "
               //   }`}
+              
 
               className={`p-4 border rounded-lg transition-all  flex items-center justify-between mb-4 border-gray-200 bg-white `}
             >
+              
               <div>
                 <div className='flex items-center gap-2 mb-2'>
                   {assignment.is_active === 1 ? (
@@ -87,12 +90,27 @@ const Assignments = ({ assignments }) => {
                       Inactive
                     </span>
                   )}
-                  <h3 className='mb-1 text-lg font-semibold text-gray-800'>
+
+                  {/* <div className="flex flex-col">
+                    <div className="text-sm font-medium text-gray-600">
+                    {assignment.course_code} {" "}
+                    {assignment.course_name}: {" "}
+                    </div>
+                    <h3 className='mb-1 text-lg font-medium text-gray-800'>
                     {assignment.assignment_title} (Course ID:{" "}
                     {assignment.course_id})
                   </h3>
-                </div>
+                  </div> */}
 
+                  <h3 className='mb-1 text-lg font-medium text-gray-800'>
+                  {assignment.course_code} {" "}
+                  {assignment.course_name}: {" "}
+                  {assignment.assignment_title} 
+                  </h3>
+                       
+                  
+                </div>
+        
                 <div
                   // className={`text-sm font-medium  ${
                   //   overdue
@@ -114,7 +132,7 @@ const Assignments = ({ assignments }) => {
                 {userRole === "student" ?(
                    <button
                    onClick={() => handleViewDetails(assignment.assignment_id)}
-                   className='flex items-center gap-1 px-3 py-1 text-sm text-black transition-colors bg-white border border-gray-300 rounded hover:cursor-pointer'
+                   className='flex items-center gap-1 px-3 py-1 text-sm text-black bg-white border border-gray-300 rounded hover:cursor-pointer transition-all duration-300  hover:scale-[1.02]'
                  >
                    View Details
                  </button>
@@ -123,13 +141,13 @@ const Assignments = ({ assignments }) => {
                 
                 <button
                   onClick={() => handleViewReport(assignment.assignment_id)}
-                  className='flex items-center gap-1 px-3 py-1 text-sm text-black transition-colors bg-white border border-gray-300 rounded hover:cursor-pointer'
+                  className='flex items-center gap-1 px-3 py-1 text-sm text-black transition-all duration-300  hover:scale-[1.02] bg-white border border-gray-300 rounded hover:cursor-pointer'
                 >View report <MdOpenInNew />
                 </button>
 
                 <button
                 onClick={() => handleEditAssignment(assignment.assignment_id)}
-                className='flex items-center gap-1 px-3 py-1 text-sm text-black transition-colors bg-white border border-gray-300 rounded hover:cursor-pointer'
+                className='flex items-center gap-1 px-3 py-1 text-sm text-black transition-all duration-300  hover:scale-[1.02] bg-white border border-gray-300 rounded hover:cursor-pointer'
                 >Edit <CiEdit />
                 </button>
                 </div>
