@@ -1,11 +1,11 @@
 import express from "express";
 import {
-  getAllAssignments,
-  createAssignment,
-  updateAssignment,
-  deleteAssignment,
-  undeleteAssignment,
-  getOneAssignment,
+	getAllAssignments,
+	createAssignment,
+	updateAssignment,
+	deleteAssignment,
+	undeleteAssignment,
+	getOneAssignment
 } from "../controller/assignmentController.js";
 const router = express.Router();
 

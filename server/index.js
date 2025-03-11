@@ -6,6 +6,7 @@ import userRoutes from "./routes/userRoutes.js";
 import courseRoutes from "./routes/courseRoutes.js";
 import assignmentRoutes from "./routes/assignmentRoutes.js";
 import feedbackRoutes from "./routes/feedbackRoutes.js";
+import { errorHandler } from "./middleware/errorHandler.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
@@ -30,6 +31,9 @@ app.use("/api/users", userRoutes);
 app.use("/api/courses", courseRoutes);
 app.use("/api/assignments", assignmentRoutes);
 app.use("/api/feedback", feedbackRoutes);
+
+// globally applied error handling middleware
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log("Server is jogging on port " + PORT);
