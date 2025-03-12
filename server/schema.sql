@@ -110,7 +110,255 @@ INSERT INTO assignments (assignment_title, assignment_start_date, assignment_end
   0.80,
   1
 ),
-('Oblig 2', '2025-02-20', '2025-03-09', TRUE, TRUE, 'lorem ipsum', '{}', 1, 53, 0.75, 5),
+('Oblig 2', '2025-02-20', '2025-03-09', TRUE, TRUE, "From wireframe to finished website
+Due date: Check blackboard
+IDG1292 – Fall 2023
+Table of Contents
+Preface ..................................................................................................................................................................... 3
+Scenario.................................................................................................................................................................... 3
+Part I – Lab 8 Sketching......................................................................................................................................... 4
+Goal of the day........................................................................................................................................................................... 4
+Lab Description ......................................................................................................................................................................... 4
+Preparation ................................................................................................................................................................................ 5
+Designing the mock-up................................................................................................................................................................ 5
+Wrap up and delivery................................................................................................................................................................. 6
+Example of mock-up.................................................................................................................................................................. 6
+Part II – Development...........................................................................................................................................10
+Context ................................................................................................................................................................................... 10
+Task Description ..................................................................................................................................................................... 10
+Requirements ........................................................................................................................................................................... 10
+Reflection page.......................................................................................................................................................................... 11
+Deliverables ............................................................................................................................................................................. 12
+Preface
+This is the second compulsory activity of the course (oblig#2). This compulsory assignment will
+be done in groups that are randomly formed during the lab session (see Part I – Lab 8 Sketching). The
+assignment consists of two parts:
+• Part I - rapid prototyping: done as part of lab8 “creating paper mock-ups; sustainable design”.
+Notice that the results from the lab session must be included in the delivery.
+• Part II – implementation of a newsletter based on mock-ups done in the lab session. The
+focus of the task is to create a coherent HTML structure based on the mock-up received and
+reflect on the choices taken during the design and implementation phases. The group is
+encouraged to use anything learned between lectures 1 to 8.
+These are all rather simple tasks done in groups. So, we expect you to deliver with high quality. The
+best thing you can do for quality assurance is to:
+a) Validate all your HTML and CSS code.
+b) Make sure everyone participates in the group work and give everyone a chance to present
+and discuss their thoughts.
+Please do not forget that copying or letting others copy your code can be considered
+plagiarism. If you use fragments of code from the internet (stack overflow, w3c, etc.), make sure they
+are properly referred to in the code as a comment with the link to the resource you have used.
+Finally, also notice it is expected that you write your code from scratch. Therefore, downloading
+HTML templates or using CSS frameworks such as Tailwind CSS or Bootstrap is not allowed. and
+Grid Layout is not allowed either.
+Scenario
+Darling, the student organisation, is hosting a Halloween party as part of their fundraising efforts
+for an upcoming study trip. They have dedicated considerable time to planning the event and are keen
+to use digital channels to maximise student participation. Nevertheless, they are mindful of the
+environmental impact associated with digital platforms, particularly websites. Consequently, they\'ve
+made a deliberate choice to design their website and newsletters with a minimal carbon footprint to
+prioritise sustainability.
+They decided to hire two different teams of novice web designers to design and implement the
+newsletter. The first team will be in charge of sketching the newsletter (see Part I – Lab 8 Sketching).
+The second team will be responsible for the development of the project (see Part II – Development).
+Part I – Lab 8 Sketching
+This part of the oblig is done during the lab session.
+Please scan the QR code you will find in the classroom, and you will be assigned to a group.
+Goal of the day
+The lab session has different goals and ambitions since it consists of the first part of oblig 2. On
+the one hand, you will practice your sketching and prototyping skills in groups. On the other hand,
+your sketches will be used as part of the second compulsory assignment – Part II, where other students
+will have to implement your designs using your instructions.
+After finishing this lab session, you will:
+• have used a mobile stencil created in IDG1000 to create/sketch a website mock-up on paper
+(used by others as part of their second compulsory assignment)
+• understand the importance of planning a website beforehand to make the coding process
+more efficient
+• have designed, as a group, something you are proud of
+• know more about sustainable web design (https://sustainablewebdesign.org/)
+Lab Description
+As explained before, your work might be used by other students as part of the
+description of their second compulsory activity (oblig#2 – part 2). Therefore, we will
+ask your group to upload your designs this week to BB (more information there).
+Make sure you do not include any names or sensitive information in your sketches.
+During the lab session, your team will have to design the newsletter (who better than young web
+designers?).
+Darling has provided you with the contents they want to send out with the Halloween invitation
+newsletter (“text-content.pdf” or “text-content.txt”).
+Use the stencil template (made in IDG1000) to create a paper mock-up of the newsletter. Design
+the mock-up following a mobile first-approach. Then, include an additional view showing how one
+element would change using media queries.
+Preparation
+Find your group and start an introduction round where you say your name and study program. The
+group will be provided with three A3 papers and a stencil template (or, pick one of the stencil
+templates from one member of the group if you have them available). Nominate a member of the
+group to be in charge of writing and another member responsible for uploading the files to Blackboard
+when the lab session is finished.
+Designing the mock-up
+Start by discussing the design you envision within your group, and then translate your ideas onto
+A3 sheets. You may require multiple A3 sheets to illustrate the entire webpage fully. Encourage
+creativity throughout this process.
+Your mock-up should encompass the following elements (refer to the \'Example of Mock-Up\'
+below for guidance):
+• Text Content: Include all the content from \'text-content.pdf,\' with each piece of text
+labelled as Text#N. For each element you add to the mock-up, provide a description for
+the developers, ensuring it\'s easy to comprehend.
+• Media Queries: present an additional view that demonstrates how a specific element
+would adapt using media queries to address different screen sizes.
+• Group Number: clearly indicate your group number on the mock-up.
+In addition to that, you must design the website to ensure the following elements or CSS code will
+be included with the final implementation:
+• Background Image: while you do not need to locate an image, be sure to describe where
+and how you intend to incorporate it into the mock-up.
+• Two different Type Faces and their sizes
+• A Background image with a background-attachment: fixed
+• At least one element that uses absolute positioning or fixed positioning (the use of this
+form of positioning must be coherent)
+• Images or graphic elements
+• At least two elements that overlap each other
+• A linear gradient
+• Pseudo-classes and pseudo-elements
+• A custom emoticon for each one of the prize categories (scariest, funniest, most creative)
+that will be used to replace the bullet points of the list
+Aim for clarity, precision, and completeness when designing and describing your mock-up. Your
+goal is to make the design and descriptions explicit enough that another person can implement the
+design without requiring additional instructions from you.
+Wrap up and delivery
+Upon completing the assignment, please follow these steps to submit the lab:
+• Scan all the papers and compile them into a single PDF document. Name the document
+as \'groupX-design.pdf\' (replace X with your group number).
+• Create a folder and label it as \'lab8-groupX.\'
+• Place the PDF document inside this folder.
+• If you have any additional files or documents related to the lab, feel free to include them
+in the folder.
+• Compress the entire folder into a ZIP file.
+• Choose one member of the group to submit the lab on Blackboard. Navigate to
+\'Learning materials\' -> \'Labs\' -> \'Lab 8\' -> \'Upload Lab 8\' to make your submission.
+This step is very important since all the mock-ups done during the lab session will be shared with
+other groups for Part II. Please be aware that the mock-ups will be shared on Blackboard, and they
+will be utilised as part of the second part of the assignment and, therefore, other students will have
+access to view them.
+Example of mock-up
+This is just an example, be aware that it might not be the best design. For instance, it may not be
+the best approach having the image after the text in one article, and the image between the heading
+and the text in the other articles. Therefore, be creative and create your own mock-up.
+Part II – Development
+Context
+Darling hired your group to carry out the development of the newsletter. As part of the contract,
+you have received the following documents:
+• “text-content.pdf” and “text-content.txt”: both files contain the contents they want to send
+with the first newsletter. Both files contain the same text stored in different formats.
+• Zip file with the mock-ups you must follow to implement the HTML newsletter (each group
+will receive an email with information about the mock-up your group must implement and a link to a zip file).
+They also remind you that they want to develop a low-carbon footprint newsletter; therefore,
+you must pay attention to your code and your page size. They also want you to write a reflection
+about all the measures you have taken to reduce the newsletter\'s carbon footprint.
+Task Description
+In this assignment, you will need to create a responsive website based on the mock-up you received.
+The website should adapt to two screen sizes: one for mobile devices and one for larger screens (bigger
+than 960px). To achieve this, you should use media queries in your CSS code. The website should
+include all the information and elements from the mock-up, such as images, text, links, and layout.
+Try to match the mock-up as closely as possible. Also, notice that if you do not receive enough
+information or media files, you will have to make assumptions or create/find them on your own.
+The final website should consist of two pages. The first page is the main page where you implement
+the mock-up design. The second page is a reflection page where you discuss the choices you made
+and the challenges you faced while creating the website. The reflection should also describe the steps
+you took from start to finish and what you learned from this assignment. In addition, the reflection
+should include a list of measures you took to reduce your website\'s carbon footprint and make it more
+sustainable. You should also reflect on the quality of the mock-up you received, how it affected your
+implementation and decisions, and what suggestions you have for improving it. (See Reflection page
+section for more details).
+Please read all the requirements carefully before you start working on the assignment.
+Requirements
+In addition to all the information received with the mock-ups, you must find a way to meet the
+following requirements.
+You must:
+• Implement two pages (main page and reflection page)
+• Include a Link to the reflection page (check the provided text with the mock-up)
+• Implement Mobile and Desktop versions (One media query for larger screens 960px –
+mobile-first)
+• Use Two different Type Faces. This must be part of the mock-up received. If not, you must
+explain it in the reflection and decide which ones to use
+• Set a Background image with a background-attachment: fixed
+• Find the images for each article that either follow the instructions received with the mock-up
+or that matches the theme of the article (use royalty free images)
+• Find a way to use relative and absolute positioning as part of the implementation (if you have
+to do changes in the design you have received to accommodate this requirement, you must
+explain it in the reflection page)
+• Use different font sizes
+• Use a Linear gradient
+• Use Pseudo-classes and pseudo-elements
+• Add the custom emoticons for each one of the prize categories (scariest, funniest, most
+creative) using CSS – they cannot be coded as part of the HTML content (check pseudoelements and list-style-type)
+• Use the nth-child pseudo-class
+• Use the Z-Index in at least one of the elements
+You CANNOT:
+• Use Grid layout in this assignment
+• Use bootstrap or similar libraries
+Reflection page
+The reflection page must be divided in 3 parts or sections:
+• Section 1 – reflection about the implemented mock-up: Explain the main difficulties using
+the mock-up the group has received. Was all the information you needed available in the
+mock-up? What changes have you made to meet the requirements imposed in the
+description? Explain the changes and/or actions you took to implement the requirements
+(e.g.: explain how you used absolute positioning and the changes you had to do to meet these
+requirements). Finish this part of the reflection by rating the mock-up from 1 to 5 (being 5
+very good).
+• Section 2 – reflection about sustainability: explain all the measures you took to reduce your
+page\'s carbon footprint and size. How many “kbs” have you saved after applying those
+measures? How difficult was it? Give specific examples (e.g., if you change the format of a
+picture, show a table with the size before and after).
+• Section 3 – self-reflection of own mock-up: in retrospect, do you think your mock-up was
+good enough? Do you think other groups had challenges implementing it? What would you
+do differently now? Finish this part of the reflection by rating the mock-up from 1 to 5 (being
+5 very good).
+Deliverables
+The project must be delivered in a zip file which will contain two folders: part1/ and part2/.
+Follow the instructions:
+• Create the root folder and name it “groupX-o2-idg1292-2023”
+(replace X by your group number)
+• Create two folders inside the root ( “part1” and “part2”)
+o part1/: this folder will contain the mock-ups created by
+your group during lab 8. If your group did not attend
+the lab session, the group must do the task first and
+include it here.
+o part2/: this folder contains the implementation of your
+project. This is, this folder contains the complete
+website (i.e.: HTML pages, folders, assets, images, etc.).
+This is also the folder you must upload in your folk site.
+• Valid HTML and CSS code – Feel free to use the code
+validator.
+• README file (.txt or .md) in the root folder of your project
+with any relevant comment the examiner should know when
+grading the task.
+• The README file must contain the names of all the group
+members, and the folk site link to the projects (only one of the
+members of the group needs to deploy the file).
+• Compress the root folder in a zip file (only use zip to compress
+the assignment).
+• Deliver the assignment in Blackboard (only 1 member of the
+group).
+IMPORTANT
+All the members of the group are
+responsible for validating that the
+project was properly delivered.
+After uploading the assignment in
+Blackboard, double check that
+everything is in order.
+ Projects delivered after the
+deadline will be marked as
+“not delivered”.
+ Projects delivered as “drafts”
+in Blackboard will be
+considered as “not delivered”.
+ Projects delivered with a
+format different than .zip will
+be considered as “not
+delivered”
+ Corrupted zip files will be
+considered as “not delivered”
+ Projects with validation error
+(s) will be graded as “not
+approved”", '{"name": "oblig_two", "schema": {"type": "object", "properties": {"reflections": {"type": "object", "required": ["reflection_1_score", "reflection_1_feedback", "reflection_2_score", "reflection_2_feedback"], "properties": {"reflection_1_score": {"type": "integer", "description": "Criteria (0-3) 0-> missing reflection 1-> weak reflection. Only descriptive and procedural 2-> ok reflection. Describes the process but also explains why some decisions are made or why the received mock-up could be improved 3-> Perfect. Very reflective. Clearly explain"}, "reflection_2_score": {"type": "integer", "description": "Criteria (0-3) 0-> missing reflection 1-> weak reflection. Only descriptive and procedural 2-> ok reflection. Describes the process but also explains why some decisions are made or why the received mock-up could be improved 3-> Perfect. Very reflective. Clearly explain"}, "reflection_1_feedback": {"type": "string", "description": "to what degree does the student Explain the main difficulties using the mock-up"}, "reflection_2_feedback": {"type": "string", "description": "to what degree does the student reflect about sustainability"}, "reflection_1_max_score": {"type": "integer", "default": 3, "description": "Maximum score for this subsection."}, "reflection_2_max_score": {"type": "integer", "default": 3, "description": "Maximum score for this subsection."}}}, "requirements": {"type": "object", "required": ["two_different_screen_sizes_score", "two_different_screen_sizes_feedback", "two_different_type_faces_score", "two_different_type_faces_feedback", "set_a_background_image__score", "set_a_background_image__feedback", "absolute_positioning_score", "absolute_positioning_feedback", "font_sizes_score", "font_sizes_feedback", "_linear_gradient_score", "_linear_gradient_feedback", "pseudo-classes_and_pseudoelements_score", "pseudo-classes_and_pseudoelements_feedback"], "properties": {"font_sizes_score": {"type": "integer", "description": "Criteria (0-1) 0 -> not fullfilled 1 -> fulfilled"}, "font_sizes_feedback": {"type": "string", "description": "Use different font sizes"}, "font_sizes_max_score": {"type": "integer", "default": "1", "description": "Maximum score for this subsection."}, "_linear_gradient_score": {"type": "integer", "description": "Criteria (0-1) 0 -> not fullfilled 1 -> fulfilled"}, "_linear_gradient_feedback": {"type": "string", "description": "Use a Linear gradient "}, "_linear_gradient_max_score": {"type": "integer", "default": "1", "description": "Maximum score for this subsection."}, "absolute_positioning_score": {"type": "integer", "description": "Criteria (0-1) 0 -> not fullfilled 1 -> fulfilled"}, "absolute_positioning_feedback": {"type": "string", "description": "Feedback on ...Uses absolute positioning or fixed positioning (if you have to do changes in the design you have received to accommodate this requirement, you must explain it in the reflection page)"}, "set_a_background_image__score": {"type": "integer", "description": "Criteria (0-1) 0 -> not fullfilled 1 -> fulfilled"}, "absolute_positioning_max_score": {"type": "integer", "default": "1", "description": "Maximum score for this subsection."}, "two_different_type_faces_score": {"type": "integer", "description": "Criteria (0-1) 0 -> not fullfilled 1 -> fulfilled"}, "set_a_background_image__feedback": {"type": "string", "description": "Set a Background image with a background-attachment: fixed"}, "two_different_screen_sizes_score": {"type": "integer", "description": "Criteria (0-1) 0 -> not fullfilled 1 -> fulfilled"}, "set_a_background_image__max_score": {"type": "integer", "default": "1", "description": "Maximum score for this subsection."}, "two_different_type_faces_feedback": {"type": "string", "description": "has the student Used Two different Type Faces (this must be part of the mock-up received. If not, you must explain it in the reflection and decide which ones to use) "}, "two_different_type_faces_max_score": {"type": "integer", "default": "1", "description": "Maximum score for this subsection."}, "two_different_screen_sizes_feedback": {"type": "string", "description": "Feedback on how the student has: Implement Mobile and Desktop versions (One media query for larger screens 960px – mobile-first)"}, "two_different_screen_sizes_max_score": {"type": "integer", "default": "1", "description": "Maximum score for this subsection."}, "pseudo-classes_and_pseudoelements_score": {"type": "integer", "description": "Criteria (0-1) 0 -> not fullfilled 1 -> fulfilled"}, "pseudo-classes_and_pseudoelements_feedback": {"type": "string", "description": "Use Pseudo-classes and pseudoelements"}, "pseudo-classes_and_pseudoelements_max_score": {"type": "integer", "default": "1", "description": "Maximum score for this subsection."}}}, "AI_final_assessment": {"type": "object", "required": ["AI_final_comments"], "properties": {"AI_final_comments": {"type": "string", "description": "General comments about the submission as a whole. What was good, what was bad, what could be improved."}}}}}}', 1, 53, 0.75, 5),
 ('Assignment #3', '2025-01-10', '2025-02-28', TRUE, TRUE, 'lorem ipsum', '{}', 3, 68, 0.70, 2),
 ('Obligatory assignment 2', '2025-01-12', '2025-02-12', FALSE, TRUE, 'lorem ipsum', '{}', 4, 50, 0.50, 3),
 ('Oblig 1 - Web component', '2025-02-26', '2025-03-30', TRUE, TRUE, 'lorem ipsum', '{}', 6, 69, 0.42, 3),
