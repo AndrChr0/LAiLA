@@ -154,7 +154,7 @@ Scenario
 Darling, the student organisation, is hosting a Halloween party as part of their fundraising efforts
 for an upcoming study trip. They have dedicated considerable time to planning the event and are keen
 to use digital channels to maximise student participation. Nevertheless, they are mindful of the
-environmental impact associated with digital platforms, particularly websites. Consequently, they've
+environmental impact associated with digital platforms, particularly websites. Consequently, they\'ve
 made a deliberate choice to design their website and newsletters with a minimal carbon footprint to
 prioritise sustainability.
 They decided to hire two different teams of novice web designers to design and implement the
@@ -197,11 +197,11 @@ Designing the mock-up
 Start by discussing the design you envision within your group, and then translate your ideas onto
 A3 sheets. You may require multiple A3 sheets to illustrate the entire webpage fully. Encourage
 creativity throughout this process.
-Your mock-up should encompass the following elements (refer to the 'Example of Mock-Up'
+Your mock-up should encompass the following elements (refer to the \'Example of Mock-Up\'
 below for guidance):
-• Text Content: Include all the content from 'text-content.pdf,' with each piece of text
+• Text Content: Include all the content from \'text-content.pdf,\' with each piece of text
 labelled as Text#N. For each element you add to the mock-up, provide a description for
-the developers, ensuring it's easy to comprehend.
+the developers, ensuring it\'s easy to comprehend.
 • Media Queries: present an additional view that demonstrates how a specific element
 would adapt using media queries to address different screen sizes.
 • Group Number: clearly indicate your group number on the mock-up.
@@ -225,14 +225,14 @@ design without requiring additional instructions from you.
 Wrap up and delivery
 Upon completing the assignment, please follow these steps to submit the lab:
 • Scan all the papers and compile them into a single PDF document. Name the document
-as 'groupX-design.pdf' (replace X with your group number).
-• Create a folder and label it as 'lab8-groupX.'
+as \'groupX-design.pdf\' (replace X with your group number).
+• Create a folder and label it as \'lab8-groupX.\'
 • Place the PDF document inside this folder.
 • If you have any additional files or documents related to the lab, feel free to include them
 in the folder.
 • Compress the entire folder into a ZIP file.
 • Choose one member of the group to submit the lab on Blackboard. Navigate to
-'Learning materials' -> 'Labs' -> 'Lab 8' -> 'Upload Lab 8' to make your submission.
+\'Learning materials\' -> \'Labs\' -> \'Lab 8\' -> \'Upload Lab 8\' to make your submission.
 This step is very important since all the mock-ups done during the lab session will be shared with
 other groups for Part II. Please be aware that the mock-ups will be shared on Blackboard, and they
 will be utilised as part of the second part of the assignment and, therefore, other students will have
@@ -251,7 +251,7 @@ with the first newsletter. Both files contain the same text stored in different 
 will receive an email with information about the mock-up your group must implement and a link to a zip file).
 They also remind you that they want to develop a low-carbon footprint newsletter; therefore,
 you must pay attention to your code and your page size. They also want you to write a reflection
-about all the measures you have taken to reduce the newsletter's carbon footprint.
+about all the measures you have taken to reduce the newsletter\'s carbon footprint.
 Task Description
 In this assignment, you will need to create a responsive website based on the mock-up you received.
 The website should adapt to two screen sizes: one for mobile devices and one for larger screens (bigger
@@ -263,7 +263,7 @@ The final website should consist of two pages. The first page is the main page w
 the mock-up design. The second page is a reflection page where you discuss the choices you made
 and the challenges you faced while creating the website. The reflection should also describe the steps
 you took from start to finish and what you learned from this assignment. In addition, the reflection
-should include a list of measures you took to reduce your website's carbon footprint and make it more
+should include a list of measures you took to reduce your website\'s carbon footprint and make it more
 sustainable. You should also reflect on the quality of the mock-up you received, how it affected your
 implementation and decisions, and what suggestions you have for improving it. (See Reflection page
 section for more details).
@@ -304,7 +304,7 @@ description? Explain the changes and/or actions you took to implement the requir
 requirements). Finish this part of the reflection by rating the mock-up from 1 to 5 (being 5
 very good).
 • Section 2 – reflection about sustainability: explain all the measures you took to reduce your
-page's carbon footprint and size. How many “kbs” have you saved after applying those
+page\'s carbon footprint and size. How many “kbs” have you saved after applying those
 measures? How difficult was it? Give specific examples (e.g., if you change the format of a
 picture, show a table with the size before and after).
 • Section 3 – self-reflection of own mock-up: in retrospect, do you think your mock-up was
