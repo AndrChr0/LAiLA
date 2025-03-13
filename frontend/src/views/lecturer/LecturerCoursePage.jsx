@@ -10,18 +10,18 @@ import { GetConfig} from "../../utils/GetConfig"
 import { useAuth } from "../../context/AuthContext";
 
 const LecturerCoursePage = () => {
-      const { token } = useAuth();
-      const { assignments } = useFetchAssignments(GetConfig(token));
-      const path = useParams();
-      const courseId = path.id;
-    
-      const activeAssignmentInCourse = (courseId) => {
-        return assignments.filter((assignment) => assignment.course_id === Number(courseId) && assignment.is_active === 1);
-      };
-    
-      const inActiveAssignmentInCourse = (courseId) => {
-        return assignments.filter((assignment) => assignment.course_id === Number(courseId) && assignment.is_active === 0);
-      }
+    const { token } = useAuth();
+    const { assignments } = useFetchAssignments(GetConfig(token));
+    const path = useParams();
+    const courseId = path.id;
+  
+    const activeAssignmentInCourse = (courseId) => {
+      return assignments.filter((assignment) => assignment.course_id === Number(courseId) && assignment.is_active === 1);
+    };
+  
+    const inActiveAssignmentInCourse = (courseId) => {
+      return assignments.filter((assignment) => assignment.course_id === Number(courseId) && assignment.is_active === 0);
+    }
       
     
     return (
