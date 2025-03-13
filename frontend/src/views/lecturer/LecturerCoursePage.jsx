@@ -5,11 +5,13 @@ import instance from "../../utils/axiosInstance";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Assignments from "../../components/Assignments";
-import { useAuth } from "../../context/AuthContext";
 import { useFetchAssignments } from "../../utils/fetches/useFetchAssignments";
+import { GetConfig} from "../../utils/GetConfig"
+import { useAuth } from "../../context/AuthContext";
 
 const LecturerCoursePage = () => {
-      const { assignments } = useFetchAssignments();
+      const { token } = useAuth();
+      const { assignments } = useFetchAssignments(GetConfig(token));
       const path = useParams();
       const courseId = path.id;
     
