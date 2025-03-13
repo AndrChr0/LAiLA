@@ -4,9 +4,12 @@ import Assignments from "../../components/Assignments";
 import { useNavigate } from "react-router-dom";
 import { useFetchAssignments } from "../../utils/fetches/useFetchAssignments";
 import { useFetchCourses } from "../../utils/fetches/useFetchCourses";
+import { GetConfig} from "../../utils/GetConfig"
+import { useAuth } from "../../context/AuthContext";
 
 function LecturerHomePage() {
-  const { assignments } = useFetchAssignments();
+  const { token } = useAuth();
+  const { assignments } = useFetchAssignments(GetConfig(token));
   const { courses } = useFetchCourses();
   const navigate = useNavigate();
 

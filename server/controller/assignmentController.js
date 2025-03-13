@@ -7,7 +7,7 @@ const pool = SQLpool;
 // (req.body would be JWT attribute once authentication is integrated)
 export async function getAllAssignments(req, res, next) {
 	try {
-		if (req.query.course_coordinator) {
+		if (req.user.role == "lecturer") {
 			const [rows] = await pool.query(`
 				SELECT a.assignment_id, a.assignment_title, a.assignment_start_date, a.assignment_end_date, a.is_active, a.is_public, a.assignment_description, a.assignment_criteria, a.course_id, c.course_name, c.course_code, a.max_score, a.pass_threshold, GROUP_CONCAT(af.filetype ORDER BY af.filetype SEPARATOR ', ') AS allowed_filetypes, a.assignment_attempts
 				FROM assignments a
@@ -15,7 +15,7 @@ export async function getAllAssignments(req, res, next) {
 				LEFT JOIN assignment_filetypes af ON a.assignment_id = af.assignment_id
 				WHERE c.course_coordinator = ?
 				GROUP BY a.assignment_id, c.course_name;
-				`, [req.query.course_coordinator]
+				`, [req.user.id]
 			);
 
 			if (rows.length == 0) {
