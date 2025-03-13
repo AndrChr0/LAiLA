@@ -1,12 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 import Courses from "../../components/Courses";
 import Assignments from "../../components/Assignments";
 import { useFetchAssignments } from "../../utils/fetches/useFetchAssignments";
 import { useFetchCourses } from "../../utils/fetches/useFetchCourses";
+import { GetConfig} from "../../utils/GetConfig"
+import { useAuth } from "../../context/AuthContext";
 
 function StudentHomePage() {
-const { assignments } = useFetchAssignments();
+const { token } = useAuth();
+const { assignments } = useFetchAssignments(GetConfig(token));
 const { courses } = useFetchCourses();
+
 
 const activeAssignments = Array.isArray(assignments)
     ? assignments.filter((assignment) => assignment.is_active === 1)

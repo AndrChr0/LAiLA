@@ -1,4 +1,5 @@
 import express from "express";
+import {auth}  from "../middleware/verifyToken.js";
 import {
 	getAllAssignments,
 	createAssignment,
@@ -14,7 +15,7 @@ const router = express.Router();
     requires req.body.course_coordinator or req.body.student_id with the relevant user ID
     req.body would be JWT attribute once authentication is integrated
 */
-router.get("/", getAllAssignments);
+router.get("/", auth, getAllAssignments);
 
 // get one assignment
 router.get("/:assignment_id", getOneAssignment);

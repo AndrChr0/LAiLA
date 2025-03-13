@@ -23,16 +23,16 @@ export async function getAllAssignments(req, res, next) {
 			}
 
 			return res.status(200).json(rows);
-		} else if (req.query.student_id) {
+		} else if (req.user.role == "student") {
 			const [rows] = await pool.query(`
 				SELECT a.assignment_id, a.assignment_title, a.assignment_start_date, a.assignment_end_date, a.is_active, a.assignment_description, a.course_id, c.course_name, c.course_code, a.max_score, a.pass_threshold, GROUP_CONCAT(af.filetype ORDER BY af.filetype SEPARATOR ', ') AS allowed_filetypes, a.assignment_attempts
 				FROM assignments a
 				JOIN enrollment e ON a.course_id = e.course_id
-        JOIN courses c ON a.course_id = c.course_id
+        		JOIN courses c ON a.course_id = c.course_id
 				LEFT JOIN assignment_filetypes af ON a.assignment_id = af.assignment_id
 				WHERE e.student_id = ? AND is_public = TRUE
 				GROUP BY a.assignment_id, c.course_name;
-				`, [req.query.student_id]
+				`, [req.user.id]
 			);
 
 			if (rows.length == 0) {
