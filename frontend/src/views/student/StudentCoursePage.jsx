@@ -6,11 +6,14 @@ import Assignments from '../../components/Assignments';
 import { useFetchAssignments } from "../../utils/fetches/useFetchAssignments";
 import { Link } from 'react-router-dom';
 import { FaArrowLeft } from "react-icons/fa";
+import { GetConfig} from "../../utils/GetConfig"
+import { useAuth } from "../../context/AuthContext";
 
 
 const StudentCoursePage = () => {
-const [currentCourse, setCurrentCourse] = useState({});
-  const { assignments } = useFetchAssignments();
+  const [currentCourse, setCurrentCourse] = useState({});
+  const { token } = useAuth();
+  const { assignments } = useFetchAssignments(GetConfig(token));
   const path = useParams();
   const courseId = path.id;
 
