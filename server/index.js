@@ -2,7 +2,6 @@ import express from "express";
 import dotenv from "dotenv";
 import aiZipRoutes from "./routes/zipRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
-import userRoutes from "./routes/userRoutes.js";
 import courseRoutes from "./routes/courseRoutes.js";
 import assignmentRoutes from "./routes/assignmentRoutes.js";
 import feedbackRoutes from "./routes/feedbackRoutes.js";
@@ -27,7 +26,6 @@ app.use(cookieParser());
 // route for decompressing the zip file, AI has yet to be implemented (AC - 23/02)
 app.use("/api/ai", aiZipRoutes);
 app.use("/api/auth", authRoutes);
-app.use("/api/users", userRoutes);
 app.use("/api/courses", courseRoutes);
 app.use("/api/assignments", assignmentRoutes);
 app.use("/api/feedback", feedbackRoutes);
