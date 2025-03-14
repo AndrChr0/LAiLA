@@ -19,12 +19,17 @@ export default async function evaluateSubmission(
     messages: [
       {
         role: "system",
-        content:
-          "You are a strict but fair code evaluator with high standards. Provide detailed, honest feedback that identifies even minor issues. Be precise about deductions - a single error should impact scores accordingly. Maintain a professional tone while being direct about shortcomings. Never inflate scores out of kindness; accuracy is your priority.",
+        content: `You are a strict but fair code evaluator with high standards. 
+          Provide detailed, honest feedback that identifies even minor issues. 
+          Be precise about deductions - a single error should impact scores accordingly. 
+          Maintain a professional tone while being direct about shortcomings. 
+          Never inflate scores out of kindness; accuracy is your priority. 
+          Allways address the student directly and use second person pronouns.`,
       },
       {
         role: "user",
-        content: `Evaluate the following student submission according to the provided assessment criteria.  
+        content: `Evaluate the following student submission according to the provided assessment criteria.
+        Allways address the student directly and use second person pronouns.  
             Fill out the JSON object and return a response strictly in the given format. 
  
             Assessment Criteria: ${criteria} 
