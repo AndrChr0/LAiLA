@@ -6,14 +6,14 @@ import { pool as SQLpool } from '../utils/SQLPool.js';
 const pool = SQLpool;
 
 
-export const register = async (req, res) => {
+export const register = async (req, res, next) => {
     // Check if email already exists
     const email = req.body.email;
     const [rows] = await pool.query('SELECT email FROM users WHERE email = ?', [email]);
 
     // If email already exists, return error
     if (rows.length > 0) {
-        return res.status(400).json('Email already exists');
+        throw Object.assign(new Error("Email already exists"), { status: 400 });
     }
 
     // Encrypt password
@@ -34,13 +34,12 @@ export const register = async (req, res) => {
         await pool.query(`INSERT INTO users (first_name, last_name, role, email, password) VALUES (?,?,?,?,?)`, [user.first_name, user.last_name, user.role, user.email, user.password]);
         res.status(201).json('User registered successfully');
     } catch (error) {
-        console.error(error);
-        res.status(500).json('Server error');
+        next(error);
     }
         
 };
 
-export const login = async (req, res) => {
+export const login = async (req, res, next) => {
     try {
         const email = req.body.email;
         const password = req.body.password;
@@ -49,11 +48,11 @@ export const login = async (req, res) => {
         const validPassword = await bcrypt.compare(password, user.password);
 
         if (rows.length === 0) {
-            return res.status(400).json('Email could not be found in database.');
+            throw Object.assign(new Error("Email could not be found in database"), { status: 400 });
         }
 
         if (!validPassword) {
-            return res.status(400).json('Invalid password.');
+            throw Object.assign(new Error("Invalid password"), { status: 400 });
         }
 
         const accessToken = jwt.sign(
@@ -81,48 +80,61 @@ export const login = async (req, res) => {
         res.status(200).json({ message: 'Login successful', user: { id: user.id, first_name:user.first_name, last_name:user.last_name, email: user.email, role: user.role }, accessToken, refreshToken });
 
     } catch (error) {
-        console.error(error);
-        res.status(500).json('Server error');
+        next(error);
     }
 };
 
-export const refresh = (req, res) => {
-    const cookies = req.cookies;
+export const refresh = (req, res, next) => {
+    try {
+        const cookies = req.cookies;
 
-    if (!cookies?.jwt) return res.status(401).json ("Unauthorized, no token found");
-
-    const refreshToken = cookies.jwt
-
-    jwt.verify(
-        refreshToken,
-        process.env.REFRESH_TOKEN_SECRET,
-        async (err, decoded) => {
-            if (err) return res.status(403).json("Forbidden");
-
-            const [rows] = await pool.query("SELECT user_id, role FROM users WHERE user_id = ?", [decoded.userId]);
-            const user = rows[0];
-
-            if (!user) return res.status(401).send("Unauthorized, no user found");
-
-            const accessToken = jwt.sign (
-                { id: user.user_id, role: user.role },
-                process.env.ACCESS_TOKEN_SECRET,
-                { expiresIn: '15m' } // real case scenario 
-                // { expiresIn: '1m' } // testing purposes
-            )
-
-            res.status(200).send(accessToken);
-
+        if (!cookies?.jwt) {
+            throw Object.assign(new Error("Unauthorized, no token found"), { status: 401 });
         }
-    )
+    
+        const refreshToken = cookies.jwt
+    
+        jwt.verify(
+            refreshToken,
+            process.env.REFRESH_TOKEN_SECRET,
+            async (err, decoded) => {
+                if (err) {
+                    throw Object.assign(new Error("Forbidden"), { status: 403 });
+                }
+    
+                const [rows] = await pool.query("SELECT user_id, role FROM users WHERE user_id = ?", [decoded.userId]);
+                const user = rows[0];
+    
+                if (!user) {
+                    throw Object.assign(new Error("Unauthorized, no user found"), { status: 401 });
+                }
+
+                const accessToken = jwt.sign (
+                    { id: user.user_id, role: user.role },
+                    process.env.ACCESS_TOKEN_SECRET,
+                    { expiresIn: '15m' } // real case scenario 
+                    // { expiresIn: '1m' } // testing purposes
+                )
+    
+                res.status(200).json(accessToken);
+    
+            }
+        )
+    } catch (error) {
+        next(error);
+    }
 }
 
-export const logout = async (req, res) => {
-    if (req.cookies?.jwt){
-        const refreshToken = req.cookies.jwt;
-        res.clearCookie("jwt");
-        return res.status(200).json("Logout successful");
-    } else {
-        return res.status(400).json("No token found");
+export const logout = async (req, res, next) => {
+    try {
+        if (req.cookies?.jwt){
+            const refreshToken = req.cookies.jwt;
+            res.clearCookie("jwt");
+            return res.status(200).json("Logout successful");
+        } else {
+            throw Object.assign(new Error("No token found"), { status: 400 });
+        }
+    } catch (error) {
+        next(error);
     }
 }
