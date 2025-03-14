@@ -165,7 +165,7 @@ function AssignmentCriteriaForm({ onHandleCriteria, onHandleMaxScoreChange }) {
         AI_final_comments: {
           type: "string",
           description:
-            "General comments about the submission as a whole. What was good, what was bad, what could be improved.",
+            "Provide a detailed analysis of the submission with constructive feedback. Identify specific areas that need improvement, explain why they're problematic, and offer actionable suggestions for enhancement. While you may briefly acknowledge strengths if relevant, focus 80% of your response on constructive critique and specific recommendations for improvement.",
         },
       },
       required: ["AI_final_comments"],
