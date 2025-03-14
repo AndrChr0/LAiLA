@@ -10,7 +10,7 @@ import { useAuth } from "../../context/AuthContext";
 function LecturerHomePage() {
   const { token } = useAuth();
   const { assignments } = useFetchAssignments(GetConfig(token));
-  const { courses } = useFetchCourses();
+  const { courses } = useFetchCourses(GetConfig(token));
   const navigate = useNavigate();
 
 
