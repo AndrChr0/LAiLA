@@ -8,7 +8,7 @@ const router = express.Router();
 router.get("/", auth, getMyCourses);
 
 // get one course
-router.get("/:course_id", getOneCourse);
+router.get("/:course_id", auth, getOneCourse);
 
 
 export default router;

@@ -19,7 +19,7 @@ const StudentCoursePage = () => {
 
   useEffect(() => {
     instance
-      .get(`api/courses/${courseId}`)
+      .get(`api/courses/${courseId}`, GetConfig(token))
       .then((response) => {
         setCurrentCourse(response.data);
       })
