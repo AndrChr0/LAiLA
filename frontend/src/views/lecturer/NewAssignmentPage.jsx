@@ -8,7 +8,7 @@ import ToolTip from "../../shared/ToolTip";
 function NewAssignmentPage() {
   const { userId } = useAuth();
 
-  // propably refactor state usage
+  // TODO: refactor state usage
   const [assignment_title, setAssignmentTitle] = useState("");
   const [assignment_start_date, setAssignmentStart] = useState("");
   const [assignment_end_date, setAssignmentEnd] = useState("");
