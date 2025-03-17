@@ -427,5 +427,4 @@ INSERT INTO feedback (assignment_id, student_id, feedback_contents, general_comm
 (2, 1, '{}', 'I will forward this concern further to your study program leaders.', 'fail', 1),
 (4, 2, '{}', 'If you have questions regarding the feedback, please take contact.', 'fail', 2),
 (3, 1, '{}', 'Several potential issues and areas for improvement.', 'fail', 1),
-(3, 1, '{}', 'Good job!', 'fail', 2),
-(5, 2, '{}', 'Good acknowledgements and judgements in your reflection.', 'pass', 1);
+(3, 1, '{}', 'Good job!', 'fail', 2);
