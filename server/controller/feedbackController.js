@@ -3,6 +3,51 @@ dotenv.config();
 import { pool as SQLpool } from "../utils/SQLPool.js";
 const pool = SQLpool;
 
+const AIResponsePlaceholder = 
+{
+    "commonProblems": [
+        {
+            "problemName": "Incomplete Documentation",
+            "description": "Many submissions lacked sufficient in-code comments and documentation.",
+            "occurrences": 2,
+            "averageScore": 60.0,
+            "recommendedActions": [
+                "Include more detailed comments",
+                "Review documentation guidelines"
+            ]
+        },
+        {
+            "problemName": "Variable Naming Issues",
+            "description": "Several students used non-descriptive variable names, making the code harder to understand.",
+            "occurrences": 3,
+            "averageScore": 55.0,
+            "recommendedActions": [
+                "Follow standard naming conventions",
+                "Use descriptive variable names"
+            ]
+        }
+    ],
+    "strongAreas": [
+        {
+            "areaName": "Code Functionality",
+            "description": "Most submissions met the core functional requirements and ran as expected.",
+            "averageScore": 85.0,
+            "numStudentsAboveThreshold": 3
+        },
+        {
+            "areaName": "Algorithm Implementation",
+            "description": "Students correctly implemented key algorithms with appropriate logic.",
+            "averageScore": 90.0,
+            "numStudentsAboveThreshold": 2
+        }
+    ],
+    "overallLecturerSuggestions": [
+        "Emphasize the importance of thorough documentation during lectures",
+        "Include a review session on best coding practices and naming conventions"
+    ],
+    "additionalNotes": "Feedback is based on three submissions; a larger sample may provide more comprehensive insights."
+};
+
 // get all feedback (for yourself) - auth(S)
 export async function getAllFeedback(req, res, next) {
     try {
@@ -66,23 +111,55 @@ export async function getFeedbackForSummary(req, res, next) {
         //     WHERE assignment_id = ?;
         //     `, [req.params.assignment_id]
         // );
+
+        // // testing query for DB without much feedback_contents
+        // const [rows] = await pool.query(`
+        //     WITH FeedbackForReport AS (
+        //         SELECT *,
+        //             ROW_NUMBER() OVER (PARTITION BY assignment_id, student_id ORDER BY attempt_nr DESC) AS rn
+        //         FROM feedback
+        //     )
+        //     SELECT general_comment, suggested_result, attempt_nr
+        //     FROM FeedbackForReport
+        //     WHERE rn = 1 AND assignment_id = ?;
+        //     `, [req.params.assignment_id]
+        // );
+
+        // fetch all of the most recent feedback
         const [rows] = await pool.query(`
             WITH FeedbackForReport AS (
                 SELECT *,
                     ROW_NUMBER() OVER (PARTITION BY assignment_id, student_id ORDER BY attempt_nr DESC) AS rn
                 FROM feedback
             )
-            SELECT feedback_id, assignment_id, student_id, general_comment, suggested_result, attempt_nr 
+            SELECT feedback_contents, suggested_result, attempt_nr
             FROM FeedbackForReport
             WHERE rn = 1 AND assignment_id = ?;
             `, [req.params.assignment_id]
         );
-        
+
+        // throw an error if there is none
         if (rows.length == 0) {
             throw Object.assign(new Error("No feedback found"), { status: 404 });
         }
 
-        return res.status(200).json(rows);
+        // handle the data
+        const feedbackContents = [];
+        const metaData = {passRate: 0, failRate: 0, totalFeedback: 0, uniqueStudents: rows.length};
+
+        // populate metaData object based on the data
+        for (let i = 0; i < rows.length; i++) {
+            // feedbackContents.push(rows[i]["general_comment"]);
+            feedbackContents.push(JSON.stringify(rows[i]["feedback_contents"]));
+            rows[i]["suggested_result"] == "pass" ? metaData.passRate++ : metaData.failRate++;
+            metaData.totalFeedback += rows[i]["attempt_nr"];
+        }
+
+        // create array of information passed back to the frontend
+        const reportInfo = [AIResponsePlaceholder, metaData]; // maybe make object
+
+        // return res.status(200).json(metaData);
+        return res.status(200).json(reportInfo);
     } catch (error) {
         next(error);
     }
