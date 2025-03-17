@@ -1,7 +1,7 @@
 // utility function to get the config object with the token
 // REMEMBER to import the token from the useAuth hook in the component where you want to use this function
 
-function GetConfig(token) {
+export function GetConfig(token) {
     return {
         headers: {
             authorization: `Bearer ${token}`,
@@ -10,4 +10,4 @@ function GetConfig(token) {
 };
 
 
-export default GetConfig;
+// export default GetConfig;

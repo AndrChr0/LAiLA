@@ -1,11 +1,16 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AssignmentCriteriaForm from "../../components/AssignmentCriteriaForm";
-import axios from "axios";
+import instance from "../../utils/axiosInstance";
+import { useAuth } from "../../context/AuthContext";
+import ToolTip from "../../shared/ToolTip";
+import { GetConfig } from "../../utils/GetConfig";
 
 function NewAssignmentPage() {
+  const { userId } = useAuth();
+  const { token } = useAuth();
 
-  // propably refactor state usage
+  // TODO: refactor state usage
   const [assignment_title, setAssignmentTitle] = useState("");
   const [assignment_start_date, setAssignmentStart] = useState("");
   const [assignment_end_date, setAssignmentEnd] = useState("");
@@ -18,8 +23,19 @@ function NewAssignmentPage() {
   const [assignment_criteria, setAssignmentCriteria] = useState({});
   const [passPercentage, setPassPercentage] = useState(70);
   const [maxScore, setMaxScore] = useState(0);
+  const [lecturerCourses, setLecturerCourses] = useState([]);
+  const [courseId, setCourseId] = useState(0);
 
-  console.log("Max Score:", maxScore);
+  useEffect(() => {
+    instance
+      .get(`api/courses?course_coordinator=${userId}`, GetConfig(token))
+      .then((response) => {
+        setLecturerCourses(response.data);
+        setCourseId(response.data[0].course_id);
+      });
+  }, [userId]);
+
+  console.log("Courses:", lecturerCourses);
 
   function handleMaxScoreChange(newScore) {
     setMaxScore(newScore);
@@ -30,12 +46,11 @@ function NewAssignmentPage() {
   }
 
   function handleIsActiveChange() {
-    setIsActive(!isActive); 
+    setIsActive(!isActive);
   }
 
-
   function handleIsPublicChange() {
-    setIsPublic(prev => {
+    setIsPublic((prev) => {
       const newIsPublic = !prev;
       if (!newIsPublic) {
         setIsActive(false);
@@ -45,8 +60,7 @@ function NewAssignmentPage() {
   }
 
   console.log("isPublic:", isPublic);
-    console.log("isActive:", isActive);
-
+  console.log("isActive:", isActive);
 
   function handleFileChange() {
     if (!allowed_filetype) {
@@ -60,52 +74,58 @@ function NewAssignmentPage() {
     if (allowed_filetype.startsWith(".")) {
       setAssignmentFiletypes([...allowed_filetypes, allowed_filetype]);
     } else {
-      setAssignmentFiletypes([
-        ...allowed_filetypes,
-        `.${allowed_filetype}`,
-      ]);
+      setAssignmentFiletypes([...allowed_filetypes, `.${allowed_filetype}`]);
     }
     setAssignmentFiletype("");
   }
   console.log("filetypes:", allowed_filetypes);
 
-
-
-  
-
   function handleSubmit(e) {
-  
-
     e.preventDefault();
-    axios.post("http://localhost:5310/api/assignments", {
-      assignment_title: assignment_title,
-      assignment_start_date: assignment_start_date,
-      assignment_end_date: assignment_end_date,
-      is_active: isActive,
-      is_public: isPublic,
-      assignment_description: assignment_description,
-      assignment_criteria: JSON.stringify(assignment_criteria),
-      course_id: 1,
-      max_score: maxScore,
-      pass_threshold: passPercentage/100,
-      assignment_attempts: assignment_attempts,
-      allowed_filetypes: allowed_filetypes
-    })
-    .then((response) => {
-      console.log(response.data);
-    })
+    instance
+      .post("api/assignments", {
+        assignment_title: assignment_title,
+        assignment_start_date: assignment_start_date,
+        assignment_end_date: assignment_end_date,
+        is_active: isActive,
+        is_public: isPublic,
+        assignment_description: assignment_description,
+        assignment_criteria: JSON.stringify(assignment_criteria),
+        course_id: courseId,
+        max_score: maxScore,
+        pass_threshold: passPercentage / 100,
+        assignment_attempts: assignment_attempts,
+        allowed_filetypes: allowed_filetypes,
+      })
+      .then((response) => {
+        console.log(response.data);
+      });
+  }
 
-  } 
-
+  console.log("course ID", courseId);
   return (
     <>
       <h1 className='text-3xl font-light'>New Assignment</h1>
-      <div className='flex flex-col w-11/12 md:w-2/3 mx-auto my-0 pt-4'>
+      <div className='flex flex-col w-11/12 pt-4 mx-auto my-0 md:w-2/3'>
+        <label htmlFor='course'>Select Course</label>
+        <select
+          className='p-2 mb-4 bg-white border border-gray-400'
+          name='course'
+          id='course'
+          onChange={(e) => setCourseId(e.target.value)}
+        >
+          {lecturerCourses.map((course) => (
+            <option key={course.course_id} value={course.course_id}>
+              {course.course_name}
+            </option>
+          ))}
+        </select>
+
         <label htmlFor='assignment_title'>Assignment Title</label>
         <input
           onChange={(e) => setAssignmentTitle(e.target.value)}
           value={assignment_title}
-          className='border border-gray-400 p-2 mb-4'
+          className='p-2 mb-4 bg-white border border-gray-400'
           type='text'
           name='assignment_title'
           id='assignment_title'
@@ -115,7 +135,7 @@ function NewAssignmentPage() {
         <input
           onChange={(e) => setAssignmentStart(e.target.value)}
           value={assignment_start_date}
-          className='border border-gray-400 p-2 w-36 mb-4'
+          className='p-2 mb-4 bg-white border border-gray-400 w-36'
           type='date'
           name='assignment_start'
           id='assignment_start'
@@ -125,43 +145,50 @@ function NewAssignmentPage() {
         <input
           onChange={(e) => setAssignmentEnd(e.target.value)}
           value={assignment_end_date}
-          className='border border-gray-400 p-2 w-36 mb-4'
+          className='p-2 mb-4 bg-white border border-gray-400 w-36'
           type='date'
           name='assignment_end'
           id='assignment_end'
         />
-    <div className="flex items-center py-8">
-        <label htmlFor='is_public'>Make Public</label>
-        <input
-          onChange={handleIsPublicChange}
-          checked={isPublic}
-          className='border border-gray-400 w-16'
-          type='checkbox'
-          name='is_public'
-          id='is_public'
-        />
-    </div>
+        <div className='flex items-center py-8'>
+          <div className='flex gap-4'>
+            <ToolTip toolText='Assignment is publically viewable by students in your course' />
+            <label htmlFor='is_public'>Make Public</label>
+          </div>
 
-    {isPublic && (
-      <div className="flex items-center py-8">
-        <label htmlFor='is_active'>Is Active</label>
-        <input
-          onChange={handleIsActiveChange}
+          <input
+            onChange={handleIsPublicChange}
+            checked={isPublic}
+            className='w-16 bg-white border border-gray-400'
+            type='checkbox'
+            name='is_public'
+            id='is_public'
+          />
+        </div>
 
-          checked={isActive}
-          className='border border-gray-400 w-16'
-          type='checkbox'
-          name='is_active'
-          id='is_active'
-        />
-      </div>
-    )}
+        {isPublic && (
+          <div className='flex items-center py-8'>
+            <div className='flex gap-4'>
+              <ToolTip toolText='Students can recieve feedback on their assignments by Athea AI' />
+              <label htmlFor='is_active'>Is Active</label>
+            </div>
+            <input
+              onChange={handleIsActiveChange}
+              checked={isActive}
+              className='w-16 border border-gray-400'
+              type='checkbox'
+              name='is_active'
+              id='is_active'
+            />
+          </div>
+        )}
 
+        <ToolTip toolText='Number of attempts allowed for this assignment' />
         <label htmlFor='assignment_attempts'>Assignment Attempts</label>
         <input
           onChange={(e) => setAssignmentAttempts(e.target.value)}
           value={assignment_attempts}
-          className='border border-gray-400 p-2 w-16 mb-4'
+          className='w-16 p-2 mb-4 bg-white border border-gray-400'
           min={0}
           max={5}
           type='number'
@@ -173,19 +200,20 @@ function NewAssignmentPage() {
           Paste assignment description
         </label>
         <textarea
-          className='border border-gray-400 p-2 mb-4 h-40'
+          className='h-40 p-2 mb-4 bg-white border border-gray-400'
           onChange={(e) => setAssignmentDescription(e.target.value)}
           name='assignment_description'
           id='assignment_description'
         ></textarea>
 
+        <ToolTip toolText='Add filetypes that will be assessed. Filtypes that are not specified will not be accessed Athea AI.' />
         <label htmlFor='assignment_filetypes'>
           Add filetypes to be analyzed
         </label>
         <input
           onChange={(e) => setAssignmentFiletype(e.target.value)}
           value={allowed_filetype}
-          className='border border-gray-400 p-2 mb-4'
+          className='p-2 mb-4 bg-white border border-gray-400'
           type='text'
           name='assignment_filetypes'
           id='assignment_filetypes'
@@ -193,7 +221,7 @@ function NewAssignmentPage() {
         <button
           onClick={handleFileChange}
           type='button'
-          className='border border-gray-400 p-2 w-20 mb-4'
+          className='w-20 p-2 mb-4 bg-white border border-gray-400'
         >
           Add
         </button>
@@ -202,7 +230,7 @@ function NewAssignmentPage() {
             <span key={index} className=''>
               <span>{filetype}</span>
               <button
-                className='border border-gray-400 w-16 mb-4 ml-2'
+                className='w-16 mb-4 ml-2 bg-white border border-gray-400'
                 type='button'
                 onClick={() => {
                   setAssignmentFiletypes(
@@ -216,21 +244,25 @@ function NewAssignmentPage() {
           ))}
         </div>
 
+        <ToolTip toolText='Percentage value required to indicate a pass or fail grade' />
         <label htmlFor='passPercentage'>Pass Percentage</label>
         <input
           onChange={(e) => setPassPercentage(e.target.value)}
           value={passPercentage}
-          className='border border-gray-400 p-2 w-16 mb-4'
+          className='w-16 p-2 mb-4 bg-white border border-gray-400'
           min={0}
           max={100}
           type='number'
           name='passPercentage'
           id='passPercentage'
         />
-        <AssignmentCriteriaForm onHandleCriteria={handleCriteriaChange} onHandleMaxScoreChange={handleMaxScoreChange} />
+        <AssignmentCriteriaForm
+          onHandleCriteria={handleCriteriaChange}
+          onHandleMaxScoreChange={handleMaxScoreChange}
+        />
         <button
           type='submit'
-          className='border border-gray-400 p-2 w-28 mt-4'
+          className='p-2 mt-4 border border-gray-400 w-28'
           onClick={handleSubmit}
         >
           Publish Assignment
