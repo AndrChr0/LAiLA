@@ -461,10 +461,10 @@ async function aggregateAssignmentFeedback() {
       {
         role: "user",
         content: `
-            Here are the JSON feedback objects from multiple students (one per line or in an array):
+            Here are the JSON feedback objects from multiple students: ${studentFeedback}
     
-           ${studentFeedback}
-    
+            
+
             Please produce the final aggregated feedback JSON following the schema. 
             Make sure to include:
             - "assignmentInfo" with "assignmentId", "title", "dateGenerated", and "totalSubmissions".
