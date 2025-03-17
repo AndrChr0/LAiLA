@@ -58,11 +58,23 @@ export async function getFeedbackForSummary(req, res, next) {
         if (!req.query.course_coordinator) {
             throw Object.assign(new Error("Unauthorized"), { status: 401 });
         }
-        
+
+        // // old query, kept in case we need it later
+        // const [rows] = await pool.query(`
+        //     SELECT feedback_contents
+        //     FROM feedback
+        //     WHERE assignment_id = ?;
+        //     `, [req.params.assignment_id]
+        // );
         const [rows] = await pool.query(`
-            SELECT feedback_contents
-            FROM feedback
-            WHERE assignment_id = ?;
+            WITH FeedbackForReport AS (
+                SELECT *,
+                    ROW_NUMBER() OVER (PARTITION BY assignment_id, student_id ORDER BY attempt_nr DESC) AS rn
+                FROM feedback
+            )
+            SELECT feedback_id, assignment_id, student_id, general_comment, suggested_result, attempt_nr 
+            FROM FeedbackForReport
+            WHERE rn = 1 AND assignment_id = ?;
             `, [req.params.assignment_id]
         );
         
