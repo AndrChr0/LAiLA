@@ -1,10 +1,28 @@
 import React from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { FaRegUser } from "react-icons/fa";
+import { IoIosLogOut } from "react-icons/io";
+
 function Nav({ role = "" }) {
+  const profileMenu = useRef(null);
   const { logout } = useAuth();
 
-  console.log(role);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (profileMenu.current && !profileMenu.current.contains(e.target)) {
+        setIsMenuOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <nav className='border-b border-gray-200 mb-4'>
@@ -56,12 +74,30 @@ function Nav({ role = "" }) {
           ) : null}
         </div>
         {role ? (
-          <button
-            className='hover:text-gray-600 hover:cursor-pointer'
-            onClick={() => logout()}
-          >
-            Log Out
-          </button>
+          <>
+            <button
+              className='hover:text-gray-600 hover:cursor-pointer'
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+              <FaRegUser size={25} />
+            </button>
+
+            {isMenuOpen ? (
+              <div
+                ref={profileMenu}
+                className='absolute bg-white border border-gray-200 rounded-md p-2 right-10 top-15'
+              >
+                <div className='font-extralight'>Ola Nordmann</div>
+                <button
+                  className='flex items-center gap-1 hover:text-gray-600 hover:cursor-pointer'
+                  onClick={() => logout()}
+                >
+                  Log out
+                  <IoIosLogOut size={20} />
+                </button>
+              </div>
+            ) : null}
+          </>
         ) : null}
       </ul>
     </nav>

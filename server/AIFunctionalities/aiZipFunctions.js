@@ -14,7 +14,7 @@ export default async function evaluateSubmission(
   const jsonCriteria = JSON.parse(criteria);
 
   const completion = await openai.chat.completions.create({
-    model: "o3-mini-2025-01-31",
+    model: "o3-mini",
     response_format: { type: "json_schema", json_schema: jsonCriteria },
     messages: [
       {
@@ -22,7 +22,8 @@ export default async function evaluateSubmission(
         content: `You are a strict but fair code evaluator with high standards. 
           Provide detailed, honest feedback that identifies even minor issues. 
           Be precise about deductions - a single error should impact scores accordingly. 
-          Maintain a professional tone while being direct about shortcomings. 
+          Maintain a professional tone while being direct about shortcomings.
+          When aproppriate, refrence the code directly when providing feedback. 
           Never inflate scores out of kindness; accuracy is your priority. 
           Allways address the student directly and use second person pronouns.`,
       },
