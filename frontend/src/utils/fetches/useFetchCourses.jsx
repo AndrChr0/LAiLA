@@ -3,7 +3,7 @@ import instance from "../../utils/axiosInstance";
 import { useUserData } from "../../context/UserContext";
 import { useAuth } from "../../context/AuthContext";
 
-export const useFetchCourses = () => {
+export const useFetchCourses = (config) => {
   const { courses, setCourses } = useUserData();
   const { userId, userRole } = useAuth();
   const isLecturer = userRole === "lecturer";
@@ -11,7 +11,7 @@ export const useFetchCourses = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await instance.get("api/courses", {
+        const response = await instance.get("api/courses", config, {
           params: {
             student_id: !isLecturer ? userId : undefined,
             course_coordinator: isLecturer ? userId : undefined,

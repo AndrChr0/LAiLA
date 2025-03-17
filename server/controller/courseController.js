@@ -7,12 +7,12 @@ const pool = SQLpool;
 // (req.body would be JWT attribute once authentication is integrated)
 export async function getMyCourses(req, res, next) {
     try {
-        if (req.query.course_coordinator) {
+        if (req.user.role == "lecturer") {
             const [rows] = await pool.query(`
                 SELECT course_id, course_code, course_name, course_description, course_link
                 FROM courses
                 WHERE course_coordinator = ?;
-                `, [req.query.course_coordinator]
+                `, [req.user.id]
             );
 
             if (rows.length == 0) {
@@ -20,13 +20,13 @@ export async function getMyCourses(req, res, next) {
 			}
 
             return res.status(200).json(rows);
-        } else if (req.query.student_id) {
+        } else if (req.user.role == "student") {
             const [rows] = await pool.query(`
                 SELECT courses.course_id, course_code, course_name, course_description, course_link, course_coordinator 
                 FROM  courses
                 JOIN enrollment ON courses.course_id = enrollment.course_id 
                 WHERE enrollment.student_id = ?;
-                `, [req.query.student_id]
+                `, [req.user.id]
             );
 
             if (rows.length == 0) {

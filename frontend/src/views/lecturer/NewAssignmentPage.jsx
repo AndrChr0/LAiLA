@@ -4,9 +4,11 @@ import AssignmentCriteriaForm from "../../components/AssignmentCriteriaForm";
 import instance from "../../utils/axiosInstance";
 import { useAuth } from "../../context/AuthContext";
 import ToolTip from "../../shared/ToolTip";
+import { GetConfig } from "../../utils/GetConfig";
 
 function NewAssignmentPage() {
   const { userId } = useAuth();
+  const { token } = useAuth();
 
   // propably refactor state usage
   const [assignment_title, setAssignmentTitle] = useState("");
@@ -26,7 +28,7 @@ function NewAssignmentPage() {
 
   useEffect(() => {
     instance
-      .get(`api/courses?course_coordinator=${userId}`)
+      .get(`api/courses?course_coordinator=${userId}`, GetConfig(token))
       .then((response) => {
         setLecturerCourses(response.data);
         setCourseId(response.data[0].course_id);
@@ -104,10 +106,10 @@ function NewAssignmentPage() {
   return (
     <>
       <h1 className='text-3xl font-light'>New Assignment</h1>
-      <div className='flex flex-col w-11/12 md:w-2/3 mx-auto my-0 pt-4'>
+      <div className='flex flex-col w-11/12 pt-4 mx-auto my-0 md:w-2/3'>
         <label htmlFor='course'>Select Course</label>
         <select
-          className='bg-white border border-gray-400 p-2 mb-4'
+          className='p-2 mb-4 bg-white border border-gray-400'
           name='course'
           id='course'
           onChange={(e) => setCourseId(e.target.value)}
@@ -123,7 +125,7 @@ function NewAssignmentPage() {
         <input
           onChange={(e) => setAssignmentTitle(e.target.value)}
           value={assignment_title}
-          className='bg-white border border-gray-400 p-2 mb-4'
+          className='p-2 mb-4 bg-white border border-gray-400'
           type='text'
           name='assignment_title'
           id='assignment_title'
@@ -133,7 +135,7 @@ function NewAssignmentPage() {
         <input
           onChange={(e) => setAssignmentStart(e.target.value)}
           value={assignment_start_date}
-          className='bg-white border border-gray-400 p-2 w-36 mb-4'
+          className='p-2 mb-4 bg-white border border-gray-400 w-36'
           type='date'
           name='assignment_start'
           id='assignment_start'
@@ -143,7 +145,7 @@ function NewAssignmentPage() {
         <input
           onChange={(e) => setAssignmentEnd(e.target.value)}
           value={assignment_end_date}
-          className='bg-white border border-gray-400 p-2 w-36 mb-4'
+          className='p-2 mb-4 bg-white border border-gray-400 w-36'
           type='date'
           name='assignment_end'
           id='assignment_end'
@@ -157,7 +159,7 @@ function NewAssignmentPage() {
           <input
             onChange={handleIsPublicChange}
             checked={isPublic}
-            className='bg-white border border-gray-400 w-16'
+            className='w-16 bg-white border border-gray-400'
             type='checkbox'
             name='is_public'
             id='is_public'
@@ -173,7 +175,7 @@ function NewAssignmentPage() {
             <input
               onChange={handleIsActiveChange}
               checked={isActive}
-              className='border border-gray-400 w-16'
+              className='w-16 border border-gray-400'
               type='checkbox'
               name='is_active'
               id='is_active'
@@ -186,7 +188,7 @@ function NewAssignmentPage() {
         <input
           onChange={(e) => setAssignmentAttempts(e.target.value)}
           value={assignment_attempts}
-          className='bg-white border border-gray-400 p-2 w-16 mb-4'
+          className='w-16 p-2 mb-4 bg-white border border-gray-400'
           min={0}
           max={5}
           type='number'
@@ -198,7 +200,7 @@ function NewAssignmentPage() {
           Paste assignment description
         </label>
         <textarea
-          className='bg-white border border-gray-400 p-2 mb-4 h-40'
+          className='h-40 p-2 mb-4 bg-white border border-gray-400'
           onChange={(e) => setAssignmentDescription(e.target.value)}
           name='assignment_description'
           id='assignment_description'
@@ -211,7 +213,7 @@ function NewAssignmentPage() {
         <input
           onChange={(e) => setAssignmentFiletype(e.target.value)}
           value={allowed_filetype}
-          className='bg-white border border-gray-400 p-2 mb-4'
+          className='p-2 mb-4 bg-white border border-gray-400'
           type='text'
           name='assignment_filetypes'
           id='assignment_filetypes'
@@ -219,7 +221,7 @@ function NewAssignmentPage() {
         <button
           onClick={handleFileChange}
           type='button'
-          className='bg-white border border-gray-400 p-2 w-20 mb-4'
+          className='w-20 p-2 mb-4 bg-white border border-gray-400'
         >
           Add
         </button>
@@ -228,7 +230,7 @@ function NewAssignmentPage() {
             <span key={index} className=''>
               <span>{filetype}</span>
               <button
-                className='bg-white border border-gray-400 w-16 mb-4 ml-2'
+                className='w-16 mb-4 ml-2 bg-white border border-gray-400'
                 type='button'
                 onClick={() => {
                   setAssignmentFiletypes(
@@ -247,7 +249,7 @@ function NewAssignmentPage() {
         <input
           onChange={(e) => setPassPercentage(e.target.value)}
           value={passPercentage}
-          className='bg-white border border-gray-400 p-2 w-16 mb-4'
+          className='w-16 p-2 mb-4 bg-white border border-gray-400'
           min={0}
           max={100}
           type='number'
@@ -260,7 +262,7 @@ function NewAssignmentPage() {
         />
         <button
           type='submit'
-          className='border border-gray-400 p-2 w-28 mt-4'
+          className='p-2 mt-4 border border-gray-400 w-28'
           onClick={handleSubmit}
         >
           Publish Assignment
