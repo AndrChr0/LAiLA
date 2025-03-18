@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import instance from "../utils/axiosInstance";
+import { GetConfig} from "../utils/GetConfig";
 
 function UploadAssignmentAssessment({
   assignmentId,
@@ -12,7 +13,7 @@ function UploadAssignmentAssessment({
   const [file, setFile] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const { userId, userRole } = useAuth();
+  const { userId, userRole, token } = useAuth();
 
   const criteriaString = JSON.stringify(criteria);
 
@@ -56,7 +57,7 @@ function UploadAssignmentAssessment({
 
       formData.append("student_id", userId);
 
-      const response = await instance.post("api/ai/decompress", formData, {
+      const response = await instance.post("api/ai/decompress", formData, GetConfig(token), {
         headers: {
           "Content-Type": "multipart/form-data",
         },

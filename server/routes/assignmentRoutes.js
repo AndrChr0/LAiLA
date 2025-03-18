@@ -1,5 +1,5 @@
 import express from "express";
-import {auth}  from "../middleware/verifyToken.js";
+import { auth, authRole } from "../middleware/verifyToken.js";
 import {
 	getAllAssignments,
 	createAssignment,
@@ -21,13 +21,13 @@ router.get("/", auth, getAllAssignments);
 router.get("/:assignment_id", getOneAssignment);
 
 // post assignment - auth(L)
-router.post("/", createAssignment);
+router.post("/", auth, authRole("lecturer"), createAssignment);
 
 // put/patch assignment details - auth(L)   (only before submissions?)
-router.patch("/:assignment_id", updateAssignment);
+router.patch("/:assignment_id", auth, authRole("lecturer"), updateAssignment);
 
 // delete assignment
-router.delete("/:assignment_id", deleteAssignment);
+router.delete("/:assignment_id", auth, authRole("lecturer"), deleteAssignment);
 router.patch("/ohno/:assignment_id", undeleteAssignment); // remove later
 
 export default router;

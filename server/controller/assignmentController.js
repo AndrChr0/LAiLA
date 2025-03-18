@@ -234,10 +234,6 @@ export async function updateAssignment(req, res, next) {
 // delete assignment
 export async function deleteAssignment(req, res, next) {
 	try {
-		if (!req.query.course_coordinator) {
-			throw Object.assign(new Error("Unauthorized"), { status: 401 });
-		}
-
 		// check if answered
 		const [answers] = await pool.query(`
 			SELECT feedback_id
@@ -265,10 +261,6 @@ export async function deleteAssignment(req, res, next) {
 
 export async function undeleteAssignment(req, res, next) {
 	try {
-		if (!req.query.course_coordinator) {
-			throw Object.assign(new Error("Unauthorized"), { status: 401 });
-		}
-
 		const [results] = await pool.query(`
 			UPDATE assignments
 			SET is_deleted = 0, is_public = 1

@@ -8,6 +8,3 @@ export function GetConfig(token) {
         }
     };
 };
-
-
-// export default GetConfig;
