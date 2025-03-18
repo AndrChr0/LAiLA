@@ -7,17 +7,18 @@ const pool = SQLpool;
 // get all feedback (for yourself) - auth(S)
 export async function getAllFeedback(req, res, next) {
     try {
-        if (!req.query.student_id) {
+        if (!req.user.role == "student") {
             throw Object.assign(new Error("Unauthorized"), { status: 401 });
         }
-        
+
         const [rows] = await pool.query(`
             SELECT feedback_id, assignment_id, general_comment, attempt_nr, suggested_result 
             FROM feedback
-            WHERE student_id = ?;
+            WHERE student_id = ?
+            ORDER BY attempt_nr DESC;
             `, [req.query.student_id]
         );
-        
+
         if (rows.length == 0) {
             throw Object.assign(new Error("No feedback found"), { status: 404 });
         }
@@ -31,7 +32,7 @@ export async function getAllFeedback(req, res, next) {
 // get one piece of feedback (for yourself) - auth(S)
 export async function getOneFeedback(req, res, next) {
     try {
-        if (!req.query.student_id) {
+        if (!req.user.role == "student") {
             throw Object.assign(new Error("Unauthorized"), { status: 401 });
         }
 

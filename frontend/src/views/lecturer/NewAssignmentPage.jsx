@@ -96,7 +96,7 @@ function NewAssignmentPage() {
         pass_threshold: passPercentage / 100,
         assignment_attempts: assignment_attempts,
         allowed_filetypes: allowed_filetypes,
-      })
+      }, GetConfig(token))
       .then((response) => {
         console.log(response.data);
       });

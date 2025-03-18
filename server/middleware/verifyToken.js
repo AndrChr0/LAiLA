@@ -19,7 +19,7 @@ export const auth = (req, res, next) => {
     }
 }
 
-function authRole(role) {
+export function authRole(role) {
     return (req, res, next) => {
         if (req.user.role !== role) {
             res.status(401)
@@ -28,5 +28,3 @@ function authRole(role) {
         next()
     }
 }
-
-// export default { auth, authRole }

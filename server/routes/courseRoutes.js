@@ -1,5 +1,5 @@
 import express from "express";
-import {auth}  from "../middleware/verifyToken.js";
+import { auth } from "../middleware/verifyToken.js";
 import { getMyCourses, getOneCourse } from "../controller/courseController.js";
 const router = express.Router();
 
