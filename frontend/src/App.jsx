@@ -16,6 +16,7 @@ import StudentCoursePage from "./views/student/StudentCoursePage";
 import LecturerCoursePage from "./views/lecturer/LecturerCoursePage";
 import LecturerReportPage from "./views/lecturer/LecturerReportPage";
 import LecturerEditAssignmentPage from "./views/lecturer/LecturerEditAssignmentPage";
+import Reports from "./components/Reports";
 
 
 function App() {
@@ -112,6 +113,15 @@ function App() {
 
           <Route
             path="/assignment-report/:id"
+            element={
+              <ProtectedRoute roles={["lecturer"]}>
+                <Reports />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/reports"
             element={
               <ProtectedRoute roles={["lecturer"]}>
                 <LecturerReportPage />
