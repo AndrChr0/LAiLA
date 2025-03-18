@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 dotenv.config();
+// import aggregateAssignmentFeedback from "../AIFunctionalities/aiAggregatedAssignmentFeedback.js";
 import { pool as SQLpool } from "../utils/SQLPool.js";
 const pool = SQLpool;
 
@@ -7,45 +8,49 @@ const AIResponsePlaceholder =
 {
     "commonProblems": [
         {
-            "problemName": "Incomplete Documentation",
-            "description": "Many submissions lacked sufficient in-code comments and documentation.",
-            "occurrences": 2,
-            "averageScore": 60.0,
+            "problemName": "HTML/CSS Validation Errors",
+            "description": "Several submissions contained errors in HTML or CSS code that failed validation, impacting overall quality.",
+            "occurrences": 3,
             "recommendedActions": [
-                "Include more detailed comments",
-                "Review documentation guidelines"
+                "Encourage students to use validation tools before final submission.",
+                "Provide workshops or resources focused on debugging HTML/CSS errors."
             ]
         },
         {
-            "problemName": "Variable Naming Issues",
-            "description": "Several students used non-descriptive variable names, making the code harder to understand.",
-            "occurrences": 3,
-            "averageScore": 55.0,
+            "problemName": "Positioning and Layout Issues",
+            "description": "Some groups struggled with coherent use of absolute/fixed positioning, causing layout overflow or misalignment.",
+            "occurrences": 2,
             "recommendedActions": [
-                "Follow standard naming conventions",
-                "Use descriptive variable names"
+                "Offer additional guidance on CSS positioning techniques.",
+                "Clarify expectations regarding responsive layout in the assignment instructions."
+            ]
+        },
+        {
+            "problemName": "Incomplete Reflection Details",
+            "description": "Many reflections on mock-up challenges and sustainability measures lacked depth and concrete examples.",
+            "occurrences": 2,
+            "recommendedActions": [
+                "Provide a detailed rubric or examples of reflective responses.",
+                "Encourage students to include specific examples and explanations of design decisions."
             ]
         }
     ],
     "strongAreas": [
         {
-            "areaName": "Code Functionality",
-            "description": "Most submissions met the core functional requirements and ran as expected.",
-            "averageScore": 85.0,
-            "numStudentsAboveThreshold": 3
+            "areaName": "Responsive Design Implementation",
+            "description": "Most students successfully implemented mobile-first designs with effective use of media queries."
         },
         {
-            "areaName": "Algorithm Implementation",
-            "description": "Students correctly implemented key algorithms with appropriate logic.",
-            "averageScore": 90.0,
-            "numStudentsAboveThreshold": 2
+            "areaName": "Project Structure and Documentation",
+            "description": "Students generally adhered to the prescribed folder structure, naming conventions, and external CSS integration."
         }
     ],
-    "overallLecturerSuggestions": [
-        "Emphasize the importance of thorough documentation during lectures",
-        "Include a review session on best coding practices and naming conventions"
+        "overallLecturerSuggestions": [
+            "Consider offering additional examples or sample reflections to help students deepen their analysis.",
+            "Reiterate the importance of code validation and provide resources for common pitfalls in HTML/CSS.",
+            "Highlight best practices for CSS positioning and responsive design in follow-up lectures."
     ],
-    "additionalNotes": "Feedback is based on three submissions; a larger sample may provide more comprehensive insights."
+    "additionalNotes": "Overall, students demonstrated strong technical skills in many areas, though further emphasis on reflective practice and detailed sustainability reporting could improve future submissions."
 };
 
 // get all feedback (for yourself) - auth(S)
@@ -155,8 +160,18 @@ export async function getFeedbackForSummary(req, res, next) {
             metaData.totalFeedback += rows[i]["attempt_nr"];
         }
 
+
+        // AI stuff
+        const newReport = await aggregateAssignmentFeedback(
+            // assignmentDescription,
+            // assignmentCriteria,
+            feedbackContents
+        );
+        // logs maybe
+
         // create array of information passed back to the frontend
-        const reportInfo = [AIResponsePlaceholder, metaData]; // maybe make object
+        // const reportInfo = [AIResponsePlaceholder, metaData]; // maybe make object
+        const reportInfo = [newReport, metaData];
 
         // return res.status(200).json(metaData);
         return res.status(200).json(reportInfo);
