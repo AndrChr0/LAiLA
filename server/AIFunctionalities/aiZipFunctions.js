@@ -14,7 +14,7 @@ export default async function evaluateSubmission(
   const jsonCriteria = JSON.parse(criteria);
 
   const completion = await openai.chat.completions.create({
-    model: "o3-mini",
+    model: process.env.AI_MODEL,
     response_format: { type: "json_schema", json_schema: jsonCriteria },
     messages: [
       {

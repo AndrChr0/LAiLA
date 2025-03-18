@@ -1,52 +1,8 @@
 import dotenv from "dotenv";
 dotenv.config();
+import aggregateAssignmentFeedback from "../AIFunctionalities/aiAggregatedAssignmentFeedback.js";
 import { pool as SQLpool } from "../utils/SQLPool.js";
 const pool = SQLpool;
-
-const AIResponsePlaceholder = 
-{
-    "commonProblems": [
-        {
-            "problemName": "Incomplete Documentation",
-            "description": "Many submissions lacked sufficient in-code comments and documentation.",
-            "occurrences": 2,
-            "averageScore": 60.0,
-            "recommendedActions": [
-                "Include more detailed comments",
-                "Review documentation guidelines"
-            ]
-        },
-        {
-            "problemName": "Variable Naming Issues",
-            "description": "Several students used non-descriptive variable names, making the code harder to understand.",
-            "occurrences": 3,
-            "averageScore": 55.0,
-            "recommendedActions": [
-                "Follow standard naming conventions",
-                "Use descriptive variable names"
-            ]
-        }
-    ],
-    "strongAreas": [
-        {
-            "areaName": "Code Functionality",
-            "description": "Most submissions met the core functional requirements and ran as expected.",
-            "averageScore": 85.0,
-            "numStudentsAboveThreshold": 3
-        },
-        {
-            "areaName": "Algorithm Implementation",
-            "description": "Students correctly implemented key algorithms with appropriate logic.",
-            "averageScore": 90.0,
-            "numStudentsAboveThreshold": 2
-        }
-    ],
-    "overallLecturerSuggestions": [
-        "Emphasize the importance of thorough documentation during lectures",
-        "Include a review session on best coding practices and naming conventions"
-    ],
-    "additionalNotes": "Feedback is based on three submissions; a larger sample may provide more comprehensive insights."
-};
 
 // get all feedback (for yourself) - auth(S)
 export async function getAllFeedback(req, res, next) {
@@ -112,19 +68,6 @@ export async function getFeedbackForSummary(req, res, next) {
         //     `, [req.params.assignment_id]
         // );
 
-        // // testing query for DB without much feedback_contents
-        // const [rows] = await pool.query(`
-        //     WITH FeedbackForReport AS (
-        //         SELECT *,
-        //             ROW_NUMBER() OVER (PARTITION BY assignment_id, student_id ORDER BY attempt_nr DESC) AS rn
-        //         FROM feedback
-        //     )
-        //     SELECT general_comment, suggested_result, attempt_nr
-        //     FROM FeedbackForReport
-        //     WHERE rn = 1 AND assignment_id = ?;
-        //     `, [req.params.assignment_id]
-        // );
-
         // fetch all of the most recent feedback
         const [rows] = await pool.query(`
             WITH FeedbackForReport AS (
@@ -155,8 +98,28 @@ export async function getFeedbackForSummary(req, res, next) {
             metaData.totalFeedback += rows[i]["attempt_nr"];
         }
 
+        // fetch assignment information
+        const [aiData] = await pool.query(`
+            SELECT assignment_description, assignment_criteria
+            FROM assignments
+            WHERE assignment_id = ?
+            `, [req.params.assignment_id]
+        );
+
+        // throw error if the assignment doesn't exist
+        if (aiData.length == 0) {
+            throw Object.assign(new Error("Assignment not found"), { status: 404 });
+        }
+
+        // AI stuff
+        const newReport = await aggregateAssignmentFeedback(
+            aiData[0]["assignment_description"],
+            aiData[0]["assignment_criteria"],
+            feedbackContents
+        );
+
         // create array of information passed back to the frontend
-        const reportInfo = [AIResponsePlaceholder, metaData]; // maybe make object
+        const reportInfo = [newReport, metaData];
 
         // return res.status(200).json(metaData);
         return res.status(200).json(reportInfo);
