@@ -15,6 +15,8 @@ export default async function evaluateSubmission(
 
   const completion = await openai.chat.completions.create({
     model: process.env.AI_MODEL,
+    // migth need to change this to a different effort lvl
+    reasoning_effort: "medium",
     response_format: { type: "json_schema", json_schema: jsonCriteria },
     messages: [
       {
