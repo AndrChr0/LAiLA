@@ -29,7 +29,9 @@ function HeroPage() {
               alt='athea logo of a flower'
               className='h-16'
             />{" "}
-            <h1 className='text-7xl'> ATHEA</h1>
+            <h1 className='text-6xl main-heading'>
+              l<span className='text-7xl'>AI</span>la
+            </h1>
           </div>
           {!userRole && (
             <button
