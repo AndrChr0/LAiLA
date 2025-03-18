@@ -16,7 +16,7 @@ export async function getAllFeedback(req, res, next) {
             FROM feedback
             WHERE student_id = ?
             ORDER BY attempt_nr DESC;
-            `, [req.query.student_id]
+            `, [req.user.id]
         );
 
         if (rows.length == 0) {
@@ -40,7 +40,7 @@ export async function getOneFeedback(req, res, next) {
             SELECT feedback_id, assignment_id, general_comment, attempt_nr 
             FROM feedback
             WHERE student_id = ? AND feedback_id = ?;
-            `, [req.query.student_id, req.params.feedback_id]
+            `, [req.user.id, req.params.feedback_id]
         );
 
         if (rows.length == 0) {
@@ -57,9 +57,10 @@ export async function getOneFeedback(req, res, next) {
 // threshold to get report (e.g. every 20% participation), each report is standalone (@20% "X% have trouble with Y...", @40% (new)"X% have trouble with Y...")
 export async function getFeedbackForSummary(req, res, next) {
     try {
-        if (!req.query.course_coordinator) {
-            throw Object.assign(new Error("Unauthorized"), { status: 401 });
-        }
+        // // old auth, replace with something when we have a proper system for when to make reports
+        // if (!req.query.course_coordinator) {
+        //     throw Object.assign(new Error("Unauthorized"), { status: 401 });
+        // }
 
         // // old query, kept in case we need it later
         // const [rows] = await pool.query(`
