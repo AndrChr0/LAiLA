@@ -68,6 +68,19 @@ CREATE TABLE feedback (
     FOREIGN KEY (student_id) REFERENCES users(user_id)
 );
 
+
+CREATE TABLE assignment_reports (
+    report_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    assignment_id SMALLINT UNSIGNED NOT NULL,
+    report_nr TINYINT UNSIGNED NOT NULL,
+    report_contents JSON NOT NULL,
+    students_passed SMALLINT UNSIGNED NOT NULL,
+    students_failed SMALLINT UNSIGNED NOT NULL,
+    total_feedback SMALLINT UNSIGNED NOT NULL,
+    students_evaluated SMALLINT UNSIGNED NOT NULL,
+    FOREIGN KEY (assignment_id) REFERENCES assignments(assignment_id)
+);
+
 INSERT INTO users (first_name, last_name, role, email, password) VALUES
 ('Ola', 'Nsk', 'student', 'olansk@ntnu', '$2b$10$72WZIieimJ17Kmtfo50FXuAbFDybh.fwrbQhsCKwEevrdpxGrrjXS'),
 ('Chris', 'NG', 'student', 'chrisng@ntnu', '$2b$10$72WZIieimJ17Kmtfo50FXuAbFDybh.fwrbQhsCKwEevrdpxGrrjXS'),
@@ -428,3 +441,65 @@ INSERT INTO feedback (assignment_id, student_id, feedback_contents, general_comm
 (4, 2, '{}', 'If you have questions regarding the feedback, please take contact.', 'fail', 2),
 (3, 1, '{}', 'Several potential issues and areas for improvement.', 'fail', 1),
 (3, 1, '{}', 'Good job!', 'fail', 2);
+
+
+INSERT INTO assignment_reports (assignment_id, report_nr, report_contents, students_passed, students_failed, total_feedback, students_evaluated) VALUES
+(2, 1, '{
+    "commonProblems": [
+      {
+        "problemName": "Inadequate Reflection Details",
+        "description": "Some submissions did not include a comprehensive reflection page covering the evaluation of the mock-up, sustainability measures, and the challenges encountered.",
+        "occurrences": 1,
+        "recommendedActions": [
+          "Ensure that all required reflection sections (self-reflection, sustainability, and difficulties) are thoroughly addressed in the submission."
+        ]
+      },
+      {
+        "problemName": "Non-compliance with CSS Technical Requirements",
+        "description": "There is inconsistent adherence to required CSS techniques, including missing media queries, pseudo-classes/elements, absolute positioning, and in one case, use of disallowed layout methods.",
+        "occurrences": 2,
+        "recommendedActions": [
+          "Reinforce the assignment guidelines about which CSS techniques are allowed and required.",
+          "Conduct reviews or provide examples that highlight the correct implementation of media queries, pseudo-classes, nth-child, and absolute/fixed positioning."
+        ]
+      },
+      {
+        "problemName": "SEO Optimization Deficiencies",
+        "description": "Some submissions exhibit generic titles and lack essential meta descriptions and other SEO elements.",
+        "occurrences": 2,
+        "recommendedActions": [
+          "Include meaningful title tags, meta descriptions, and proper semantic HTML elements to improve SEO.",
+          "Provide examples of effective SEO metadata in course materials."
+        ]
+      },
+      {
+        "problemName": "CSS Validation Issues",
+        "description": "At least one submission presented CSS validation errors, specifically related to shorthand properties which might cause errors in browsers.",
+        "occurrences": 1,
+        "recommendedActions": [
+          "Use online validators for HTML and CSS to catch and correct any errors before final submission."
+        ]
+      }
+    ],
+    "strongAreas": [
+      {
+        "areaName": "Comprehensive Sustainability Measures",
+        "description": "Several submissions detailed clear and thoughtful sustainability actions, including image optimization and quantification of file savings."
+      },
+      {
+        "areaName": "Effective Use of Diverse Typefaces and Linear Gradients",
+        "description": "Students successfully implemented multiple typefaces and applied linear gradients, enhancing the visual appeal and readability of their web pages."
+      },
+      {
+        "areaName": "Clear Code Organization and Semantic HTML Usage",
+        "description": "Some projects demonstrated well-organized code, appropriate externalization of CSS, and proper use of semantic tags which contributed to a solid project structure."
+      }
+    ],
+    "overallLecturerSuggestions": [
+      "Reiterate the necessity of including a complete reflection page with all required sections.",
+      "Clarify allowed versus disallowed CSS techniques in the assignment guidelines.",
+      "Emphasize the importance of SEO best practices and provide examples of proper metadata usage.",
+      "Encourage students to validate their code using online tools prior to submission."
+    ],
+    "additionalNotes": "There is a noticeable variation in the quality of submissions. Additional support sessions focusing on detailed reflections and technical implementations may help in aligning all groups with the assignment expectations."
+  }', 2, 1, 3, 3);
