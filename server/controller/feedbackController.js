@@ -1,57 +1,8 @@
 import dotenv from "dotenv";
 dotenv.config();
-// import aggregateAssignmentFeedback from "../AIFunctionalities/aiAggregatedAssignmentFeedback.js";
+import aggregateAssignmentFeedback from "../AIFunctionalities/aiAggregatedAssignmentFeedback.js";
 import { pool as SQLpool } from "../utils/SQLPool.js";
 const pool = SQLpool;
-
-const AIResponsePlaceholder = 
-{
-    "commonProblems": [
-        {
-            "problemName": "HTML/CSS Validation Errors",
-            "description": "Several submissions contained errors in HTML or CSS code that failed validation, impacting overall quality.",
-            "occurrences": 3,
-            "recommendedActions": [
-                "Encourage students to use validation tools before final submission.",
-                "Provide workshops or resources focused on debugging HTML/CSS errors."
-            ]
-        },
-        {
-            "problemName": "Positioning and Layout Issues",
-            "description": "Some groups struggled with coherent use of absolute/fixed positioning, causing layout overflow or misalignment.",
-            "occurrences": 2,
-            "recommendedActions": [
-                "Offer additional guidance on CSS positioning techniques.",
-                "Clarify expectations regarding responsive layout in the assignment instructions."
-            ]
-        },
-        {
-            "problemName": "Incomplete Reflection Details",
-            "description": "Many reflections on mock-up challenges and sustainability measures lacked depth and concrete examples.",
-            "occurrences": 2,
-            "recommendedActions": [
-                "Provide a detailed rubric or examples of reflective responses.",
-                "Encourage students to include specific examples and explanations of design decisions."
-            ]
-        }
-    ],
-    "strongAreas": [
-        {
-            "areaName": "Responsive Design Implementation",
-            "description": "Most students successfully implemented mobile-first designs with effective use of media queries."
-        },
-        {
-            "areaName": "Project Structure and Documentation",
-            "description": "Students generally adhered to the prescribed folder structure, naming conventions, and external CSS integration."
-        }
-    ],
-        "overallLecturerSuggestions": [
-            "Consider offering additional examples or sample reflections to help students deepen their analysis.",
-            "Reiterate the importance of code validation and provide resources for common pitfalls in HTML/CSS.",
-            "Highlight best practices for CSS positioning and responsive design in follow-up lectures."
-    ],
-    "additionalNotes": "Overall, students demonstrated strong technical skills in many areas, though further emphasis on reflective practice and detailed sustainability reporting could improve future submissions."
-};
 
 // get all feedback (for yourself) - auth(S)
 export async function getAllFeedback(req, res, next) {
@@ -117,19 +68,6 @@ export async function getFeedbackForSummary(req, res, next) {
         //     `, [req.params.assignment_id]
         // );
 
-        // // testing query for DB without much feedback_contents
-        // const [rows] = await pool.query(`
-        //     WITH FeedbackForReport AS (
-        //         SELECT *,
-        //             ROW_NUMBER() OVER (PARTITION BY assignment_id, student_id ORDER BY attempt_nr DESC) AS rn
-        //         FROM feedback
-        //     )
-        //     SELECT general_comment, suggested_result, attempt_nr
-        //     FROM FeedbackForReport
-        //     WHERE rn = 1 AND assignment_id = ?;
-        //     `, [req.params.assignment_id]
-        // );
-
         // fetch all of the most recent feedback
         const [rows] = await pool.query(`
             WITH FeedbackForReport AS (
@@ -160,17 +98,27 @@ export async function getFeedbackForSummary(req, res, next) {
             metaData.totalFeedback += rows[i]["attempt_nr"];
         }
 
+        // fetch assignment information
+        const [aiData] = await pool.query(`
+            SELECT assignment_description, assignment_criteria
+            FROM assignments
+            WHERE assignment_id = ?
+            `, [req.params.assignment_id]
+        );
+
+        // throw error if the assignment doesn't exist
+        if (aiData.length == 0) {
+            throw Object.assign(new Error("Assignment not found"), { status: 404 });
+        }
 
         // AI stuff
         const newReport = await aggregateAssignmentFeedback(
-            // assignmentDescription,
-            // assignmentCriteria,
+            aiData[0]["assignment_description"],
+            aiData[0]["assignment_criteria"],
             feedbackContents
         );
-        // logs maybe
 
         // create array of information passed back to the frontend
-        // const reportInfo = [AIResponsePlaceholder, metaData]; // maybe make object
         const reportInfo = [newReport, metaData];
 
         // return res.status(200).json(metaData);
