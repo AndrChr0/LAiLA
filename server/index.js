@@ -5,6 +5,7 @@ import authRoutes from "./routes/authRoutes.js";
 import courseRoutes from "./routes/courseRoutes.js";
 import assignmentRoutes from "./routes/assignmentRoutes.js";
 import feedbackRoutes from "./routes/feedbackRoutes.js";
+import reportRoutes from "./routes/reportRoutes.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -29,6 +30,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/courses", courseRoutes);
 app.use("/api/assignments", assignmentRoutes);
 app.use("/api/feedback", feedbackRoutes);
+app.use("/api/reports", reportRoutes);
 
 // globally applied error handling middleware
 app.use(errorHandler);

@@ -1,95 +1,47 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from 'recharts';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '../../components/ui/Card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../components/ui/select';
 import { Badge } from '../../components/ui/badge';
 import { AlertCircle, CheckCircle, Clock, FileText, Users, Award, TrendingUp } from 'lucide-react';
+import instance from "../../utils/axiosInstance";
+import { GetConfig} from "../../utils/GetConfig"
+import { useAuth } from "../../context/AuthContext";
+import { useParams } from 'react-router-dom';
 
 const LecturerReportPage = () => {
-  const [selectedReport, setSelectedReport] = useState('report-1');
-  const sampleData = [
-    {
-      "commonProblems": [
-        {
-          "problemName": "Missing or Incomplete Reflection Components",
-          "description": "Some submissions did not provide a detailed reflection on the mock-up and sustainability measures, omitting key insights required by the assignment.",
-          "occurrences": 1,
-          "recommendedActions": [
-            "Ensure all reflection sections are fully completed, including explanations on challenges, sustainability efforts, and self-assessment of the mock-up."
-          ]
-        },
-        {
-          "problemName": "Lack of Responsive Design Implementation",
-          "description": "At least one submission failed to implement media queries to differentiate between mobile and desktop layouts.",
-          "occurrences": 1,
-          "recommendedActions": [
-            "Reinforce the use of media queries in CSS and conduct testing on multiple devices to ensure responsiveness."
-          ]
-        },
-        {
-          "problemName": "Absence of Pseudo-classes and Custom Emoticons",
-          "description": "Some projects did not use pseudo-classes/elements or include custom CSS emoticons for list items, missing part of the styling requirements.",
-          "occurrences": 1,
-          "recommendedActions": [
-            "Include pseudo-classes and pseudo-elements as required and utilize CSS to add custom emoticons for the designated prize categories."
-          ]
-        },
-        {
-          "problemName": "Inadequate SEO Implementation",
-          "description": "Multiple submissions lacked meaningful meta tags and detailed SEO elements, affecting overall page optimization.",
-          "occurrences": 2,
-          "recommendedActions": [
-            "Integrate meaningful title tags, meta descriptions, and properly name files to enhance SEO."
-          ]
-        },
-        {
-          "problemName": "Use of Disallowed CSS Techniques",
-          "description": "Some submissions used disallowed techniques such as flexbox, which violates the assignment guidelines.",
-          "occurrences": 1,
-          "recommendedActions": [
-            "Emphasize strict adherence to assignment guidelines by avoiding disallowed CSS methods like flexbox."
-          ]
-        }
-      ],
-      "strongAreas": [
-        {
-          "areaName": "Detailed Sustainability Measures",
-          "description": "Several groups provided comprehensive sustainability reflections, detailing measures like image optimization and file size reduction."
-        },
-        {
-          "areaName": "Effective Use of CSS Properties",
-          "description": "Projects demonstrated successful implementation of fixed background images, linear gradients, and varied font sizes to enhance visual design."
-        },
-        {
-          "areaName": "Clean Code and Semantic HTML",
-          "description": "Strong submissions featured well-structured code with externalized CSS, proper semantic HTML tags, and a clear project structure."
-        }
-      ],
-      "overallLecturerSuggestions": [
-        "Emphasize the importance of completing all reflection sections with detailed self-assessment.",
-        "Encourage adherence to the technical guidelines, particularly regarding responsive design and allowed CSS techniques.",
-        "Provide additional instruction on SEO best practices to ensure students include comprehensive meta tag implementations."
-      ],
-      "additionalNotes": "While the submissions showed strengths in design and sustainability considerations, instructors should address common oversights in technical compliance and comprehensive reflection details."
-    },
-    {
-      "passRate": 2,
-      "failRate": 1,
-      "totalFeedback": 3,
-      "uniqueStudents": 3
-    }
-  ] 
+  const [selectedReport, setSelectedReport] = useState(0);
+  const [reportData, setReportData] = useState(null);
+  const { token } = useAuth();
+  const path = useParams();
+  const pathId = path.id;
 
-  const reports = [
-    { id: 'report-1', name: 'Report 1' },
-    { id: 'report-2', name: 'Report 2' },
-    { id: 'report-3', name: 'Report 3' }
-  ];
+
+  useEffect(() => {
+    instance
+      .get(`api/reports/${pathId}`, GetConfig(token))
+      .then((response) => {
+        setReportData(response.data);
+      })
+      .catch((error) => {
+      console.error("Failed to fetch report data:", error);
+      });
+  }, []);
+
+  if (!reportData) return;
+
+
+  const reports = reportData.map((report, index) => {
+    return {
+      id: index,
+      name: "Report " + report.report_id
+    };
+  });
   
   const passFailData = [
-    { name: 'Passed', value: sampleData[1].passRate, color: '#4ade80' },
-    { name: 'Failed', value: sampleData[1].failRate, color: '#f87171' }
+    { name: 'Passed', value: reportData[selectedReport].students_passed, color: '#4ade80' },
+    { name: 'Failed', value: reportData[selectedReport].students_failed, color: '#f87171' }
   ];
   
   const scoreDistributionData = [
@@ -102,11 +54,11 @@ const LecturerReportPage = () => {
   ];
   
   const feedbackMetrics = {
-    totalFeedback: sampleData[1].totalFeedback,
-    uniqueStudents: sampleData[1].uniqueStudents,
+    totalFeedback: reportData[selectedReport].total_feedback,
+    uniqueStudents: reportData[selectedReport].students_evaluated,
   };
 
-  const commonProblemsData = sampleData[0].commonProblems.map((problem) => {
+  const commonProblemsData = reportData[selectedReport].report_contents.commonProblems.map((problem) => {
     return {
       problemName: problem.problemName,
       description: problem.description,
@@ -115,25 +67,24 @@ const LecturerReportPage = () => {
     };
   });
   
-  const strongAreasData = sampleData[0].strongAreas.map((area) => {
+  const strongAreasData = reportData[selectedReport].report_contents.strongAreas.map((area) => {
     return {
       areaName: area.areaName,
       description: area.description,
     };
   });
 
-  const overallLecturerSuggestions = sampleData[0].overallLecturerSuggestions.map((suggestion) => {
+  const overallLecturerSuggestions = reportData[selectedReport].report_contents.overallLecturerSuggestions.map((suggestion) => {
     return {
       suggestion: suggestion
     };
   });
 
-  const additionalNotes = sampleData[0].additionalNotes;
-
-  console.log(overallLecturerSuggestions)
+  const additionalNotes = reportData[selectedReport].report_contents.additionalNotes;
 
   return (
-    <div className="min-h-screen p-6 bg-gray-50">
+    !reportData && !reportData[selectedReport] ? (<div>Loading...</div>) : (
+      <div className="min-h-screen p-6 bg-gray-50">
       <div className="mx-auto max-w-7xl">
         <header className="mb-8">
           <h1 className="mb-4 text-3xl font-bold text-gray-800">Assignment (NAME)</h1>
@@ -380,6 +331,7 @@ const LecturerReportPage = () => {
         </Tabs>
       </div>
     </div>
+    )
   );
 };
 
