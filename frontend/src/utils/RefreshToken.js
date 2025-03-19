@@ -1,6 +1,6 @@
 import instance from "./axiosInstance"
 // utility function to refresh the user's access token
-async function RefreshToken() {
+async function refreshToken() {
     try {
         const response = await instance.get("api/auth/refresh")
         const jwt = response
@@ -11,4 +11,4 @@ async function RefreshToken() {
     }
 }
 
-export default RefreshToken
+export default refreshToken
