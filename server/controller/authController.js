@@ -125,6 +125,27 @@ export const refresh = (req, res, next) => {
     }
 }
 
+
+// might move to userController
+export const getOneUser = async (req, res, next) => {
+    try {
+        // const userId = req.;
+        const [rows] = await pool.query('SELECT first_name, last_name, email FROM users WHERE user_id = ?', [req.user.id]);
+        const user = rows[0];
+
+        if (!user) {
+            throw Object.assign(new Error("User not found"), { status: 404 });
+        }
+
+        res.status(200).json(user);
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+
+
 export const logout = async (req, res, next) => {
     try {
         if (req.cookies?.jwt){
