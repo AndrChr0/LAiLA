@@ -8,6 +8,7 @@ import feedbackRoutes from "./routes/feedbackRoutes.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import { job } from "./utils/cron.js";
 
 const app = express();
 
@@ -32,6 +33,10 @@ app.use("/api/feedback", feedbackRoutes);
 
 // globally applied error handling middleware
 app.use(errorHandler);
+
+// start the cron job
+job.start();
+
 
 app.listen(PORT, () => {
   console.log("Server is jogging on port " + PORT);

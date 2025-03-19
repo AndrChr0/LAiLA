@@ -129,3 +129,32 @@ export async function getFeedbackForSummary(req, res, next) {
         next(error);
     }
 }
+
+
+// cronjob function
+export async function checkFeedbackProgress(){
+    try {
+
+// get assignments that are active
+const [activeAssignments] = await pool.query(
+`    SELECT f.assignment_id
+    FROM feedback f
+    JOIN assignments a ON f.assignment_id = a.assignment_id
+    WHERE a.is_active = 1
+    GROUP BY f.assignment_id;`
+)
+
+console.log(activeAssignments)
+
+for (let i = 0; i < activeAssignments.length; i++) {
+    // call ola sine greier
+    console.log('new report for')
+    console.log(activeAssignments[i])
+    
+}
+}
+
+catch (error) {
+    console.log(error);
+}
+}
