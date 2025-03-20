@@ -122,7 +122,7 @@ export async function createAssignment(req, res, next) {
 			  	);
 			}
 
-			return res.status(200).json("Successfully created assignment")
+			return res.status(200).json("Successfully created assignment");
 		} else {
 			throw Object.assign(new Error("Missing attributes"), { status: 400 });
 		}
@@ -259,6 +259,7 @@ export async function deleteAssignment(req, res, next) {
 	}
 }
 
+// remove later
 export async function undeleteAssignment(req, res, next) {
 	try {
 		const [results] = await pool.query(`
