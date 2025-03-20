@@ -1,4 +1,4 @@
-const verifyRegisterInput = (req, res, next) => {
+export const verifyRegisterInput = (req, res, next) => {
     
     if (req.body.email){
         if (!req.body.email.match(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)) {
@@ -13,6 +13,4 @@ const verifyRegisterInput = (req, res, next) => {
     
         next()
     }
-}
-
-export default verifyRegisterInput;
+};
