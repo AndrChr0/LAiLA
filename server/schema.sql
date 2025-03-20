@@ -78,6 +78,7 @@ CREATE TABLE assignment_reports (
     students_failed SMALLINT UNSIGNED NOT NULL,
     total_feedback SMALLINT UNSIGNED NOT NULL,
     students_evaluated SMALLINT UNSIGNED NOT NULL,
+    isManuallyCreated BOOLEAN NOT NULL DEFAULT FALSE,
     FOREIGN KEY (assignment_id) REFERENCES assignments(assignment_id)
 );
 

@@ -42,6 +42,7 @@ import { useParams } from "react-router-dom";
 const LecturerReportPage = () => {
   const [selectedReport, setSelectedReport] = useState(0);
   const [reportData, setReportData] = useState(null);
+  const [errorMsg, setErrorMsg] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { token } = useAuth();
   const path = useParams();
@@ -63,13 +64,15 @@ const LecturerReportPage = () => {
     setIsLoading(true);
 
     instance
-      .get(`/api/feedback/ai/${id}`)
+      .post(`/api/reports/${id}`, { isManuallyCreated: true }, GetConfig(token))
       .then(() => {
         console.log("Report generated");
         setIsLoading(false);
+        window.location.reload();
       })
       .catch((error) => {
         setIsLoading(false);
+        setErrorMsg(error.response.data.error);
         console.error(
           "API request failed:",
           error.response ? error.response.data : error.message
@@ -160,13 +163,17 @@ const LecturerReportPage = () => {
             </Select>
 
             <button
+              disabled={isLoading}
               onClick={() => handleNewAssignmentReport(pathId)}
               type='button'
-              className='h-10 px-5 m-2 text-white transition-colors duration-150 bg-[#2b6cb0] rounded-lg focus:shadow-outline hover:bg-[#2c5282]'
+              className={`h-auto min-h-10 px-5 m-2 duration-150 rounded-lg focus:shadow-outline bg-white hover:bg-neutral-200 border border-neutral-300 hover:border-neutral-400 text-neutral-700 hover:text-neutral-800 ${
+                isLoading ? "hidden" : ""
+              }`}
             >
-              New Report
+              Generate New Report
             </button>
             {isLoading && <div>Loading...</div>}
+            {errorMsg && <div className='text-red-700'>{errorMsg}</div>}
             <div className='flex items-center gap-2 text-sm text-gray-600'>
               <Clock size={16} />
               <span>Last updated: March 17, 2025, 10:42 AM</span>

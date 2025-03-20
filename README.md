@@ -3,6 +3,7 @@
 ## Requirements
 - NodeJS <br>
 - MySQL version 8.0 or higher <br>
+- a *.env* file in the root of the "server" directory
 
 ## .env Config
 MYSQL_HOST = 'nnn.n.n.n' <br>
