@@ -75,7 +75,7 @@ const LecturerReportPage = () => {
     setIsLoading(true);
 
     instance
-      .get(`/api/feedback/ai/${id}`)
+      .get(`/api/feedback/ai/${id}`, { isManuallyCreated: true })
       .then(() => {
         console.log("Report generated");
         setIsLoading(false);
@@ -187,7 +187,9 @@ const LecturerReportPage = () => {
               disabled={isLoading}
               onClick={() => handleNewAssignmentReport(pathId)}
               type='button'
-              className='h-10 px-5 m-2 duration-150 rounded-lg focus:shadow-outline bg-white hover:bg-neutral-200 border border-neutral-300 hover:border-neutral-400 text-neutral-700 hover:text-neutral-800'
+              className={`h-auto min-h-10 px-5 m-2 duration-150 rounded-lg focus:shadow-outline bg-white hover:bg-neutral-200 border border-neutral-300 hover:border-neutral-400 text-neutral-700 hover:text-neutral-800 ${
+                isLoading ? "hidden" : ""
+              }`}
             >
               Generate New Report
             </button>
