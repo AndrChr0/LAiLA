@@ -12,8 +12,6 @@ export async function getAllAssignmentReports(req, res, next) {
             `, [req.params.assignment_id]
         );
 
-        console.log(rows);
-
         if (rows.length == 0) {
             throw Object.assign(new Error("No report found"), { status: 404 });
         }
