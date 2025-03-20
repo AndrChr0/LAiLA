@@ -53,23 +53,9 @@ export async function getOneFeedback(req, res, next) {
     }
 }
 
-// get all feedback JSON (assignment) - auth(L)
-// threshold to get report (e.g. every 20% participation), each report is standalone (@20% "X% have trouble with Y...", @40% (new)"X% have trouble with Y...")
-export async function getFeedbackForSummary(req, res, next) {
+// get all feedback JSON (assignment)
+export async function generateReport(req, res, next) {
     try {
-        // // old auth, replace with something when we have a proper system for when to make reports
-        // if (!req.query.course_coordinator) {
-        //     throw Object.assign(new Error("Unauthorized"), { status: 401 });
-        // }
-
-        // // old query, kept in case we need it later
-        // const [rows] = await pool.query(`
-        //     SELECT feedback_contents
-        //     FROM feedback
-        //     WHERE assignment_id = ?;
-        //     `, [req.params.assignment_id]
-        // );
-
         // fetch all of the most recent feedback
         const [rows] = await pool.query(`
             WITH FeedbackForReport AS (
@@ -100,6 +86,22 @@ export async function getFeedbackForSummary(req, res, next) {
             metaData.totalFeedback += rows[i]["attempt_nr"];
         }
 
+        // check data for last report
+        const [latestReport] = await pool.query(`
+            SELECT total_feedback, report_nr
+            FROM assignment_reports
+            WHERE assignment_id = ? AND report_nr = (SELECT MAX(report_nr)
+                                                     FROM assignment_reports
+                                                     WHERE assignment_id = ?);
+            `, [req.params.assignment_id, req.params.assignment_id]
+        );
+        const currentReport = latestReport[0].report_nr || 0;
+
+        // throw an error if a report cannot be made
+        if (latestReport[0].total_feedback >= metaData.totalFeedback) {
+            throw Object.assign(new Error("No new feedback since the last report"), { status: 403 });
+        }
+
         // fetch assignment information
         const [aiData] = await pool.query(`
             SELECT assignment_description, assignment_criteria
@@ -120,11 +122,22 @@ export async function getFeedbackForSummary(req, res, next) {
             feedbackContents
         );
 
-        // create array of information passed back to the frontend
-        const reportInfo = [newReport, metaData];
+        // add to DB
+        const [result] = await pool.query(`
+            INSERT INTO assignment_reports (assignment_id, report_nr, report_contents, students_passed, students_failed, total_feedback, students_evaluated)
+            VALUES (?, ?, ?, ?, ?, ?, ?);
+            `, [
+                req.params.assignment_id,
+                currentReport+1,
+                JSON.stringify(newReport),
+                metaData.passRate,
+                metaData.failRate,
+                metaData.totalFeedback,
+                metaData.uniqueStudents
+            ]
+        );
 
-        // return res.status(200).json(metaData);
-        return res.status(200).json(reportInfo);
+        return res.status(200).json("Database updated");
     } catch (error) {
         next(error);
     }
