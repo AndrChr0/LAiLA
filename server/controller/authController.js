@@ -7,43 +7,57 @@ const pool = SQLpool;
 
 
 export const register = async (req, res, next) => {
-    // Check if email already exists
-    const email = req.body.email;
-    const [rows] = await pool.query('SELECT email FROM users WHERE email = ?', [email]);
-
-    // If email already exists, return error
-    if (rows.length > 0) {
-        throw Object.assign(new Error("Email already exists"), { status: 400 });
-    }
-
-    // Encrypt password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(req.body.password, salt);
-
-    // Create new user
-    const user = { 
-        first_name: req.body.first_name,
-        last_name: req.body.last_name,
-        role: req.body.role,
-        email: req.body.email,
-        password: hashedPassword,
-    };
-
-    // Insert user into database
     try {
-        await pool.query(`INSERT INTO users (first_name, last_name, role, email, password) VALUES (?,?,?,?,?)`, [user.first_name, user.last_name, user.role, user.email, user.password]);
-        res.status(201).json('User registered successfully');
+        // Check if email already exists
+        const email = req.body.email;
+        const [rows] = await pool.query(`
+            SELECT email
+            FROM users
+            WHERE email = ?;
+            `, [email]
+        );
+
+        // If email already exists, return error
+        if (rows.length > 0) {
+            throw Object.assign(new Error("Email already exists"), { status: 400 });
+        }
+
+        // Encrypt password
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(req.body.password, salt);
+
+        // Create new user
+        const user = { 
+            first_name: req.body.first_name,
+            last_name: req.body.last_name,
+            role: req.body.role,
+            email: req.body.email,
+            password: hashedPassword
+        };
+
+        // Insert user into database
+        await pool.query(`
+            INSERT INTO users (first_name, last_name, role, email, password)
+            VALUES (?,?,?,?,?);
+            `, [user.first_name, user.last_name, user.role, user.email, user.password]
+        );
+        return res.status(201).json('User registered successfully');
     } catch (error) {
         next(error);
     }
         
-};
+}
 
 export const login = async (req, res, next) => {
     try {
         const email = req.body.email;
         const password = req.body.password;
-        const [rows] = await pool.query('SELECT user_id, email, password, role FROM users WHERE email = ?', [email]);
+        const [rows] = await pool.query(`
+            SELECT user_id, email, password, role
+            FROM users
+            WHERE email = ?;
+            `, [email]
+        );
         const user = rows[0];
         const validPassword = await bcrypt.compare(password, user.password);
 
@@ -77,12 +91,11 @@ export const login = async (req, res, next) => {
             // maxAge: 1*60*1000 // testing purposes (1 minute)
         });
 
-        res.status(200).json({ message: 'Login successful', user: { id: user.id, first_name:user.first_name, last_name:user.last_name, email: user.email, role: user.role }, accessToken, refreshToken });
-
+        return res.status(200).json({ message: 'Login successful', user: { id: user.id, first_name: user.first_name, last_name: user.last_name, email: user.email, role: user.role }, accessToken, refreshToken });
     } catch (error) {
         next(error);
     }
-};
+}
 
 export const refresh = (req, res, next) => {
     try {
@@ -92,7 +105,7 @@ export const refresh = (req, res, next) => {
             throw Object.assign(new Error("Unauthorized, no token found"), { status: 401 });
         }
     
-        const refreshToken = cookies.jwt
+        const refreshToken = cookies.jwt;
     
         jwt.verify(
             refreshToken,
@@ -102,7 +115,12 @@ export const refresh = (req, res, next) => {
                     throw Object.assign(new Error("Forbidden"), { status: 403 });
                 }
     
-                const [rows] = await pool.query("SELECT user_id, role FROM users WHERE user_id = ?", [decoded.userId]);
+                const [rows] = await pool.query(`
+                    SELECT user_id, role
+                    FROM users
+                    WHERE user_id = ?;
+                    `, [decoded.userId]
+                );
                 const user = rows[0];
     
                 if (!user) {
@@ -114,37 +132,15 @@ export const refresh = (req, res, next) => {
                     process.env.ACCESS_TOKEN_SECRET,
                     { expiresIn: '15m' } // real case scenario 
                     // { expiresIn: '1m' } // testing purposes
-                )
+                );
     
-                res.status(200).json(accessToken);
-    
+                return res.status(200).json(accessToken);
             }
         )
     } catch (error) {
         next(error);
     }
 }
-
-
-// might move to userController
-export const getOneUser = async (req, res, next) => {
-    try {
-        // const userId = req.;
-        const [rows] = await pool.query('SELECT first_name, last_name, email FROM users WHERE user_id = ?', [req.user.id]);
-        const user = rows[0];
-
-        if (!user) {
-            throw Object.assign(new Error("User not found"), { status: 404 });
-        }
-
-        res.status(200).json(user);
-    } catch (error) {
-        next(error);
-    }
-};
-
-
-
 
 export const logout = async (req, res, next) => {
     try {

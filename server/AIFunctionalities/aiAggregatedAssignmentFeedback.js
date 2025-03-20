@@ -4,7 +4,7 @@ import { aggregatedAssignmentFeedbackSchema } from "../utils/aggregatedFeedbackS
 dotenv.config();
 const openai = new OpenAI({ apiKey: process.env.AI_API_KEY });
 
-export default async function aggregateAssignmentFeedback(
+export async function aggregateAssignmentFeedback(
     assignmentDescription,
     assignmentCriteria,
     newestStudentFeedback

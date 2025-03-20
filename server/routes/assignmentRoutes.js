@@ -1,29 +1,18 @@
 import express from "express";
 import { auth, authRole } from "../middleware/verifyToken.js";
-import {
-	getAllAssignments,
-	createAssignment,
-	updateAssignment,
-	deleteAssignment,
-	undeleteAssignment,
-	getOneAssignment
-} from "../controller/assignmentController.js";
+import { getAllAssignments, createAssignment, updateAssignment, deleteAssignment, undeleteAssignment, getOneAssignment } from "../controller/assignmentController.js";
 const router = express.Router();
 
-// get all assignments (for user) - auth(S/L)
-/*
-    requires req.body.course_coordinator or req.body.student_id with the relevant user ID
-    req.body would be JWT attribute once authentication is integrated
-*/
+// get all assignments (for user)
 router.get("/", auth, getAllAssignments);
 
 // get one assignment
 router.get("/:assignment_id", getOneAssignment);
 
-// post assignment - auth(L)
+// post assignment
 router.post("/", auth, authRole("lecturer"), createAssignment);
 
-// put/patch assignment details - auth(L)   (only before submissions?)
+// put/patch assignment details
 router.patch("/:assignment_id", auth, authRole("lecturer"), updateAssignment);
 
 // delete assignment
