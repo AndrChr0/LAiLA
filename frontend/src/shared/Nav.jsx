@@ -14,15 +14,16 @@ function Nav({ role = "" }) {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-useEffect(() => {
-  instance.get("/api/auth/user", GetConfig(token))
-    .then((response) => {
-      setUserDetails(response.data);
-    })
-    .catch((error) => {
-      console.error("Failed to get user", error);
-    });
-}, []);
+  useEffect(() => {
+    instance
+      .get("/api/users", GetConfig(token))
+      .then((response) => {
+        setUserDetails(response.data);
+      })
+      .catch((error) => {
+        console.error("Failed to get user", error);
+      });
+  }, []);
 
   useEffect(() => {
     function handleClickOutside(e) {
@@ -100,12 +101,14 @@ useEffect(() => {
                 ref={profileMenu}
                 className='absolute bg-white border border-gray-200 rounded-md p-2 right-10 top-15'
               >
-                {userDetails?.first_name && userDetails?.last_name && userDetails?.email ?(
+                {userDetails?.first_name &&
+                userDetails?.last_name &&
+                userDetails?.email ? (
                   <>
-                  <div className='font-normal'>
-                    {userDetails.first_name} {userDetails.last_name}
-                  </div>
-                  <div className='font-light'>{userDetails.email}</div>
+                    <div className='font-normal'>
+                      {userDetails.first_name} {userDetails.last_name}
+                    </div>
+                    <div className='font-light'>{userDetails.email}</div>
                   </>
                 ) : (
                   <div className='font-light'>Ola Nordmann</div>
