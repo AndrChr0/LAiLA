@@ -290,53 +290,15 @@ const LecturerReportPage = () => {
                   </div>
                 </CardContent>
               </Card>
-
+              
               <Card className='lg:col-span-2'>
                 <CardHeader>
-                  <CardTitle>Score Distribution</CardTitle>
-                  <CardDescription>
-                    Breakdown of scores by range
-                  </CardDescription>
+                  <CardTitle className='flex items-center gap-2'>
+                    {/* <CheckCircle className="w-5 h-5 text-green-500" /> */}
+                    Overall lecturer suggestions
+                  </CardTitle>
+                  <CardDescription>Subheading...?</CardDescription>
                 </CardHeader>
-                <CardContent>
-                  <div className='h-64'>
-                    <ResponsiveContainer width='100%' height='100%'>
-                      <BarChart
-                        data={scoreDistributionData}
-                        margin={{
-                          top: 5,
-                          right: 30,
-                          left: 20,
-                          bottom: 5,
-                        }}
-                      >
-                        <CartesianGrid strokeDasharray='3 3' />
-                        <XAxis dataKey='score' />
-                        <YAxis />
-                        <Tooltip />
-                        <Legend />
-                        <Bar dataKey='count' name='Number of Students'>
-                          {scoreDistributionData.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={entry.color} />
-                          ))}
-                        </Bar>
-                      </BarChart>
-                    </ResponsiveContainer>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
-
-          <TabsContent value='overview' className='space-y-6'>
-            <Card className='shadow-md mt-[20px]'>
-              <CardHeader>
-                <CardTitle className='flex items-center gap-2'>
-                  {/* <CheckCircle className="w-5 h-5 text-green-500" /> */}
-                  Overall lecturer suggestions
-                </CardTitle>
-                <CardDescription>Subheading...?</CardDescription>
-              </CardHeader>
               <CardContent>
                 <div className='space-y-6'>
                   {overallLecturerSuggestions.map((data, index) => (
@@ -356,7 +318,8 @@ const LecturerReportPage = () => {
                   ))}
                 </div>
               </CardContent>
-            </Card>
+              </Card>
+            </div>
           </TabsContent>
 
           <TabsContent value='overview' className='space-y-6'>
