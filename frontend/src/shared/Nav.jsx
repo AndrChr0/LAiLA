@@ -4,12 +4,25 @@ import { Link, NavLink } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { FaRegUser } from "react-icons/fa";
 import { IoIosLogOut } from "react-icons/io";
+import instance from "../utils/axiosInstance";
+import { GetConfig } from "../utils/GetConfig";
 
 function Nav({ role = "" }) {
   const profileMenu = useRef(null);
-  const { logout } = useAuth();
+  const [userDetails, setUserDetails] = useState({});
+  const { logout, token } = useAuth();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+useEffect(() => {
+  instance.get("/api/auth/user", GetConfig(token))
+    .then((response) => {
+      setUserDetails(response.data);
+    })
+    .catch((error) => {
+      console.error("Failed to get user", error);
+    });
+}, []);
 
   useEffect(() => {
     function handleClickOutside(e) {
@@ -87,7 +100,16 @@ function Nav({ role = "" }) {
                 ref={profileMenu}
                 className='absolute bg-white border border-gray-200 rounded-md p-2 right-10 top-15'
               >
-                <div className='font-extralight'>Ola Nordmann</div>
+                {userDetails?.first_name && userDetails?.last_name && userDetails?.email ?(
+                  <>
+                  <div className='font-normal'>
+                    {userDetails.first_name} {userDetails.last_name}
+                  </div>
+                  <div className='font-light'>{userDetails.email}</div>
+                  </>
+                ) : (
+                  <div className='font-light'>Ola Nordmann</div>
+                )}
                 <button
                   className='flex items-center gap-1 hover:text-gray-600 hover:cursor-pointer'
                   onClick={() => logout()}
