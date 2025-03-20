@@ -75,7 +75,7 @@ const LecturerReportPage = () => {
     setIsLoading(true);
 
     instance
-      .get(`/api/feedback/ai/${id}`, { isManuallyCreated: true })
+      .post(`/api/reports/${id}`, { isManuallyCreated: true }, GetConfig(token))
       .then(() => {
         console.log("Report generated");
         setIsLoading(false);
@@ -83,9 +83,7 @@ const LecturerReportPage = () => {
       })
       .catch((error) => {
         setIsLoading(false);
-        if (error.status === 403) {
-          setErrorMsg("No new feedback since the last report");
-        }
+        setErrorMsg(error.response.data.error);
         console.error(
           "API request failed:",
           error.response ? error.response.data : error.message
