@@ -7,11 +7,13 @@ export async function getAllAssignmentReports(req, res, next) {
   try {
     const [rows] = await pool.query(
       `
-            SELECT report_id, assignment_id, report_nr, report_contents, students_passed, students_failed, total_feedback, students_evaluated
-            FROM assignment_reports
-            WHERE assignment_id = ?
-            ORDER by report_nr DESC;
-            `,
+        SELECT ar.report_id, ar.assignment_id, ar.report_nr, ar.report_contents, ar.students_passed, ar.students_failed, ar.total_feedback, ar.students_evaluated, a.assignment_title, c.course_name
+        FROM assignment_reports ar
+        JOIN assignments a ON ar.assignment_id = a.assignment_id
+        JOIN courses c ON a.course_id = c.course_id
+        WHERE ar.assignment_id = ?
+        ORDER BY ar.report_nr DESC;
+      `,
       [req.params.assignment_id]
     );
 
