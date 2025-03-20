@@ -1,18 +1,10 @@
 import React, { useState, useEffect } from "react";
 import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
   Tooltip,
-  Legend,
   ResponsiveContainer,
   PieChart,
   Pie,
   Cell,
-  LineChart,
-  Line,
 } from "recharts";
 import {
   Card,
@@ -20,7 +12,6 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-  CardFooter,
 } from "../../components/ui/Card";
 import {
   Tabs,
@@ -42,8 +33,6 @@ import {
   Clock,
   FileText,
   Users,
-  Award,
-  TrendingUp,
 } from "lucide-react";
 import instance from "../../utils/axiosInstance";
 import { GetConfig } from "../../utils/GetConfig";
@@ -113,15 +102,6 @@ const LecturerReportPage = () => {
     },
   ];
 
-  const scoreDistributionData = [
-    { score: "0-50", count: 8, color: "#f87171" },
-    { score: "51-60", count: 12, color: "#fb923c" },
-    { score: "61-70", count: 14, color: "#facc15" },
-    { score: "71-80", count: 22, color: "#a3e635" },
-    { score: "81-90", count: 28, color: "#4ade80" },
-    { score: "91-100", count: 16, color: "#2dd4bf" },
-  ];
-
   const feedbackMetrics = {
     totalFeedback: reportData[selectedReport].total_feedback,
     uniqueStudents: reportData[selectedReport].students_evaluated,
@@ -164,8 +144,9 @@ const LecturerReportPage = () => {
     <div className='min-h-screen p-6 bg-gray-50'>
       <div className='mx-auto max-w-7xl'>
         <header className='mb-8'>
-          <h1 className='mb-4 text-3xl font-bold text-gray-800'>
-            Assignment (NAME)
+          <h1 className='flex flex-col mb-4 text-3xl text-gray-800'>
+            <span className="text-[15px] text-gray-500  ">{reportData[selectedReport].course_name}</span>
+            <span className="font-bold">{reportData[selectedReport].assignment_title}</span>
           </h1>
           <div className='flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center'>
             <Select value={selectedReport} onValueChange={setSelectedReport}>
@@ -297,53 +278,15 @@ const LecturerReportPage = () => {
                   </div>
                 </CardContent>
               </Card>
-
+              
               <Card className='lg:col-span-2'>
                 <CardHeader>
-                  <CardTitle>Score Distribution</CardTitle>
-                  <CardDescription>
-                    Breakdown of scores by range
-                  </CardDescription>
+                  <CardTitle className='flex items-center gap-2'>
+                    {/* <CheckCircle className="w-5 h-5 text-green-500" /> */}
+                    Overall lecturer suggestions
+                  </CardTitle>
+                  <CardDescription>Subheading...?</CardDescription>
                 </CardHeader>
-                <CardContent>
-                  <div className='h-64'>
-                    <ResponsiveContainer width='100%' height='100%'>
-                      <BarChart
-                        data={scoreDistributionData}
-                        margin={{
-                          top: 5,
-                          right: 30,
-                          left: 20,
-                          bottom: 5,
-                        }}
-                      >
-                        <CartesianGrid strokeDasharray='3 3' />
-                        <XAxis dataKey='score' />
-                        <YAxis />
-                        <Tooltip />
-                        <Legend />
-                        <Bar dataKey='count' name='Number of Students'>
-                          {scoreDistributionData.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={entry.color} />
-                          ))}
-                        </Bar>
-                      </BarChart>
-                    </ResponsiveContainer>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
-
-          <TabsContent value='overview' className='space-y-6'>
-            <Card className='shadow-md mt-[20px]'>
-              <CardHeader>
-                <CardTitle className='flex items-center gap-2'>
-                  {/* <CheckCircle className="w-5 h-5 text-green-500" /> */}
-                  Overall lecturer suggestions
-                </CardTitle>
-                <CardDescription>Subheading...?</CardDescription>
-              </CardHeader>
               <CardContent>
                 <div className='space-y-6'>
                   {overallLecturerSuggestions.map((data, index) => (
@@ -363,7 +306,8 @@ const LecturerReportPage = () => {
                   ))}
                 </div>
               </CardContent>
-            </Card>
+              </Card>
+            </div>
           </TabsContent>
 
           <TabsContent value='overview' className='space-y-6'>
