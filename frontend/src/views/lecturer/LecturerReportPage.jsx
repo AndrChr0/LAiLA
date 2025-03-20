@@ -35,7 +35,7 @@ const LecturerReportPage = () => {
   const reports = reportData.map((report, index) => {
     return {
       id: index,
-      name: "Report " + report.report_id
+      name: "Report " + report.report_nr
     };
   });
   
