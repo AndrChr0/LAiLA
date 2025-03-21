@@ -31,37 +31,62 @@ function AssignmentCriteriaForm({
   const [expandedSections, setExpandedSections] = useState({});
   const [expandedSubsections, setExpandedSubsections] = useState({});
 
-  // if editing, load the criteria
   useEffect(() => {
     if (isEditing) {
       setSchemaName(criteria.name);
-      const sections = [];
+
+      const loadedSections = [];
+      // skip the final assessment section
       for (const sectionName in criteria.schema.properties) {
+        if (sectionName === "AI_final_assessment") {
+          continue;
+        }
+        // loop over the top-level sections
+
+        const sectionProps = criteria.schema.properties[sectionName].properties;
         const section = {
           sectionId: crypto.randomUUID(),
           sectionName,
           subsections: [],
         };
-        for (const subsectionName in criteria.schema.properties[sectionName]
-          .properties) {
-          const subsection = {
-            subsectionId: crypto.randomUUID(),
-            subsectionName,
-            scoreDescription:
-              criteria.schema.properties[sectionName].properties[subsectionName]
-                .description,
-            feedbackDescription:
-              criteria.schema.properties[sectionName].properties[subsectionName]
-                .description,
-            maxScore:
-              criteria.schema.properties[sectionName].properties[subsectionName]
-                .default,
-          };
-          section.subsections.push(subsection);
+
+        //  group subsection fields by their base name
+        const subsectionMap = new Map();
+
+        for (const propName in sectionProps) {
+          const property = sectionProps[propName];
+
+          let baseName = propName.replace(/(_score|_feedback|_max_score)$/, "");
+
+          if (!subsectionMap.has(baseName)) {
+            subsectionMap.set(baseName, {
+              subsectionId: crypto.randomUUID(),
+              subsectionName: baseName,
+              scoreDescription: "",
+              feedbackDescription: "",
+              maxScore: 3,
+            });
+          }
+
+          const subObj = subsectionMap.get(baseName);
+
+          if (propName.endsWith("_score")) {
+            subObj.scoreDescription = property.description || "";
+          } else if (propName.endsWith("_feedback")) {
+            subObj.feedbackDescription = property.description || "";
+          } else if (propName.endsWith("_max_score")) {
+            subObj.maxScore = property.default || 3;
+          }
+
+          // update map
+          subsectionMap.set(baseName, subObj);
         }
-        sections.push(section);
+
+        section.subsections = Array.from(subsectionMap.values());
+        loadedSections.push(section);
       }
-      setSections(sections);
+
+      setSections(loadedSections);
     }
   }, [isEditing, criteria]);
 
@@ -76,8 +101,6 @@ function AssignmentCriteriaForm({
         subsections: [],
       },
     ]);
-    // if we'd want automatically expand new section when added
-    // setExpandedSections(prev => ({ ...prev, [newSectionId]: true }));
   };
 
   // remove a section
@@ -111,9 +134,6 @@ function AssignmentCriteriaForm({
             maxScore: 3,
           };
 
-          // if we'd want automatically expand new subsection when added
-          // setExpandedSubsections(prev => ({ ...prev, [newSubId]: true }));
-
           return { ...s, subsections: [...s.subsections, newSub] };
         }
         return s;
@@ -138,7 +158,6 @@ function AssignmentCriteriaForm({
 
   // change subsection name/score/feedback
   const handleSubsectionChange = (sectionId, subsectionId, field, value) => {
-    // field: "subsectionName", "scoreDescription", "feedbackDescription" etc.
     setSections((prev) => {
       return prev.map((s) => {
         if (s.sectionId === sectionId) {
@@ -155,7 +174,6 @@ function AssignmentCriteriaForm({
     });
   };
 
-  // toggle section expansion
   const toggleSection = (sectionId) => {
     setExpandedSections((prev) => ({
       ...prev,
@@ -163,7 +181,6 @@ function AssignmentCriteriaForm({
     }));
   };
 
-  // toggle subsection/criteria expansion
   const toggleSubsection = (subsectionId) => {
     setExpandedSubsections((prev) => ({
       ...prev,
@@ -185,7 +202,6 @@ function AssignmentCriteriaForm({
       const sectionProperties = {};
       const requiredFields = [];
 
-      // for each subsection, create two fields: *_score, *_feedback and *_max_score
       section.subsections.forEach((sub) => {
         const scoreKey = `${sub.subsectionName.replace(/\s+/g, "_")}_score`;
         const feedbackKey = `${sub.subsectionName.replace(
@@ -222,7 +238,6 @@ function AssignmentCriteriaForm({
       };
     });
 
-    // add final assessment to be returned to student
     schemaObject.schema.properties.AI_final_assessment = {
       type: "object",
       properties: {
@@ -241,7 +256,6 @@ function AssignmentCriteriaForm({
   const handleGenerateClick = () => {
     const generated = generateJsonSchema();
 
-    // calc max score
     let totalMaxScore = 0;
     sections.forEach((section) => {
       section.subsections.forEach((sub) => {
@@ -559,6 +573,7 @@ function AssignmentCriteriaForm({
 
       <div>
         <button
+          type='button'
           className='w-full px-6 py-3 font-medium text-white transition-colors bg-purple-500 rounded-lg hover:bg-purple-600'
           onClick={handleGenerateClick}
         >
