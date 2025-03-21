@@ -29,7 +29,7 @@ export async function checkFeedbackProgress() {
 // function to query report routes to generate report(s)
 async function requestGenerateReport(id) {
     try {
-        const response = await axios.get(`http://localhost:5310/api/reports/cron/${id}`);
+        const response = await axios.post(`http://localhost:5310/api/reports/cron/${id}`);
         // console.log("Report generated:", response.data);
     } catch (error) {
         console.error("API request failed:", error.response ? error.response.data : error.message);
