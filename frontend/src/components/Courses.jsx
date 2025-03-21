@@ -38,9 +38,6 @@ const Courses = ({ courses }) => {
                 <h3 className='mb-2 text-lg font-semibold text-gray-800 line-clamp-2'>
                   {course.course_name}
                 </h3>
-                <p className='text-sm text-gray-500'>
-                  Course ID: {course.course_id}
-                </p>
               </div>
             </div>
           );
