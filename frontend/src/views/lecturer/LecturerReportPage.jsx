@@ -49,8 +49,6 @@ const LecturerReportPage = () => {
   const pathId = path.id;
   console.log(reportData);
 
-  if (!reportData) return <div>No reports yet.</div>;
-
   useEffect(() => {
     instance
       .get(`api/reports/${pathId}`, GetConfig(token))
@@ -61,6 +59,8 @@ const LecturerReportPage = () => {
         console.error("Failed to fetch report data:", error);
       });
   }, []);
+
+  if (!reportData) return <div>No reports yet.</div>;
 
   function handleNewAssignmentReport(id) {
     setIsLoading(true);
