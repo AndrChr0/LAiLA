@@ -133,5 +133,19 @@ WHERE assignment_id = ?;`,
     ]
   );
 
-  return result;
+  // get the latest assignment_report
+  const [newestReport] = await pool.query(
+    `
+     SELECT ar.report_id, ar.assignment_id, ar.report_nr, ar.report_contents, ar.students_passed, ar.students_failed, ar.total_feedback, ar.students_evaluated, ar.isManuallyCreated, a.assignment_title, c.course_name
+FROM assignment_reports ar
+JOIN assignments a ON a.assignment_id = ar.assignment_id
+JOIN courses c on c.course_id = a.course_id
+where report_id = ?;
+    `,
+    [result.insertId]
+  );
+
+  console.log(newestReport);
+
+  return newestReport;
 }
