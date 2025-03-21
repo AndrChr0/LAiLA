@@ -17,4 +17,4 @@ ACCESS_TOKEN_SECRET = 'string' <br>
 REFRESH_TOKEN_SECRET = 'string'
 
 ## Considerations
-- The project is only designed and tested for local hosting of SLQ database
+- The project is only designed and tested for local hosting of SQL database
