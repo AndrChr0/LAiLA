@@ -157,6 +157,8 @@ export const getZipcontents = async (req, res, next) => {
       resultString = "fail";
     }
 
+    // sanitize feedback JSON - remove score/max score
+
     // save to DB
     const [result] = await pool.query(
       `

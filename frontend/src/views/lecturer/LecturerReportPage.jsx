@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Tooltip,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-} from "recharts";
+import { Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import {
   Card,
   CardContent,
@@ -27,13 +21,7 @@ import {
   SelectValue,
 } from "../../components/ui/select";
 import { Badge } from "../../components/ui/badge";
-import {
-  AlertCircle,
-  CheckCircle,
-  Clock,
-  FileText,
-  Users,
-} from "lucide-react";
+import { AlertCircle, CheckCircle, Clock, FileText, Users } from "lucide-react";
 import instance from "../../utils/axiosInstance";
 import { GetConfig } from "../../utils/GetConfig";
 import { useAuth } from "../../context/AuthContext";
@@ -58,19 +46,17 @@ const LecturerReportPage = () => {
       .catch((error) => {
         console.error("Failed to fetch report data:", error);
       });
-  }, []);
+  }, [pathId]);
 
   if (!reportData) return <div>No reports yet.</div>;
-
   function handleNewAssignmentReport(id) {
     setIsLoading(true);
 
     instance
       .post(`/api/reports/${id}`, { isManuallyCreated: true }, GetConfig(token))
-      .then(() => {
-        console.log("Report generated");
+      .then((res) => {
         setIsLoading(false);
-        window.location.reload();
+        setReportData([res.data[0], ...reportData]);
       })
       .catch((error) => {
         setIsLoading(false);
@@ -147,8 +133,12 @@ const LecturerReportPage = () => {
       <div className='mx-auto max-w-7xl'>
         <header className='mb-8'>
           <h1 className='flex flex-col mb-4 text-3xl text-gray-800'>
-            <span className="text-[15px] text-gray-500  ">{reportData[selectedReport].course_name}</span>
-            <span className="font-bold">{reportData[selectedReport].assignment_title}</span>
+            <span className='text-[15px] text-gray-500  '>
+              {reportData[selectedReport].course_name}
+            </span>
+            <span className='font-bold'>
+              {reportData[selectedReport].assignment_title}
+            </span>
           </h1>
           <div className='flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center'>
             <Select value={selectedReport} onValueChange={setSelectedReport}>
@@ -280,34 +270,37 @@ const LecturerReportPage = () => {
                   </div>
                 </CardContent>
               </Card>
-              
+
               <Card className='lg:col-span-2'>
                 <CardHeader>
                   <CardTitle className='flex items-center gap-2'>
                     {/* <CheckCircle className="w-5 h-5 text-green-500" /> */}
-                    Overall lecturer suggestions
+                    Overall course suggestions
                   </CardTitle>
-                  <CardDescription>Subheading...?</CardDescription>
+                  <CardDescription>
+                    Suggestions for improvement across all assignment
+                    submissions
+                  </CardDescription>
                 </CardHeader>
-              <CardContent>
-                <div className='space-y-6'>
-                  {overallLecturerSuggestions.map((data, index) => (
-                    <div
-                      key={index}
-                      className='pb-4 border-b last:border-0 last:pb-0'
-                    >
-                      <div className='flex items-start justify-between mb-2'>
-                        <h3 className='text-lg font-semibold'>
-                          {data.areaName}
-                        </h3>
+                <CardContent>
+                  <div className='space-y-6'>
+                    {overallLecturerSuggestions.map((data, index) => (
+                      <div
+                        key={index}
+                        className='pb-4 border-b last:border-0 last:pb-0'
+                      >
+                        <div className='flex items-start justify-between mb-2'>
+                          <h3 className='text-lg font-semibold'>
+                            {data.areaName}
+                          </h3>
+                        </div>
+                        <p className='mb-3 text-muted-foreground'>
+                          {data.suggestion}
+                        </p>
                       </div>
-                      <p className='mb-3 text-muted-foreground'>
-                        {data.suggestion}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
+                    ))}
+                  </div>
+                </CardContent>
               </Card>
             </div>
           </TabsContent>
@@ -319,7 +312,9 @@ const LecturerReportPage = () => {
                   {/* <CheckCircle className="w-5 h-5 text-green-500" /> */}
                   Additional notes
                 </CardTitle>
-                <CardDescription>Subheading..?</CardDescription>
+                <CardDescription>
+                  Additional notes for the lecturer
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className='space-y-6'>
