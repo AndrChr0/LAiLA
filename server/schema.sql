@@ -68,9 +68,8 @@ CREATE TABLE feedback (
     FOREIGN KEY (student_id) REFERENCES users(user_id)
 );
 
-
 CREATE TABLE assignment_reports (
-    report_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    report_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
     assignment_id SMALLINT UNSIGNED NOT NULL,
     report_nr TINYINT UNSIGNED NOT NULL,
     report_contents JSON NOT NULL,
@@ -79,8 +78,30 @@ CREATE TABLE assignment_reports (
     total_feedback SMALLINT UNSIGNED NOT NULL,
     students_evaluated SMALLINT UNSIGNED NOT NULL,
     isManuallyCreated BOOLEAN NOT NULL DEFAULT FALSE,
+    PRIMARY KEY (report_id),
     FOREIGN KEY (assignment_id) REFERENCES assignments(assignment_id)
 );
+
+CREATE TABLE final_assessments (
+    assessment_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    student_id SMALLINT UNSIGNED,
+    assignment_id SMALLINT UNSIGNED,
+    assessment_contents JSON NOT NULL,
+    assessment_result ENUM('pass', 'fail') NOT NULL,
+    is_reviewed BOOLEAN NOT NULL DEFAULT FALSE,
+    PRIMARY KEY (assessment_id),
+    FOREIGN KEY (student_id) REFERENCES users(user_id),
+    FOREIGN KEY (assignment_id) REFERENCES assignments(assignment_id)
+);
+
+CREATE TABLE student_work (
+    student_work_id MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    assessment_id SMALLINT UNSIGNED,
+    file_contents TEXT NOT NULL,
+    PRIMARY KEY (student_work_id),
+    FOREIGN KEY (assessment_id) REFERENCES final_assessments(assessment_id)
+);
+
 
 INSERT INTO users (first_name, last_name, role, email, password) VALUES
 ('Ola', 'Nsk', 'student', 'olansk@ntnu', '$2b$10$72WZIieimJ17Kmtfo50FXuAbFDybh.fwrbQhsCKwEevrdpxGrrjXS'),
