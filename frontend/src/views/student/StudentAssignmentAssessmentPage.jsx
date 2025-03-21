@@ -3,18 +3,19 @@ import { useAuth } from "../../context/AuthContext";
 import instance from "../../utils/axiosInstance";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { GetConfig } from "../../utils/GetConfig";
 
 function StudentAssignmentAssessmentPage() {
   const [currentAssignment, setCurrentAssignment] = useState(null);
   const [previousFeedback, setPreviousFeedback] = useState([]);
   const path = useParams();
   const assignmentId = parseInt(path.id, 10);
-  const { userId } = useAuth();
+  const { userId, token } = useAuth();
 
   // get assignment details
   useEffect(() => {
     instance
-      .get(`api/assignments/${assignmentId}`)
+      .get(`api/assignments/${assignmentId}`, GetConfig(token))
       .then((response) => {
         setCurrentAssignment(response.data);
       })
@@ -26,7 +27,7 @@ function StudentAssignmentAssessmentPage() {
   // get previous feedback
   useEffect(() => {
     instance
-      .get(`api/feedback?student_id=${userId}`)
+      .get(`api/feedback?student_id=${userId}`, GetConfig(token))
       .then((response) => {
         console.log("Feedback API Response:", response.data);
 

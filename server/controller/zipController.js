@@ -1,7 +1,7 @@
 import decompress from "decompress";
 import path from "path";
 import fs from "fs";
-import evaluateSubmission from "../AIFunctionalities/aiZipFunctions.js";
+import { evaluateSubmission } from "../AIFunctionalities/aiAssignmentEvaluation.js";
 import { pool as SQLpool } from "../utils/SQLPool.js";
 const pool = SQLpool;
 
@@ -52,13 +52,10 @@ async function decompressZip(zipPath, allowedExtensions) {
   }
 }
 
-const getZipcontents = async (req, res) => {
-  // check that req has everything it needs
-  // return error if not
+export const getZipcontents = async (req, res, next) => {
+  // check that req has what it needs
   if (!req.body.assignment_id) {
-    return res.status(400).send("Missing attributes");
-  } else if (!req.body.student_id) {
-    return res.status(401).send("Unauthorized");
+    throw Object.assign(new Error("Missing attributes"), { status: 400 });
   }
 
   try {
@@ -67,25 +64,25 @@ const getZipcontents = async (req, res) => {
     // save num for later
     const [maxAttempts] = await pool.query(
       `
-        SELECT assignment_attempts
-        FROM assignments
-        WHERE assignment_id = ?;
-        `,
+            SELECT assignment_attempts
+            FROM assignments
+            WHERE assignment_id = ?;
+            `,
       [req.body.assignment_id]
     );
     const DBAttempts = maxAttempts[0]["assignment_attempts"];
     const [highestAttempt] = await pool.query(
       `
-        SELECT MAX(attempt_nr)
-        FROM feedback
-        WHERE assignment_id = ? AND student_id = ?;
-        `,
+            SELECT MAX(attempt_nr)
+            FROM feedback
+            WHERE assignment_id = ? AND student_id = ?;
+            `,
       [req.body.assignment_id, req.body.student_id]
     );
     const currentAttempt = highestAttempt[0]["MAX(attempt_nr)"] || 0;
 
     if (currentAttempt == DBAttempts) {
-      return res.status(403).send("Max attempts reached");
+      throw Object.assign(new Error("Max attempts reached"), { status: 403 });
     }
 
     const file = req.file;
@@ -96,21 +93,16 @@ const getZipcontents = async (req, res) => {
     console.log("Parsed extensions:", parsedExtensions);
 
     if (!file) {
-      return res.status(400).send("No file was uploaded.");
+      throw Object.assign(new Error("No file was uploaded"), { status: 400 });
     }
-
-    // try {
-    //   // parsedExtensions = JSON.parse(allowedExtensions);
-    // } catch (err) {
-    //   console.log("Could not parse allowedExtensions as JSON:", err);
-    // }
 
     // Decompress the zip using the uploaded file path
     const zipContents = await decompressZip(file.path, parsedExtensions);
 
     if (!zipContents.length) {
-      console.log("No files found in zip after filtering.");
-      return res.status(400).send("No files found in zip after filtering.");
+      throw Object.assign(new Error("No files found in zip after filtering"), {
+        status: 400,
+      });
     }
 
     // Evaluate
@@ -130,10 +122,10 @@ const getZipcontents = async (req, res) => {
     // get pass threshold and max score
     const [assignmentEvaluationData] = await pool.query(
       `
-    SELECT pass_threshold, max_score
-    FROM assignments
-    WHERE assignment_id = ?;
-    `,
+            SELECT pass_threshold, max_score
+            FROM assignments
+            WHERE assignment_id = ?;
+            `,
       [req.body.assignment_id]
     );
 
@@ -165,12 +157,14 @@ const getZipcontents = async (req, res) => {
       resultString = "fail";
     }
 
+    // sanitize feedback JSON - remove score/max score
+
     // save to DB
     const [result] = await pool.query(
       `
-      INSERT INTO feedback (assignment_id, student_id, feedback_contents, general_comment, suggested_result, attempt_nr)
-      VALUES (?, ?, ?, ?, ?, ?);
-      `,
+            INSERT INTO feedback (assignment_id, student_id, feedback_contents, general_comment, suggested_result, attempt_nr)
+            VALUES (?, ?, ?, ?, ?, ?);
+            `,
       [
         req.body.assignment_id,
         req.body.student_id,
@@ -183,20 +177,14 @@ const getZipcontents = async (req, res) => {
       ]
     );
 
-    // only send general_comment(?)
-    // to be updated
-
     const responseObj = {
       general_comment:
         evaluatedSubmission.AI_final_assessment.AI_final_comments,
       result_string: resultString,
     };
 
-    res.send(responseObj);
+    return res.status(200).json(responseObj);
   } catch (error) {
-    console.error(error);
-    res.status(500).send("An error occurred while decompressing.");
+    next(error);
   }
 };
-
-export default getZipcontents;

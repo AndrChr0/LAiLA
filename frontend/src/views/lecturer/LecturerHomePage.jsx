@@ -21,19 +21,19 @@ function LecturerHomePage() {
 
   return (
     <>
-      <button
-        onClick={() => navigate("/new-assignment")}
-        className='px-4 py-2 mb-2 text-gray-800 bg-white border border-gray-400 rounded hover:cursor-pointer hover:bg-gray-100'
-      >
-        New Assignment
-      </button>
-
       <div className='mb-[4.5em]'>
+      <h2 className='text-4xl font-normal mb-[1.5em] mt-[1.5em]'>Courses</h2>
         <Courses courses={courses} />
       </div>
 
       <div className=''>
         <h2 className='text-4xl font-normal mb-[1.5em]'>Active Assignments</h2>
+        <button
+        onClick={() => navigate("/new-assignment")}
+        className=' px-4 py-2 mb-[1.5em] text-gray-800 bg-white border border-gray-400 rounded hover:cursor-pointer hover:bg-gray-100'
+      >
+        New Assignment
+      </button>
         <Assignments assignments={activeAssignments} />
       </div>
     </>

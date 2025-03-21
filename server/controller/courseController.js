@@ -3,8 +3,7 @@ dotenv.config();
 import { pool as SQLpool } from '../utils/SQLPool.js';
 const pool = SQLpool;
 
-// get all courses (you take) - auth(S) (/L if lecturers should be able to see it too?)
-// (req.body would be JWT attribute once authentication is integrated)
+// get all courses (you take/teach)
 export async function getMyCourses(req, res, next) {
     try {
         if (req.user.role == "lecturer") {

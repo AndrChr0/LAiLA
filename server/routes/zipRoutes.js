@@ -1,15 +1,13 @@
 import express from "express";
-import getZipcontents from "../controller/zipController.js";
+import { getZipcontents } from "../controller/zipController.js";
 import multer from "multer";
-import fs from "fs";
-
+import { auth, authRole } from "../middleware/verifyToken.js";
+const router = express.Router();
 const upload = multer({
-  dest: "ClientZipUploads/",
-  mimetype: "application/x-zip-compressed",
+    dest: "ClientZipUploads/",
+    mimetype: "application/x-zip-compressed",
 });
 
-const router = express.Router();
-
-router.post("/decompress", upload.single("zipUpload"), getZipcontents);
+router.post("/decompress", auth, authRole("student"), upload.single("zipUpload"), getZipcontents);
 
 export default router;

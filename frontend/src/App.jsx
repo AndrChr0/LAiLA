@@ -118,6 +118,15 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          {/* <Route
+            path="/reports"
+            element={
+              <ProtectedRoute roles={["lecturer"]}>
+                <LecturerReportPage />
+              </ProtectedRoute>
+            }
+          /> */}
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </div>
