@@ -39,9 +39,9 @@ function Nav({ role = "" }) {
   }, []);
 
   return (
-    <nav className='border-b border-gray-200 mb-4'>
+    <nav className='mb-4 border-b border-gray-200'>
       <ul className='flex justify-between  p-5 bg-white px-[5dvw] font-semibold text-sm'>
-        <div className='flex gap-4 md:gap-8 items-center'>
+        <div className='flex items-center gap-4 md:gap-8'>
           <Link to='/home'>
             <img className='h-8' src='/athea_logo_svg.svg' alt='athea logo' />
           </Link>
@@ -57,7 +57,7 @@ function Nav({ role = "" }) {
               Home
             </NavLink>
           </li>
-          {role === "lecturer" ? (
+          {/* {role === "lecturer" ? (
             <li>
               <NavLink
                 className={({ isActive }) =>
@@ -70,9 +70,9 @@ function Nav({ role = "" }) {
                 Reports
               </NavLink>
             </li>
-          ) : null}
+          ) : null} */}
 
-          {role === "student" ? (
+          {/* {role === "student" ? (
             <li>
               <NavLink
                 className={({ isActive }) =>
@@ -85,7 +85,7 @@ function Nav({ role = "" }) {
                 Chatbots
               </NavLink>
             </li>
-          ) : null}
+          ) : null} */}
         </div>
         {role ? (
           <>
@@ -99,7 +99,7 @@ function Nav({ role = "" }) {
             {isMenuOpen ? (
               <div
                 ref={profileMenu}
-                className='absolute bg-white border border-gray-200 rounded-md p-2 right-10 top-15'
+                className='absolute p-2 bg-white border border-gray-200 rounded-md right-10 top-15'
               >
                 {userDetails?.first_name &&
                 userDetails?.last_name &&

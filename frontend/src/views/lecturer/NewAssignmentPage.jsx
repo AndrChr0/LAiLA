@@ -107,6 +107,10 @@ function NewAssignmentPage() {
     <>
       <h1 className='text-3xl font-light'>New Assignment</h1>
       <div className='flex flex-col w-11/12 pt-4 mx-auto my-0 md:w-2/3'>
+
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+
+      <div className="flex flex-col">
         <label htmlFor='course'>Select Course</label>
         <select
           className='p-2 mb-4 bg-white border border-gray-400'
@@ -120,7 +124,10 @@ function NewAssignmentPage() {
             </option>
           ))}
         </select>
+      </div>
 
+     
+      <div className="flex flex-col">
         <label htmlFor='assignment_title'>Assignment Title</label>
         <input
           onChange={(e) => setAssignmentTitle(e.target.value)}
@@ -130,71 +137,115 @@ function NewAssignmentPage() {
           name='assignment_title'
           id='assignment_title'
         />
+        </div>
+      
 
-        <label htmlFor='assignment_start'>Start Date</label>
+      <div className="flex flex-col">
+      <label htmlFor='assignment_start'>Start Date</label>
         <input
           onChange={(e) => setAssignmentStart(e.target.value)}
           value={assignment_start_date}
-          className='p-2 mb-4 bg-white border border-gray-400 w-36'
+          className='p-2 mb-4 bg-white border border-gray-400 '
           type='date'
           name='assignment_start'
           id='assignment_start'
         />
 
-        <label htmlFor='assignment_end'>End Date</label>
+      </div>
+      
+      <div className="flex flex-col">
+
+      <label htmlFor='assignment_end'>End Date</label>
         <input
           onChange={(e) => setAssignmentEnd(e.target.value)}
           value={assignment_end_date}
-          className='p-2 mb-4 bg-white border border-gray-400 w-36'
+          className='p-2 mb-4 bg-white border border-gray-400'
           type='date'
           name='assignment_end'
           id='assignment_end'
         />
-        <div className='flex items-center py-8'>
-          <div className='flex gap-4'>
-            <ToolTip toolText='Assignment is publically viewable by students in your course' />
-            <label htmlFor='is_public'>Make Public</label>
-          </div>
+        </div>
+        
+        </div>
+   
 
+          <div className="flex justify-between w-full h-auto p-4 border border-gray-400 rounded">
+            <div className='flex flex-col items-center gap-3'>
+              <div className='flex items-center gap-2'>
+                <label htmlFor='is_public'>Make Public</label>
+                <ToolTip toolText='Assignment is publically viewable by students in your course' />
+              </div>
+
+              <input
+                onChange={handleIsPublicChange}
+                checked={isPublic}
+                className="mt-1 bg-white border-2 border-blue-500 rounded-sm h-7 w-15 shrink-0 checked:bg-blue-500 checked:border-0"
+                type='checkbox'
+                name='is_public'
+                id='is_public'
+              />
+            </div>
+
+
+
+            {isPublic && (
+              <div className='flex flex-col items-center gap-3 '>
+                <div className='flex items-center gap-2'>
+                  <label htmlFor='is_active'>Is Active</label>
+                  <ToolTip toolText='Students can recieve feedback on their assignments by Athea AI' />
+                </div>
+                <input
+                  onChange={handleIsActiveChange}
+                  checked={isActive}
+                  className='mt-1 bg-white border-2 border-blue-500 rounded-sm h-7 w-15 shrink-0 checked:bg-blue-500 checked:border-0'
+                  type='checkbox'
+                  name='is_active'
+                  id='is_active'
+                />
+              </div>
+            )}
+
+            <div className='flex flex-col gap-2'>
+              <div className="flex items-center gap-2">
+                <label htmlFor='assignment_attempts'>Attempts allowed</label>
+                <ToolTip toolText='Number of attempts allowed for this assignment' />
+              </div>
+            
+              <input
+                onChange={(e) => setAssignmentAttempts(e.target.value)}
+                value={assignment_attempts}
+                className='w-16 p-2 mb-4 bg-white border border-gray-400'
+                min={0}
+                max={5}
+                type='number'
+                name='assignment_attempts'
+                id='assignment_attempts'
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center gap-2">
+              <label htmlFor='passPercentage'>Pass Percentage</label>
+              <ToolTip toolText='Percentage value required to indicate a pass or fail grade' />
+              </div>
+         
           <input
-            onChange={handleIsPublicChange}
-            checked={isPublic}
-            className='w-16 bg-white border border-gray-400'
-            type='checkbox'
-            name='is_public'
-            id='is_public'
+            onChange={(e) => setPassPercentage(e.target.value)}
+            value={passPercentage}
+            className='w-16 p-2 mb-4 bg-white border border-gray-400'
+            min={0}
+            max={100}
+            type='number'
+            name='passPercentage'
+            id='passPercentage'
           />
         </div>
-
-        {isPublic && (
-          <div className='flex items-center py-8'>
-            <div className='flex gap-4'>
-              <ToolTip toolText='Students can recieve feedback on their assignments by Athea AI' />
-              <label htmlFor='is_active'>Is Active</label>
-            </div>
-            <input
-              onChange={handleIsActiveChange}
-              checked={isActive}
-              className='w-16 border border-gray-400'
-              type='checkbox'
-              name='is_active'
-              id='is_active'
-            />
           </div>
-        )}
+        
 
-        <ToolTip toolText='Number of attempts allowed for this assignment' />
-        <label htmlFor='assignment_attempts'>Assignment Attempts</label>
-        <input
-          onChange={(e) => setAssignmentAttempts(e.target.value)}
-          value={assignment_attempts}
-          className='w-16 p-2 mb-4 bg-white border border-gray-400'
-          min={0}
-          max={5}
-          type='number'
-          name='assignment_attempts'
-          id='assignment_attempts'
-        />
+       
+
+        
 
         <label htmlFor='assignment_description'>
           Paste assignment description
@@ -210,27 +261,30 @@ function NewAssignmentPage() {
         <label htmlFor='assignment_filetypes'>
           Add filetypes to be analyzed
         </label>
-        <input
-          onChange={(e) => setAssignmentFiletype(e.target.value)}
-          value={allowed_filetype}
-          className='p-2 mb-4 bg-white border border-gray-400'
-          type='text'
-          name='assignment_filetypes'
-          id='assignment_filetypes'
-        />
-        <button
-          onClick={handleFileChange}
-          type='button'
-          className='w-20 p-2 mb-4 bg-white border border-gray-400'
-        >
-          Add
-        </button>
-        <div className='flex flex-wrap gap-2'>
+
+        <div className="flex gap-2">
+          <input
+            onChange={(e) => setAssignmentFiletype(e.target.value)}
+            value={allowed_filetype}
+            className='w-full p-2 mb-4 bg-white border border-gray-400'
+            type='text'
+            name='assignment_filetypes'
+            id='assignment_filetypes'
+          />
+          <button
+            onClick={handleFileChange}
+            type='button'
+            className='w-20 p-2 mb-4 bg-white border border-gray-400'
+          >
+            Add
+          </button>
+        </div>
+        
+        <div className='flex flex-wrap gap-2 mb-7'>
           {allowed_filetypes.map((filetype, index) => (
             <span key={index} className=''>
-              <span>{filetype}</span>
-              <button
-                className='w-16 mb-4 ml-2 bg-white border border-gray-400'
+              <span className="flex items-center px-3 py-2 bg-gray-300 rounded-4xl ">{filetype}  <button
+                className='flex items-center justify-center w-4 h-4 ml-2 text-[10px] text-gray-500 bg-gray-300 border-1 border-gray-500 rounded-full'
                 type='button'
                 onClick={() => {
                   setAssignmentFiletypes(
@@ -238,24 +292,16 @@ function NewAssignmentPage() {
                   );
                 }}
               >
-                Remove
-              </button>
+                X
+              </button></span>
+             
             </span>
           ))}
         </div>
 
-        <ToolTip toolText='Percentage value required to indicate a pass or fail grade' />
-        <label htmlFor='passPercentage'>Pass Percentage</label>
-        <input
-          onChange={(e) => setPassPercentage(e.target.value)}
-          value={passPercentage}
-          className='w-16 p-2 mb-4 bg-white border border-gray-400'
-          min={0}
-          max={100}
-          type='number'
-          name='passPercentage'
-          id='passPercentage'
-        />
+        
+
+       
         <AssignmentCriteriaForm
           onHandleCriteria={handleCriteriaChange}
           onHandleMaxScoreChange={handleMaxScoreChange}
@@ -273,3 +319,4 @@ function NewAssignmentPage() {
 }
 
 export default NewAssignmentPage;
+
