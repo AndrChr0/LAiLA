@@ -12,11 +12,10 @@ const Login = () => {
     const navigate = useNavigate();
     const { login } = useAuth();
 
-    
+    const [errMessage, setErrMessage] = useState('')
 
     const handleLoginUser = async (e) => {
         e.preventDefault()
-
 
         try{
             const response = await instance.post("api/auth/login", {email, password})
@@ -29,19 +28,14 @@ const Login = () => {
                 if (token) {
                     const decoded = jwtDecode(token)
 
-                    // const redirectTo =
-                    //     decoded.role === "lecturer" ? "/lecturer-homepage-placeholder" : "/student-homepage-placeholder"
-                        // navigate(redirectTo)
-                        navigate('/home')
+                    navigate('/home')
                 }
             } else {
                 console.error('Token not found in repsonse', response.data)
             }
         } catch (error) {
-            if (!email || !password) {
-                const errMessage = "Please log in with email and password."
-            } else {
-                const errMessage = "Invalid email or password."
+            if (error) {
+                setErrMessage(error.response.data.error)
             }
         }
     }
@@ -58,6 +52,7 @@ return (
                     <input className="w-full p-2 mb-4 border rounded" type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} required/>
                     
                     <button className="w-full px-4 py-2 text-white bg-blue-500 rounded blue-button hover:bg-blue-700" type='submit'>Login</button>
+                    {errMessage && <div className="text-red-500">{errMessage}</div>}
                 </form>
             </div>
             <div><p>Don't have an account? Register <a className='text-blue-700' href="/register">here</a></p></div>

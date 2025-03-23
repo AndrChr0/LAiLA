@@ -18,9 +18,10 @@ export const useFetchCourses = (config) => {
           },
         });
 
-        setCourses(Array.isArray(response.data) ? response.data : []);
+        setCourses(response.data || []);
       } catch (error) {
         console.error("Error fetching courses:", error);
+        setCourses([]);
       }
     };
 
