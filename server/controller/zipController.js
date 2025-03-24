@@ -41,7 +41,8 @@ async function decompressZip(zipPath, allowedExtensions) {
     for (let file of files) {
       const filePath = path.join("zipDist", file.path);
       const content = fs.readFileSync(filePath, "utf-8");
-      allFilesContent.push(`${file.path}${content}`);
+      const ext = path.extname(file.path);
+      allFilesContent.push(`${ext}\n${file.path}${content}`);
       console.log("Decompressed:", file.path);
     }
 
