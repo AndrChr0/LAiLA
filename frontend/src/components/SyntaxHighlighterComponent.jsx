@@ -1,15 +1,33 @@
-import React from "react";
+import { useState } from "react";
 import SyntaxHighlighter from "react-syntax-highlighter";
-import { docco } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import language from "react-syntax-highlighter/dist/esm/languages/hljs/1c";
+import { vs2015 } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
-function SyntaxHighlighterComponent() {
-  const codeString = "(num) => num + 1";
-  console.log(SyntaxHighlighter.supportedLanguages);
+function SyntaxHighlighterComponent({
+  codeString = "<h1> title</h1>",
+  language = "htmlbars",
+}) {
+  const [isCollapsed, setIsCollapsed] = useState(true);
+
+  console.log(SyntaxHighlighter.supportedLanguages); // showes all supported languages
+
+  // TODO
+  // add filepath to collapsed button/section
+  // determin language based on file extension
+
   return (
-    <div className='w-1/2'>
-      <SyntaxHighlighter language='javascript' style={docco}>
-        {codeString}
-      </SyntaxHighlighter>
+    <div>
+      <button
+        className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
+        onClick={() => setIsCollapsed(!isCollapsed)}
+      >
+        {isCollapsed ? "Show" : "Hide"}
+      </button>
+      {!isCollapsed && (
+        <SyntaxHighlighter language={language} style={vs2015}>
+          {codeString}
+        </SyntaxHighlighter>
+      )}
     </div>
   );
 }
