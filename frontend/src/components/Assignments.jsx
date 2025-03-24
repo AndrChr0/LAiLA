@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { MdOpenInNew } from "react-icons/md";
 import { CiEdit } from "react-icons/ci";
+import { FaFileSignature } from "react-icons/fa";
 
 const Assignments = ({ assignments }) => {
   const navigate = useNavigate();
@@ -19,6 +20,9 @@ const Assignments = ({ assignments }) => {
   const handleEditAssignment = (assignmentId) => {
     navigate(`/edit-assignment/${assignmentId}`);
   };
+  const handleOnClickGrade = (assignmentId) => {
+    navigate(`/final-assessment/${assignmentId}`);
+  }
 
   const formatDate = (dateString) => {
     try {
@@ -88,8 +92,17 @@ const Assignments = ({ assignments }) => {
                    View Details
                  </button>
                 ) : (
-                  <div className="flex gap-2">
+                  <div className="flex gap-3">
                 
+                  {assignment.is_active === 0 && (
+                     <button
+                     onClick={() => handleOnClickGrade(assignment.assignment_id)}
+                     className='flex items-center gap-1 px-3 py-1 text-sm text-black transition-all duration-300  hover:scale-[1.02] bg-white border border-gray-300 rounded hover:cursor-pointer'
+                   >Grade <FaFileSignature />
+                   <div className="flex items-center justify-center w-[25px] h-[25px] bg-[#9AEFFF] absolute rounded-full translate-x-[55px] translate-y-[-15px]  ">N</div>
+                   </button>
+                  )}
+
                 <button
                   onClick={() => handleViewReport(assignment.assignment_id)}
                   className='flex items-center gap-1 px-3 py-1 text-sm text-black transition-all duration-300  hover:scale-[1.02] bg-white border border-gray-300 rounded hover:cursor-pointer'
