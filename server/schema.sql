@@ -99,6 +99,7 @@ CREATE TABLE student_work (
     assessment_id SMALLINT UNSIGNED,
     file_contents TEXT NOT NULL,
     filetype VARCHAR(16) NOT NULL,
+    file_path VARCHAR(255) NOT NULL,
     PRIMARY KEY (student_work_id),
     FOREIGN KEY (assessment_id) REFERENCES final_assessments(assessment_id)
 );
@@ -530,7 +531,7 @@ INSERT INTO assignment_reports (assignment_id, report_nr, report_contents, stude
 INSERT INTO final_assessments(student_id, assignment_id, assessment_contents, assessment_result) 
 VALUES (1,2,'{"reflections": {"own_mockup_score": 3, "own_mockup_feedback": "You provided a detailed reflection on your own mock-up. You explained that while you were generally satisfied with your design, you recognized areas that needed more specificity and clarity, such as container details and media query instructions.", "own_mockup_max_score": 1, "sustainability_score": 2, "main_difficulties_score": 3, "sustainability_feedback": "Your sustainability reflection explains choices like using web‐safe fonts over heavier custom fonts and compressing images to lower carbon footprint. However, including quantitative data or more specific statistics would have made your reflection even stronger.", "sustainability_max_score": 3, "main_difficulties_feedback": "You provided a comprehensive discussion of the difficulties encountered, such as missing mock-up instructions, challenges with the navigation exit button, and adjustments needed for positioning. Your explanation was clear and reflective.", "main_difficulties_max_score": 3}, "requirements": {"z_index_score": 1, "nth_child_score": 1, "typefaces_score": 1, "z_index_feedback": "You correctly used z-index properties (e.g., in body, main, and dropdown content) to manage layering.", "z_index_max_score": 1, "nth_child_feedback": "You effectively applied the nth-child pseudo-class to insert custom emoticons in your list items.", "typefaces_feedback": "You used two distinct typefaces: a custom font (AvenirNext) and system fonts (Helvetica/Arial), satisfying the requirement.", "nth_child_max_score": 1, "typefaces_max_score": 1, "linear_gradient_score": 1, "linear_gradient_feedback": "A linear gradient is applied to container backgrounds, which meets the assignment criteria.", "linear_gradient_max_score": 1, "css_custom_emoticons_score": 1, "different_font_sizes_score": 1, "fixed_background_image_score": 1, "css_custom_emoticons_feedback": "Custom emoticons are implemented using CSS pseudo-elements on list items.", "different_font_sizes_feedback": "Different font sizes are utilized appropriately between headings and body text to enhance readability.", "css_custom_emoticons_max_score": 1, "different_font_sizes_max_score": 1, "fixed_background_image_feedback": "You set up a background image with a fixed attachment for the main element, fulfilling the requirement.", "fixed_background_image_max_score": 1, "mobile_and_desktop_versions_score": 1, "absolute_or_fixed_positioning_score": 1, "mobile_and_desktop_versions_feedback": "Responsive design is achieved through media queries that adapt the layout for desktop and mobile screens.", "mobile_and_desktop_versions_max_score": 1, "absolute_or_fixed_positioning_feedback": "Usage of absolute and fixed positioning (e.g., in the navigation and social sections) is coherent and meets the assignment requirements.", "absolute_or_fixed_positioning_max_score": 1, "pseudo_classes_and_pseudo_elements_score": 1, "pseudo_classes_and_pseudo_elements_feedback": "You have utilized pseudo-classes and pseudo-elements effectively, as seen in hover effects and nth-child selectors.", "pseudo_classes_and_pseudo_elements_max_score": 1}, "crucial_checks": {"validation_errors_score": 1, "positioning_problems_score": 1, "validation_errors_feedback": "The submitted HTML and CSS code appears to be free of validation errors.", "validation_errors_max_score": 1, "positioning_problems_feedback": "No positioning problems like overflowing elements or horizontal scroll issues were detected in your layout.", "positioning_problems_max_score": 1}, "general_comments": {"seo_score": 1, "design_score": 1, "seo_feedback": "While you have included titles and basic metadata, more descriptive, unique page titles and meta descriptions could improve SEO.", "seo_max_score": 1, "design_feedback": "Your design is coherent and consistent. Elements are well aligned, spacing is adequate, and the overall layout is user-friendly across devices.", "design_max_score": 1, "CSS_optimization_score": 1, "code_readablilty_score": 1, "user_readability_score": 1, "project_structure_score": 1, "naming_conventions_score": 1, "CSS_optimization_feedback": "Your CSS is neatly organized, with grouped rules and consistent naming conventions, facilitating maintenance.", "code_readablilty_feedback": "The code is structured and easy to follow, which demonstrates good coding practices.", "user_readability_feedback": "Content presentation is clear, and the use of semantic HTML elements enhances user readability.", "CSS_optimization_max_score": 3, "code_readablilty_max_score": 1, "project_structure_feedback": "The project has a proper structure with separate pages, external CSS, and a clear folder organization as required.", "user_readability_max_score": 1, "naming_conventions_feedback": "File and folder names follow proper naming conventions, making the project easy to navigate.", "project_structure_max_score": 1, "naming_conventions_max_score": 1, "semantic_structural_tags_score": 1, "semantic_structural_tags_feedback": "Semantic HTML tags such as header, nav, main, article, and footer have been used correctly.", "semantic_structural_tags_max_score": 1, "bringing_css_and_html_together_score": 1, "bringing_css_and_html_together_feedback": "CSS is implemented externally and integrated properly with the HTML, in line with the assignment guidelines.", "bringing_css_and_html_together_max_score": 1}, "AI_final_assessment": {"AI_final_comments": "Overall, your submission is solid and meets the bulk of the assignment requirements. Your implementation of responsive design, semantic HTML, and advanced CSS techniques such as pseudo-classes, gradients, and fixed backgrounds is commendable. The reflections are insightful, especially regarding the challenges posed by the mock-up and your sustainability considerations. Moving forward, enhancing your SEO elements and adding more quantitative details to your sustainability discussion could further improve your work. Keep up the good work!"}}',"pass");
 
-INSERT INTO student_work(assessment_id, file_contents, filetype) 
+INSERT INTO student_work(assessment_id, file_contents, filetype, file_path) 
 VALUES
 (1, '
 Group 7:
@@ -672,7 +673,7 @@ https://folk.ntnu.no/noralu/pinkumbrella/',"txt")
     </footer>
 
 </body>
-</html>', "html"),
+</html>', "html", "filpath/to/home.html"),
 (1, '<!DOCTYPE html>
 <html lang="en">
     <head>
@@ -863,7 +864,7 @@ https://folk.ntnu.no/noralu/pinkumbrella/',"txt")
     </footer>
     </body>
 </html>
-', "html"),
+', "html", "filpath/to/reflection.html"),
 (1, '@font-face {
     font-family: avenirnextregular;
     src: url(fonts/AvenirNextLTPro-Regular.otf);
@@ -1263,4 +1264,4 @@ div.left, div.right{
   box-shadow: 0px 0px 10px 0px black;
 }
 
-}', "css");
+}', "css", "filpath/to/style.css");
