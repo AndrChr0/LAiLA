@@ -6,18 +6,24 @@ const pool = SQLpool;
 // get all
 export async function getAssignmentAssessments(req, res, next) {
     try {
-        const [rows] = await pool.query(`
-            SELECT assessment_id, student_id, assignment_id, assessment_contents, assessment_result, is_reviewed
-            FROM final_assessments
-            WHERE assignment_id = ?;
-            `, [req.params.assignment_id]
-        );
+        // const [rows] = await pool.query(`
+        //     SELECT assessment_id, student_id, assignment_id, assessment_contents, assessment_result, is_reviewed
+        //     FROM final_assessments
+        //     WHERE assignment_id = ?;
+        //     `, [req.params.assignment_id]
+        // );
 
-        if (rows.length == 0) {
-            throw Object.assign(new Error("No assessment found"), { status: 404 });
-        }
+        // if (rows.length == 0) {
+        //     throw Object.assign(new Error("No assessment found"), { status: 404 });
+        // }
 
         const geef = {};
+        const [rows] = await pool.query(`
+            SELECT file_contents, filetype, filepath
+            FROM student_work
+            WHERE assessment_id = ?;
+            `, [req.query.id]
+        );
 
         return res.status(200).json(rows);
     } catch (error) {
