@@ -12,6 +12,7 @@ import assignmentRoutes from "./routes/assignmentRoutes.js";
 import feedbackRoutes from "./routes/feedbackRoutes.js";
 import reportRoutes from "./routes/reportRoutes.js";
 import aiZipRoutes from "./routes/zipRoutes.js";
+import assessmentRotues from "./routes/assessmentRoutes.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 
 const app = express();
@@ -37,6 +38,7 @@ app.use("/api/assignments", assignmentRoutes);
 app.use("/api/feedback", feedbackRoutes);
 app.use("/api/reports", reportRoutes);
 app.use("/api/ai", aiZipRoutes);
+app.use("/api/assessment", assessmentRotues);
 
 // globally applied error handling middleware
 app.use(errorHandler);
