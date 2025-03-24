@@ -16,21 +16,21 @@ import StudentCoursePage from "./views/student/StudentCoursePage";
 import LecturerCoursePage from "./views/lecturer/LecturerCoursePage";
 import LecturerReportPage from "./views/lecturer/LecturerReportPage";
 import LecturerEditAssignmentPage from "./views/lecturer/LecturerEditAssignmentPage";
-
+import FinalAssessmentPage from "./views/lecturer/FinalAssessmentPage";
 
 function App() {
   const { userRole } = useAuth();
 
   return (
-    <div className="App">
+    <div className='App'>
       {userRole ? <Nav role={userRole} /> : null}
-      <div className="md:w-10/12 md:mx-auto md:my-0">
+      <div className='md:w-10/12 md:mx-auto md:my-0'>
         <Routes>
-          {!userRole ? <Route path="/" element={<HeroPage />} /> : null}
+          {!userRole ? <Route path='/' element={<HeroPage />} /> : null}
 
           {userRole === "lecturer" ? (
             <Route
-              path="/home"
+              path='/home'
               element={
                 <ProtectedRoute roles={["lecturer"]}>
                   <UserProvider>
@@ -43,7 +43,7 @@ function App() {
 
           {userRole === "student" ? (
             <Route
-              path="/home"
+              path='/home'
               element={
                 <ProtectedRoute roles={["student"]}>
                   <UserProvider>
@@ -54,21 +54,24 @@ function App() {
             />
           ) : null}
 
-          <Route path="/" element={<HeroPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/login" element={<LoginPage />} />
+          <Route path='/' element={<HeroPage />} />
+          <Route path='/register' element={<RegisterPage />} />
+          <Route path='/login' element={<LoginPage />} />
 
           <Route
-            path="/courses/:id"
+            path='/courses/:id'
             element={
               <ProtectedRoute roles={["student", "lecturer"]}>
                 <UserProvider>
-                  {userRole === "student" ? <StudentCoursePage /> : <LecturerCoursePage />}
+                  {userRole === "student" ? (
+                    <StudentCoursePage />
+                  ) : (
+                    <LecturerCoursePage />
+                  )}
                 </UserProvider>
               </ProtectedRoute>
             }
           />
-
 
           {/* <Route path='/student-homepage-placeholder' element={ <ProtectedRoute roles={["student"]}><StudentHomePage /></ProtectedRoute> }/> */}
           {/* <Route
@@ -81,7 +84,7 @@ function App() {
           /> */}
 
           <Route
-            path="/assignment-assessment/:id"
+            path='/assignment-assessment/:id'
             element={
               <ProtectedRoute roles={["student"]}>
                 <UserProvider>
@@ -92,7 +95,7 @@ function App() {
           />
 
           <Route
-            path="/new-assignment"
+            path='/new-assignment'
             element={
               <ProtectedRoute roles={["lecturer"]}>
                 <NewAssignmentPage />
@@ -101,20 +104,29 @@ function App() {
           />
 
           <Route
-            path="/edit-assignment/:id"
+            path='/edit-assignment/:id'
             element={
               <ProtectedRoute roles={["lecturer"]}>
                 <LecturerEditAssignmentPage />
               </ProtectedRoute>
             }
           />
-          <Route path="*" element={<NotFoundPage />} />
+          <Route path='*' element={<NotFoundPage />} />
 
           <Route
-            path="/assignment-report/:id"
+            path='/assignment-report/:id'
             element={
               <ProtectedRoute roles={["lecturer"]}>
                 <LecturerReportPage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path='/final-assessment'
+            element={
+              <ProtectedRoute roles={["lecturer"]}>
+                <FinalAssessmentPage />
               </ProtectedRoute>
             }
           />
@@ -127,7 +139,7 @@ function App() {
               </ProtectedRoute>
             }
           /> */}
-          <Route path="*" element={<NotFoundPage />} />
+          <Route path='*' element={<NotFoundPage />} />
         </Routes>
       </div>
       <Footer />
