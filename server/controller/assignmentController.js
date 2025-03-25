@@ -10,12 +10,15 @@ export async function getAllAssignments(req, res, next) {
     if (req.user.role == "lecturer") {
       const [rows] = await pool.query(
         `
-				SELECT a.assignment_id, a.assignment_title, a.assignment_start_date, a.assignment_end_date, a.is_active, a.is_public, a.assignment_description, a.assignment_criteria, a.course_id, c.course_name, c.course_code, a.max_score, a.pass_threshold, GROUP_CONCAT(af.filetype ORDER BY af.filetype SEPARATOR ', ') AS allowed_filetypes, a.assignment_attempts
-				FROM assignments a
-				JOIN courses c ON a.course_id = c.course_id
-				LEFT JOIN assignment_filetypes af ON a.assignment_id = af.assignment_id
-				WHERE c.course_coordinator = ?
-				GROUP BY a.assignment_id, c.course_name;
+			
+
+        SELECT a.assignment_id, a.assignment_title, a.assignment_start_date, a.assignment_end_date, a.is_active, a.is_public, a.assignment_description, a.assignment_criteria, a.course_id, c.course_name, c.course_code, a.max_score, a.pass_threshold, GROUP_CONCAT(DISTINCT af.filetype ORDER BY af.filetype SEPARATOR ', ') AS allowed_filetypes, a.assignment_attempts, COUNT(DISTINCT fa.assessment_id) AS total_assessments_not_reviewed
+        FROM assignments a
+        JOIN courses c ON a.course_id = c.course_id
+        LEFT JOIN final_assessments fa ON a.assignment_id = fa.assignment_id AND fa.is_reviewed = 0
+        LEFT JOIN assignment_filetypes af ON a.assignment_id = af.assignment_id
+        WHERE c.course_coordinator = ?
+        GROUP BY a.assignment_id;
 				`,
         [req.user.id]
       );
@@ -28,7 +31,7 @@ export async function getAllAssignments(req, res, next) {
     } else if (req.user.role == "student") {
       const [rows] = await pool.query(
         `
-				SELECT a.assignment_id, a.assignment_title, a.assignment_start_date, a.assignment_end_date, a.is_active, a.assignment_description, a.course_id, c.course_name, c.course_code, a.max_score, a.pass_threshold, GROUP_CONCAT(af.filetype ORDER BY af.filetype SEPARATOR ', ') AS allowed_filetypes, a.assignment_attempts
+				SELECT a.assignment_id, a.assignment_title, a.assignment_start_date, a.assignment_end_date, a.is_active, a.is_public, a.assignment_description, a.course_id, c.course_name, c.course_code, a.max_score, a.pass_threshold, GROUP_CONCAT(af.filetype ORDER BY af.filetype SEPARATOR ', ') AS allowed_filetypes, a.assignment_attempts
 				FROM assignments a
 				JOIN enrollment e ON a.course_id = e.course_id
         		JOIN courses c ON a.course_id = c.course_id

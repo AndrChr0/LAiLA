@@ -133,7 +133,7 @@ function App() {
           />
 
           <Route
-            path='/grade-assessment' // TODO: must be changed to /grade-assessment/:id
+            path='/grade-assessment/:id'
             element={
               <ProtectedRoute roles={["lecturer"]}>
                 <GradeAssessmentPage />

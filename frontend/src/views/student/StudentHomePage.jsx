@@ -13,9 +13,9 @@ const { courses } = useFetchCourses(GetConfig(token));
 
 
 const activeAssignments = Array.isArray(assignments)
-    ? assignments.filter((assignment) => assignment.is_active === 1)
+    ? assignments.filter((assignment) => assignment.is_active === 1 && assignment.is_public == 1)
     : [];
-
+    
 return (
   <>
     <div className='mb-5'>
