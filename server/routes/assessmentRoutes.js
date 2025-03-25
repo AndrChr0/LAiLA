@@ -4,7 +4,7 @@ import { getAssignmentAssessments, getMyAssessments, getOneAssessment, createAss
 const router = express.Router();
 
 // get all
-router.get("/lecturer/:assignment_id", /*auth, authRole("lecturer"),*/ getAssignmentAssessments);
+router.get("/lecturer/:assignment_id", auth, authRole("lecturer"), getAssignmentAssessments);
 router.get("/student", auth, authRole("student"), getMyAssessments);
 
 // get one
