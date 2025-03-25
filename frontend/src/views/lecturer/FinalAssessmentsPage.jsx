@@ -16,6 +16,7 @@ const FinalAssessmentsPage = () => {
       .get(`api/assessment/lecturer/${assignmentId}`, GetConfig(token))
       .then((res) => {
         setAssessments(res.data);
+        console.log(res.data);
       })
       .catch((err) => {
         console.log(err);

@@ -2,15 +2,14 @@ import React from "react";
 import { useAuth } from "../context/AuthContext";
 import { MdOpenInNew } from "react-icons/md";
 import { FaFileSignature } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const Assessments = ({ assessments }) => {
   const { userRole } = useAuth();
+  const navigate = useNavigate();
 
   const handleOnClickGrade = (assessment_id) => {
-    console.log(
-      "til grading side for spesifikk assessment. for assessment id ",
-      assessment_id
-    );
+    navigate(`/grade-assessment/${assessment_id}`);
   };
 
   return (
