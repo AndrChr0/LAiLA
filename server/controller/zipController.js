@@ -1,6 +1,10 @@
 import decompress from "decompress";
 import path from "path";
 import fs from "fs";
+import dotenv from "dotenv";
+dotenv.config();
+const PORT = process.env.PORT || 5000;
+import axios from "axios";
 import { evaluateSubmission } from "../AIFunctionalities/aiAssignmentEvaluation.js";
 import { pool as SQLpool } from "../utils/SQLPool.js";
 const pool = SQLpool;
@@ -218,13 +222,21 @@ export const getZipcontents = async (req, res, next) => {
 // student work      - studentWork Object [n{}]
 
 // -path, filtype, contents
-console.log('student id', req.body.student_id);
-console.log('assignment id', req.body.assignment_id);
-console.log('feedback contents', sanitizeFeedback(evaluatedSubmission));
-console.log('result(fail/Pass)', resultString);
-console.log("studentWork", studentWork);
+// console.log('student id', req.body.student_id);
+// console.log('assignment id', req.body.assignment_id);
+// console.log('feedback contents', sanitizeFeedback(evaluatedSubmission));
+// console.log('result(fail/Pass)', resultString);
+// console.log("studentWork", studentWork);
 
-
+const details = {
+  student: req.body.student_id,
+  assignment: req.body.assignment_id,
+  contents: sanitizeFeedback(evaluatedSubmission), // (sanitized)
+  result: resultString,
+  student_work: studentWork
+}
+const response = await axios.post(`http://localhost:${PORT}/api/assessment/${details.assignment}`, {details});
+// console.log('response', response.data);
 
     return res.status(200).json(responseObj);
   } catch (error) {
