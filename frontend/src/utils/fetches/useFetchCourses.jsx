@@ -1,10 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import instance from "../../utils/axiosInstance";
-import { useUserData } from "../../context/UserContext";
 import { useAuth } from "../../context/AuthContext";
 
 export const useFetchCourses = (config) => {
-  const { courses, setCourses } = useUserData();
+  const [ courses, setCourses ] = useState([]);
   const { userId, userRole } = useAuth();
   const isLecturer = userRole === "lecturer";
 

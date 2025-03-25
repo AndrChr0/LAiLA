@@ -34,7 +34,7 @@ const LecturerCoursePage = () => {
       
       <div className=''>
         <h2 className='text-3xl font-normal mb-[1.5em] mt-[1em]'>
-          Active assignments
+          Current Assignments
         </h2>
         <div className='flex gap-3'>
          <Link to='/new-assignment' className='px-4 py-2 mb-[1.5em] text-gray-800 bg-white border border-gray-400 rounded hover:cursor-pointer hover:bg-gray-100'>
@@ -43,7 +43,7 @@ const LecturerCoursePage = () => {
       </div>
         <Assignments assignments={activeAssignmentInCourse(courseId)} />
         <h2 className='text-3xl font-normal mb-[1.5em] mt-[1.5em]'>
-          Old assignments
+          Finished Assignments
         </h2>
         <Assignments assignments={inActiveAssignmentInCourse(courseId)} />
       </div>
