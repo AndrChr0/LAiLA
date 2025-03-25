@@ -44,7 +44,7 @@ const studentWork = [];
       const ext = path.extname(file.path);
      
       allFilesContent.push(`${ext}\n${file.path}${content}`);
-      studentWork.push({ path: file.path, filetype: ext, contents: content });
+      studentWork.push({ path: file.path, type: ext, contents: content });
       console.log("Decompressed:", file.path);
     }
 
