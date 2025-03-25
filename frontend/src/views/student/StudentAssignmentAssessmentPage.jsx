@@ -4,6 +4,7 @@ import instance from "../../utils/axiosInstance";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { GetConfig } from "../../utils/GetConfig";
+import FeedbackCard from "../../components/FeedbackCard";
 
 function StudentAssignmentAssessmentPage() {
   const [currentAssignment, setCurrentAssignment] = useState(null);
@@ -83,29 +84,7 @@ function StudentAssignmentAssessmentPage() {
         <div>
           <h2 className='font-bold'>Previous Feedback</h2>
           {previousFeedback.map((feedback) => (
-            <div key={feedback.feedback_id}>
-              <h3 className='font-bold'>Attempt #{feedback.attempt_nr}</h3>
-              <div className='flex'>
-                <div className='border-r-2 border-gray-300 pr-4'>
-                  <h4 className='font-bold'>Feedback:</h4>
-                  <p>{feedback.general_comment}</p>
-                </div>
-                <div>
-                  <h4 className='font-bold'>Suggested Result:</h4>
-                  <p
-                    className={
-                      feedback.suggested_result === "pass"
-                        ? "text-green-500"
-                        : feedback.suggested_result === "fail"
-                        ? "text-red-500"
-                        : ""
-                    }
-                  >
-                    {feedback.suggested_result}
-                  </p>
-                </div>
-              </div>
-            </div>
+        <FeedbackCard feedback={feedback} keyValue={feedback.feedback_id} />
           ))}
         </div>
       ) : (
