@@ -1,6 +1,10 @@
 import decompress from "decompress";
 import path from "path";
 import fs from "fs";
+import dotenv from "dotenv";
+dotenv.config();
+const PORT = process.env.PORT || 5000;
+import axios from "axios";
 import { evaluateSubmission } from "../AIFunctionalities/aiAssignmentEvaluation.js";
 import { pool as SQLpool } from "../utils/SQLPool.js";
 const pool = SQLpool;
@@ -36,17 +40,21 @@ async function decompressZip(zipPath, allowedExtensions) {
     const files = await decompress(zipPath, "zipDist", {
       filter: (file) => allowedExtensions.includes(path.extname(file.path)),
     });
-
+const studentWork = [];
     const allFilesContent = [];
     for (let file of files) {
       const filePath = path.join("zipDist", file.path);
       const content = fs.readFileSync(filePath, "utf-8");
       const ext = path.extname(file.path);
+     
       allFilesContent.push(`${ext}\n${file.path}${content}`);
+      studentWork.push({ path: file.path, type: ext, contents: content });
       console.log("Decompressed:", file.path);
     }
 
-    return allFilesContent;
+
+   return { zipContents: allFilesContent, studentWork: studentWork};
+
   } catch (error) {
     console.error("decompressZip error:", error);
     throw error;
@@ -97,8 +105,10 @@ export const getZipcontents = async (req, res, next) => {
       throw Object.assign(new Error("No file was uploaded"), { status: 400 });
     }
 
-    // Decompress the zip using the uploaded file path
-    const zipContents = await decompressZip(file.path, parsedExtensions);
+    // zipContents is an array of strings, each string is a file's content - is sent to AI
+    // studentWork is an array of objects, each object is a file's path, filetype, and content - is saved to final assessment
+    const {zipContents, studentWork } = await decompressZip(file.path, parsedExtensions);
+
 
     if (!zipContents.length) {
       throw Object.assign(new Error("No files found in zip after filtering"), {
@@ -115,10 +125,10 @@ export const getZipcontents = async (req, res, next) => {
     if (evaluatedSubmission) {
       deleteZipFileContent();
     }
-    console.log(
-      "Evaluated submission:",
-      evaluatedSubmission.AI_final_assessment.AI_final_comments
-    );
+    // console.log(
+    //   "Evaluated submission:",
+    //   evaluatedSubmission.AI_final_assessment.AI_final_comments
+    // );
 
     // get pass threshold and max score
     const [assignmentEvaluationData] = await pool.query(
@@ -159,6 +169,19 @@ export const getZipcontents = async (req, res, next) => {
     }
 
     // sanitize feedback JSON - remove score/max score
+    function sanitizeFeedback(obj) {
+      for (const key in obj) {
+        if (typeof obj[key] === "object") {
+          sanitizeFeedback(obj[key]);
+        } else if (key.endsWith("_score") || key.endsWith("_max_score")) {
+          delete obj[key];
+        }
+      }
+      return obj;
+    }
+
+    const sanitizedSubmission = sanitizeFeedback(evaluatedSubmission);
+
 
     // save to DB
     const [result] = await pool.query(
@@ -183,6 +206,37 @@ export const getZipcontents = async (req, res, next) => {
         evaluatedSubmission.AI_final_assessment.AI_final_comments,
       result_string: resultString,
     };
+
+
+
+    // INSERT final submission logic to db
+
+//  student id        - req.body
+
+// assignment id     - req.body
+
+// feedback contents - evaluatedSubmission obj trenger å bli parsa 
+
+// result(fail/Pass) - resultString
+
+// student work      - studentWork Object [n{}]
+
+// -path, filtype, contents
+// console.log('student id', req.body.student_id);
+// console.log('assignment id', req.body.assignment_id);
+// console.log('feedback contents', sanitizeFeedback(evaluatedSubmission));
+// console.log('result(fail/Pass)', resultString);
+// console.log("studentWork", studentWork);
+
+const details = {
+  student: req.body.student_id,
+  assignment: req.body.assignment_id,
+  contents: sanitizeFeedback(evaluatedSubmission), // (sanitized)
+  result: resultString,
+  student_work: studentWork
+}
+const response = await axios.post(`http://localhost:${PORT}/api/assessment/${details.assignment}`, {details});
+// console.log('response', response.data);
 
     return res.status(200).json(responseObj);
   } catch (error) {

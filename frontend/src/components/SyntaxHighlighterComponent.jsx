@@ -82,7 +82,7 @@ function SyntaxHighlighterComponent({
         <div className='relative'>
           <SyntaxHighlighter
             showLineNumbers={highlightLanguage !== "plaintext"}
-            wrapLongLines
+            wrapLongLines = {language = 'plaintext'}
             language={highlightLanguage}
             style={vs2015}
             customStyle={{
