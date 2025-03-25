@@ -21,7 +21,7 @@ CREATE TABLE courses (
     PRIMARY KEY (course_id),
     FOREIGN KEY (course_coordinator) REFERENCES users(user_id)
 );
-
+  
 CREATE TABLE enrollment (
     student_id SMALLINT UNSIGNED NOT NULL,
     course_id SMALLINT UNSIGNED NOT NULL,

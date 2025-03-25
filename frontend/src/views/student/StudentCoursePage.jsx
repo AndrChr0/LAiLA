@@ -28,9 +28,12 @@ const StudentCoursePage = () => {
       });
   }, [courseId]);
 
+  console.log("assignmentsdsadsadasdsadadsadsadadsadsa",assignments);
+
   const activeAssignmentInCourse = (courseId) => {
-    return assignments.filter((assignment) => assignment.course_id === Number(courseId) && assignment.is_active === 1);
+    return assignments.filter((assignment) => assignment.course_id === Number(courseId) && assignment.is_active === 1 && assignment.is_public == 1);
   };
+
 
   const inActiveAssignmentInCourse = (courseId) => {
     return assignments.filter((assignment) => assignment.course_id === Number(courseId) && assignment.is_active === 0);

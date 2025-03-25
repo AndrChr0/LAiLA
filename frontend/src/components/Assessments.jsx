@@ -66,7 +66,7 @@ const Assessments = ({ assessments }) => {
                           onClick={""}
                           className="flex items-center gap-1 px-3 py-1 text-sm text-black transition-all duration-300  hover:scale-[1.02] bg-white border border-gray-300 rounded hover:cursor-pointer"
                         >
-                          HDHDD <MdOpenInNew />
+                          View <MdOpenInNew />
                         </button>
                       )}
                     </div>
