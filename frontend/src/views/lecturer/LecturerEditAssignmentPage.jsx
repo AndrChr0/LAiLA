@@ -12,8 +12,8 @@ const LecturerEditAssignmentPage = () => {
   const [assignment_title, setAssignmentTitle] = useState("");
   const [assignment_start_date, setAssignmentStart] = useState("");
   const [assignment_end_date, setAssignmentEnd] = useState("");
-  const [isActive, setIsActive] = useState(true);
-  const [isPublic, setIsPublic] = useState(true);
+  const [isActive, setIsActive] = useState("");
+  const [isPublic, setIsPublic] = useState("");
   const [assignment_attempts, setAssignmentAttempts] = useState(0);
   const [assignment_description, setAssignmentDescription] = useState("");
   const [allowed_filetype, setAssignmentFiletype] = useState("");
@@ -122,8 +122,7 @@ const LecturerEditAssignmentPage = () => {
           name='assignment_description'
           value={assignment_description || ""}
           onChange={(e) => setAssignmentDescription(e.target.value)}
-          className='p-2 mb-4 bg-white border
-          border-gray-400'
+          className='p-2 mb-4 bg-white border border-gray-400'
         />
         <label htmlFor='assignment_start_date'>Start Date</label>
         <input
@@ -132,7 +131,7 @@ const LecturerEditAssignmentPage = () => {
           name='assignment_start_date'
           value={assignment_start_date || ""}
           onChange={(e) => setAssignmentStart(e.target.value)}
-          className='p-2 mb-4 bg-white border border-gray-400 w-1/2'
+          className='w-1/2 p-2 mb-4 bg-white border border-gray-400'
         />
         <label htmlFor='assignment_end_date'>End Date</label>
         <input
@@ -141,7 +140,7 @@ const LecturerEditAssignmentPage = () => {
           name='assignment_end_date'
           value={assignment_end_date || ""}
           onChange={(e) => setAssignmentEnd(e.target.value)}
-          className='p-2 mb-4 bg-white border border-gray-400 w-1/2'
+          className='w-1/2 p-2 mb-4 bg-white border border-gray-400'
         />
         <div className='flex items-center gap-4'>
           <label htmlFor='is_active'>Active</label>
@@ -149,7 +148,7 @@ const LecturerEditAssignmentPage = () => {
             type='checkbox'
             id='is_active'
             name='is_active'
-            checked={isActive || false}
+            checked={isActive}
             onChange={(e) => setIsActive(e.target.checked)}
           />
         </div>
@@ -159,7 +158,7 @@ const LecturerEditAssignmentPage = () => {
             type='checkbox'
             id='is_public'
             name='is_public'
-            checked={isPublic || false}
+            checked={isPublic}
             onChange={(e) => setIsPublic(e.target.checked)}
           />
         </div>
@@ -179,7 +178,7 @@ const LecturerEditAssignmentPage = () => {
           name='pass_percentage'
           value={passPercentage || 70}
           onChange={(e) => setPassPercentage(e.target.value)}
-          className='p-2 w-16 mb-4 bg-white border border-gray-400'
+          className='w-16 p-2 mb-4 bg-white border border-gray-400'
         />
         <label htmlFor='max_score'>Max Score</label>
         <input
@@ -188,7 +187,7 @@ const LecturerEditAssignmentPage = () => {
           name='max_score'
           value={maxScore || 0}
           onChange={(e) => setMaxScore(e.target.value)}
-          className='p-2 w-16 mb-4 bg-white border border-gray-400'
+          className='w-16 p-2 mb-4 bg-white border border-gray-400'
         />
         <div className='flex flex-col items-start'>
           <label htmlFor='allowed_filetype'>Allowed Filetypes</label>
@@ -198,7 +197,7 @@ const LecturerEditAssignmentPage = () => {
             name='allowed_filetype'
             value={allowed_filetype || ""}
             onChange={(e) => setAssignmentFiletype(e.target.value)}
-            className='p-2 mb-4 bg-white border border-gray-400 w-40'
+            className='w-40 p-2 mb-4 bg-white border border-gray-400'
           />
           <button
             className='w-40 p-2 mb-4 bg-white border border-gray-400 hover:bg-gray-100 hover:cursor-pointer'
