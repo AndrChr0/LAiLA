@@ -23,6 +23,10 @@ const FinalAssessmentsPage = () => {
       });
   }, []);
 
+  if (!assessments.length > 0){
+    return <div>Loading...</div>
+  }
+
   const isNotReviewed = (assignmentId) => {
     return assessments.filter(
       (assessment) =>
@@ -41,6 +45,7 @@ const FinalAssessmentsPage = () => {
 
   return (
     <>
+      <h1>{assessments[0].assignment_title}</h1>
       <h2 className="flex items-center gap-3">
         <span className="text-3xl font-normal">AI Suggested Grade</span>
         <div className="w-auto h-auto px-3 py-[0.5px] text-white bg-purple-700 rounded">

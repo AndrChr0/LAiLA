@@ -33,10 +33,11 @@ const Assessments = ({ assessments }) => {
                         Fail
                       </span>
                     )}
-
+                    <h2 className="px-2 py-1 text-xs font-medium bg-gray-100 rounded-full text-gray">{assessment.submission_date}</h2>
                     <h3 className="mb-1 text-lg font-medium text-gray-800">
                       {assessment.student_name}
                     </h3>
+                   
                   </div>
 
                   <div className="text-sm font-medium text-gray-600"></div>

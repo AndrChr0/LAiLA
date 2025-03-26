@@ -39,7 +39,7 @@ export async function getAssignmentAssessments(req, res, next) {
 
         // remove time from date attributes
         for (let i = 0; i < rows.length; i++) {
-            rows[i].submission_date = rows[i].submission_date.toISOString().split("T")[0];
+            rows[i].submission_date = new Date(rows[i].submission_date).toLocaleDateString("sv-SE");
         }
 
         return res.status(200).json(rows);
@@ -82,7 +82,7 @@ export async function getMyAssessments(req, res, next) {
 
         // remove time from date attributes
         for (let i = 0; i < rows.length; i++) {
-            rows[i].submission_date = rows[i].submission_date.toISOString().split("T")[0];
+            rows[i].submission_date = new Date(rows[i].submission_date).toLocaleDateString("sv-SE");
         }
 
         return res.status(200).json(rows);
@@ -124,7 +124,7 @@ export async function getOneAssessment(req, res, next) {
             throw Object.assign(new Error("Assessment not found"), { status: 404 });
         }
 
-        rows[0].submission_date = rows[0].submission_date.toISOString().split("T")[0];
+        rows[0].submission_date = new Date(rows[0].submission_date).toLocaleDateString("sv-SE");
 
         return res.status(200).json(rows);
     } catch (error) {
