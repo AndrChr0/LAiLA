@@ -35,7 +35,7 @@ export async function getAllAssignments(req, res, next) {
 				JOIN enrollment e ON a.course_id = e.course_id
         		JOIN courses c ON a.course_id = c.course_id
 				LEFT JOIN assignment_filetypes af ON a.assignment_id = af.assignment_id
-				WHERE e.student_id = ? AND is_public = TRUE
+				WHERE e.student_id = ? 
 				GROUP BY a.assignment_id, c.course_name;
 				`,
         [req.user.id]
