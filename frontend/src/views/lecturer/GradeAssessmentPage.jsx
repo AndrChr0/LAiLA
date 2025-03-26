@@ -43,7 +43,8 @@ function GradeAssessmentPage() {
 
   return (
     <>
-      <h1>{currentAssessment.student_name}</h1>
+    <h1 className="text-3xl">{currentAssessment.assignment_title}</h1>
+      <h2 className="font-bold">Student: <span className="font-normal">{currentAssessment.student_name}</span></h2>
       <div>
         <p>
           Suggested Result:{" "}
@@ -80,7 +81,7 @@ function GradeAssessmentPage() {
             ))}
         </div>
         <div className="flex flex-col w-3/5">
-          <div className="bg-gray-100 p-4 rounded-lg">
+          <div className="bg-gray-100 p-4 rounded-lg shadow-md">
             <h2 className="text-xl font-semibold mb-2">Assessment</h2>
             {currentAssessment.assessment_contents && (
               <AssessmentFormComponent
