@@ -3,8 +3,7 @@ dotenv.config();
 import { pool as SQLpool } from "../utils/SQLPool.js";
 const pool = SQLpool;
 
-// get all assignments (for user) - auth(S/L)
-// (req.body would be JWT attribute once authentication is integrated)
+// get all assignments
 export async function getAllAssignments(req, res, next) {
   try {
     if (req.user.role == "lecturer") {
@@ -81,7 +80,7 @@ export async function getOneAssignment(req, res, next) {
   }
 }
 
-// post assignment - auth(L)
+// post assignment
 export async function createAssignment(req, res, next) {
   try {
     if (
@@ -149,24 +148,12 @@ export async function createAssignment(req, res, next) {
   }
 }
 
-// put/patch assignment details - auth(L)   (only before submissions?)
+// put/patch assignment details
 export async function updateAssignment(req, res, next) {
   try {
     if (!Object.keys(req.body).length) {
       throw Object.assign(new Error("No values to alter"), { status: 400 });
     }
-
-    // check if answered
-    // const [answers] = await pool.query(`
-    // 	SELECT feedback_id
-    // 	FROM feedback
-    // 	WHERE assignment_id = ?;
-    // 	`, [req.params.assignment_id]
-    // );
-
-    // if (answers.length) {
-    // 	throw Object.assign(new Error("Assignment has already been answered"), { status: 403 });
-    // }
 
     // update assignment
     const [result] = await pool.query(
