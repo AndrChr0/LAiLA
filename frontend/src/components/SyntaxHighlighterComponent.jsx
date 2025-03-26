@@ -8,8 +8,7 @@ function SyntaxHighlighterComponent({
   language = "html",
   filePath = "path/to/file",
 }) {
-  const [isCollapsed, setIsCollapsed] = useState(true);
-  const [copied, setCopied] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   const languageMap = {
     js: "javascript",
@@ -27,35 +26,17 @@ function SyntaxHighlighterComponent({
 
   const highlightLanguage = languageMap[language] || "plaintext";
 
-  // copy contents
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(codeString);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
   return (
     <div className='rounded-lg overflow-hidden border border-gray-200 shadow-md my-4'>
       <div className='flex justify-between items-center bg-gray-800 text-gray-200 px-4 py-3'>
         <div className='flex items-center space-x-2'>
           <File size={16} className='text-gray-400' />
-          <span className='font-mono text-base truncate max-w-xs md:max-w-md'>
+          <span className='font-mono text-base truncate '>
             {filePath}
           </span>
         </div>
         <div className='flex items-center space-x-2'>
-          <button
-            className='p-1.5 hover:bg-gray-700 rounded-md transition-colors'
-            onClick={copyToClipboard}
-            aria-label='Copy code'
-            title='Copy code'
-          >
-            {copied ? (
-              <Check size={16} className='text-green-400' />
-            ) : (
-              <Copy size={16} className='text-gray-400 hover:text-white' />
-            )}
-          </button>
+     
           <button
             className='p-1.5 hover:bg-gray-700 rounded-md transition-colors'
             onClick={() => setIsCollapsed(!isCollapsed)}
@@ -77,7 +58,7 @@ function SyntaxHighlighterComponent({
       <div
         className={`transition-all duration-300 ${
           isCollapsed ? "max-h-0" : "max-h-screen"
-        } overflow-hidden`}
+        } overflow-scroll`}
       >
         <div className='relative'>
           <SyntaxHighlighter
