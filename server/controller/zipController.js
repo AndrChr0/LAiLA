@@ -233,7 +233,8 @@ const details = {
   assignment: req.body.assignment_id,
   contents: sanitizeFeedback(evaluatedSubmission), // (sanitized)
   result: resultString,
-  student_work: studentWork
+  student_work: studentWork,
+  date: new Date().toISOString().split('T')[0]
 }
 const response = await axios.post(`http://localhost:${PORT}/api/assessment/${details.assignment}`, {details});
 // console.log('response', response.data);
