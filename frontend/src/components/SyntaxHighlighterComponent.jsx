@@ -8,7 +8,7 @@ function SyntaxHighlighterComponent({
   language = "html",
   filePath = "path/to/file",
 }) {
-  const [isCollapsed, setIsCollapsed] = useState(true);
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   const languageMap = {
     js: "javascript",

@@ -25,7 +25,7 @@ function App() {
   return (
     <div className='App'>
       {userRole ? <Nav role={userRole} /> : null}
-      <div className='md:w-10/12 md:mx-auto md:my-0'>
+      <div className='md:w-[98%] md:mx-auto md:my-0'>
         <Routes>
           {!userRole ? <Route path='/' element={<HeroPage />} /> : null}
 
