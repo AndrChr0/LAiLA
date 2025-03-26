@@ -3,8 +3,6 @@ dotenv.config();
 import { pool as SQLpool } from "../utils/SQLPool.js";
 const pool = SQLpool;
 
-
-
 // get all
 // for lecturers
 export async function getAssignmentAssessments(req, res, next) {
@@ -14,6 +12,8 @@ export async function getAssignmentAssessments(req, res, next) {
                 fa.assessment_id,
                 CONCAT(u.first_name, ' ', u.last_name) AS student_name,
                 fa.assignment_id,
+                a.assignment_title,
+                fa.submission_date,
                 fa.assessment_contents,
                 fa.assessment_result,
                 fa.is_reviewed,
@@ -25,15 +25,21 @@ export async function getAssignmentAssessments(req, res, next) {
                     )
                 ) AS student_work
             FROM final_assessments fa
-            JOIN users u ON fa.student_id = u.user_id
+            LEFT JOIN users u ON fa.student_id = u.user_id
+            LEFT JOIN assignments a ON fa.assignment_id = a.assignment_id
             LEFT JOIN student_work sw ON fa.assessment_id = sw.assessment_id
-            WHERE assignment_id = ?
+            WHERE fa.assignment_id = ?
             GROUP BY fa.assessment_id;
             `, [req.params.assignment_id]
         );
 
         if (rows.length == 0) {
             throw Object.assign(new Error("No assessments found"), { status: 404 });
+        }
+
+        // remove time from date attributes
+        for (let i = 0; i < rows.length; i++) {
+            rows[i].submission_date = rows[i].submission_date.toISOString().split("T")[0];
         }
 
         return res.status(200).json(rows);
@@ -49,6 +55,8 @@ export async function getMyAssessments(req, res, next) {
                 fa.assessment_id,
                 CONCAT(u.first_name, ' ', u.last_name) AS student_name,
                 fa.assignment_id,
+                a.assignment_title,
+                fa.submission_date,
                 fa.assessment_contents,
                 fa.assessment_result,
                 fa.is_reviewed,
@@ -60,7 +68,8 @@ export async function getMyAssessments(req, res, next) {
                     )
                 ) AS student_work
             FROM final_assessments fa
-            JOIN users u ON fa.student_id = u.user_id
+            LEFT JOIN users u ON fa.student_id = u.user_id
+            LEFT JOIN assignments a ON fa.assignment_id = a.assignment_id
             LEFT JOIN student_work sw ON fa.assessment_id = sw.assessment_id
             WHERE student_id = ?
             GROUP BY fa.assessment_id;
@@ -71,7 +80,10 @@ export async function getMyAssessments(req, res, next) {
             throw Object.assign(new Error("No assessments found"), { status: 404 });
         }
 
-        const geef = {};
+        // remove time from date attributes
+        for (let i = 0; i < rows.length; i++) {
+            rows[i].submission_date = rows[i].submission_date.toISOString().split("T")[0];
+        }
 
         return res.status(200).json(rows);
     } catch (error) {
@@ -87,6 +99,8 @@ export async function getOneAssessment(req, res, next) {
                 fa.assessment_id,
                 CONCAT(u.first_name, ' ', u.last_name) AS student_name,
                 fa.assignment_id,
+                a.assignment_title,
+                fa.submission_date,
                 fa.assessment_contents,
                 fa.assessment_result,
                 fa.is_reviewed,
@@ -98,7 +112,8 @@ export async function getOneAssessment(req, res, next) {
                     )
                 ) AS student_work
             FROM final_assessments fa
-            JOIN users u ON fa.student_id = u.user_id
+            LEFT JOIN users u ON fa.student_id = u.user_id
+            LEFT JOIN assignments a ON fa.assignment_id = a.assignment_id
             LEFT JOIN student_work sw ON fa.assessment_id = sw.assessment_id
             WHERE fa.assessment_id = ?
             GROUP BY fa.assessment_id;
@@ -109,13 +124,15 @@ export async function getOneAssessment(req, res, next) {
             throw Object.assign(new Error("Assessment not found"), { status: 404 });
         }
 
+        rows[0].submission_date = rows[0].submission_date.toISOString().split("T")[0];
+
         return res.status(200).json(rows);
     } catch (error) {
         next(error);
     }
 }
 
-// post / patch - auth(S)?
+// post / patch
 export async function createAssessment(req, res, next) {
     try {
         const [old] = await pool.query(`
@@ -128,9 +145,9 @@ export async function createAssessment(req, res, next) {
         if (old.length == 0) {
             // create
             const [result] = await pool.query(`
-                INSERT INTO final_assessments (student_id, assignment_id, assessment_contents, assessment_result)
-                VALUES (?, ?, ?, ?);
-                `, [req.body.details.student, req.body.details.assignment, JSON.stringify(req.body.details.contents), req.body.details.result]
+                INSERT INTO final_assessments (student_id, assignment_id, submission_date, assessment_contents, assessment_result)
+                VALUES (?, ?, ?, ?, ?);
+                `, [req.body.details.student, req.body.details.assignment, req.body.details.date, JSON.stringify(req.body.details.contents), req.body.details.result]
             );
 
             const assessmentID = result.insertId;
@@ -157,10 +174,11 @@ export async function createAssessment(req, res, next) {
                 SET
                     student_id = ?,
                     assignment_id = ?,
+                    submission_date = ?,
                     assessment_contents = ?,
                     assessment_result = ?
                 WHERE assessment_id = ?;
-                `, [req.body.details.student, req.body.details.assignment, JSON.stringify(req.body.details.contents), req.body.details.result, old[0].assessment_id]
+                `, [req.body.details.student, req.body.details.assignment, req.body.details.date, JSON.stringify(req.body.details.contents), req.body.details.result, old[0].assessment_id]
             );
 
             for (let i = 0; i < req.body.details.student_work.length; i++) {
@@ -179,10 +197,37 @@ export async function createAssessment(req, res, next) {
     }
 }
 
-// patch - auth(L)
+// patch
 export async function evaluateAssessment(req, res, next) {
     try {
-        // code
+        const [assessment] = await pool.query(`
+            SELECT is_reviewed
+            FROM final_assessments
+            WHERE assessment_id = ?;
+            `, [req.params.assessment_id]
+        );
+
+        // throw error if the assessment does not exist
+        if (assessment.length == 0) {
+            throw Object.assign(new Error("Assessment not found"), { status: 404 })
+        }
+        // throw error if the assessment has already been reviewed
+        if (assessment[0].is_reviewed == 1) {
+            throw Object.assign(new Error("Assessment already evaluated"), { status: 403 })
+        }
+
+        const date = new Date().toISOString().split("T")[0];
+        const [result] = await pool.query(`
+            UPDATE final_assessments
+            SET
+                submission_date = ?,
+                assessment_contents = COALESCE(?, assessment_contents),
+                assessment_result = COALESCE(?, assessment_result),
+                is_reviewed = 1
+            WHERE assessment_id = ?;
+            `, [date, JSON.stringify(req.body.contents), req.body.result, req.params.assessment_id]
+        );
+        return res.status(200).json("Assessment evaluated");
     } catch (error) {
         next(error);
     }
