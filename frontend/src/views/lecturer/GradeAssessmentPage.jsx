@@ -1,39 +1,66 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SyntaxHighlighterComponent from "../../components/SyntaxHighlighterComponent";
+import instance from "../../utils/axiosInstance";
+import { useParams } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import { GetConfig } from "../../utils/GetConfig";
+import AssessmentFormComponent from "../../components/AssessmentFormComponent";
 
 function GradeAssessmentPage() {
+const [currentAssessment, setCurrentAssessment] = useState();
+const path = useParams();
+const assessmentId = path.id
+console.log(assessmentId);
+const { token } = useAuth();
+
+useEffect(() => {
+ instance
+.get(`api/assessment/one/${assessmentId}`, GetConfig(token))
+.then((response) => {
+setCurrentAssessment(response.data[0]);
+})
+.catch((error) => {
+console.error("Error fetching assessment:", error);
+});
+}, [assessmentId]);
+
+
+
+// console.log('current final assessment: ', currentAssessment);
+
+if(!currentAssessment) return <h1>Loading...</h1>
+
   return (
     <>
-      <h1>FinalAssessmentPage</h1>
-      <div className='flex flex-col w-1/2 gap-8'>
-        <SyntaxHighlighterComponent
-          language='js'
-          codeString='const GradeAssessmentPage = () => {
-  return (
-    <div>
-      <h1>Grade Assessment Page</h1>
-    </div>
-  );
-};
-        '
-        />
-        <SyntaxHighlighterComponent
-          language='plaintext'
-          codeString='Rugby (sport) 
+      <h1>{currentAssessment.student_name}</h1>
+      <div className="">
+      <div className='flex flex-col'>
+      {currentAssessment.student_work && (
+currentAssessment.student_work.map((work, index) => (
+<SyntaxHighlighterComponent
+  language={work.filetype.split(".")[1]}
+  codeString={work.file_contents}
+  filePath={work.filepath}
+  key={index}
+/>
+)))}
+</div>
+<div className='flex flex-col'>
+<div className='bg-gray-100 p-4 rounded-lg'>
+<h2 className='text-xl font-semibold mb-2'>Assessment</h2>
+{currentAssessment.assessment_contents && (
+  <AssessmentFormComponent
+  obj={currentAssessment.assessment_contents}
+  />
+  )}
 
-Rugby union-kamp Argentina - Frankrike
-
-Takling i rugby
-Rugby, også kalt rugby-fotball er en lagidrett som spilles på profesjonelt og amatørnivå over hele verden. Det er hovedsakelig to variasjoner av denne idretten, rugby union med 15 spillere og rugby league med 13 spillere på hvert lag. Det finnes også varianten sjumannsrugby av begge rugby-versjonene.
-
-Rugby er en fysisk, hard og krevende idrett med mye fysisk kontakt. Spillerne bruker lite beskyttelse, fra enkle skinnhjelmer, til ikke noe i det hele tatt. Da selv de minste regelbrudd kan føre til alvorlige skader, er det sterkt fokus på spillernes sportslige opptreden, og spillet anses for å være en «gentlemans idrett».
-
-Det som kjennetegner rugby er den ovale ballen, og forbudet mot å kaste ballen fremover; ballen kan bare kastes bakover eller til siden. For å komme frem på banen må spillerne løpe med ballen, eller de kan sparke den fremover. Goal får man ved å sparke ballen over tverrliggeren som står mellom målstengene til motstanderen.'
-          filePath='frontend/src/views/lecturer/GradeAssessmentPage.jsx'
-        />
-      </div>
+</div>
+</div>
+</div>
     </>
   );
 }
 
 export default GradeAssessmentPage;
+
+

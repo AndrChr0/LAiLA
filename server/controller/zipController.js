@@ -80,6 +80,8 @@ export const getZipcontents = async (req, res, next) => {
       [req.body.assignment_id]
     );
     const DBAttempts = maxAttempts[0]["assignment_attempts"];
+
+    // get most recent attempt nr
     const [highestAttempt] = await pool.query(
       `
             SELECT MAX(attempt_nr)
@@ -122,6 +124,8 @@ export const getZipcontents = async (req, res, next) => {
       criteriaString,
       description
     );
+
+
     if (evaluatedSubmission) {
       deleteZipFileContent();
     }
@@ -231,7 +235,7 @@ export const getZipcontents = async (req, res, next) => {
 const details = {
   student: req.body.student_id,
   assignment: req.body.assignment_id,
-  contents: sanitizeFeedback(evaluatedSubmission), // (sanitized)
+  contents: sanitizedSubmission, // (sanitized)
   result: resultString,
   student_work: studentWork
 }
