@@ -27,8 +27,8 @@ function SyntaxHighlighterComponent({
   const highlightLanguage = languageMap[language] || "plaintext";
 
   return (
-    <div className='rounded-lg overflow-hidden border border-gray-200 shadow-md my-4'>
-      <div className='flex justify-between items-center bg-gray-800 text-gray-200 px-4 py-3'>
+    <div className='overflow-hidden border border-gray-200 rounded-lg shadow-md'>
+      <div className='flex items-center justify-between px-4 py-3 text-gray-200 bg-gray-800'>
         <div className='flex items-center space-x-2'>
           <File size={16} className='text-gray-400' />
           <span className='font-mono text-base truncate '>
@@ -76,7 +76,7 @@ function SyntaxHighlighterComponent({
             {codeString}
           </SyntaxHighlighter>
 
-          <div className='absolute bottom-2 right-2 bg-gray-800 text-xs text-gray-400 px-2 py-1 rounded-md opacity-70'>
+          <div className='absolute px-2 py-1 text-xs text-gray-400 bg-gray-800 rounded-md bottom-2 right-2 opacity-70'>
             {highlightLanguage}
           </div>
         </div>

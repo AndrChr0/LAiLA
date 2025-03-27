@@ -44,7 +44,7 @@ const FinalAssessmentsPage = () => {
   };
 
   return (
-    <>
+    <main>
       <h1>{assessments[0].assignment_title}</h1>
       <h2 className="flex items-center gap-3">
         <span className="text-3xl font-normal">AI Suggested Grade</span>
@@ -60,7 +60,7 @@ const FinalAssessmentsPage = () => {
         </div>
       </h2>
       <Assessments assessments={isReviewed(assignmentId)} />
-    </>
+    </main>
   );
 };
 

@@ -97,7 +97,7 @@ const LecturerEditAssignmentPage = () => {
   }
 
   return (
-    <>
+    <main>
       <h1 className='text-4xl font-normal mb-[1.5em]'>
         <span className='font-bold'>Edit </span> {assignment?.assignment_title}
       </h1>
@@ -243,7 +243,7 @@ const LecturerEditAssignmentPage = () => {
           Update Assignment
         </button>
       </form>
-    </>
+    </main>
   );
 };
 

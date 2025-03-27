@@ -20,7 +20,7 @@ function LecturerHomePage() {
 
 
   return (
-    <>
+    <main>
       <div className='mb-[4.5em]'>
       <h2 className='text-4xl font-normal mb-[1.5em] mt-[1.5em]'>Courses</h2>
         <Courses courses={courses} />
@@ -36,7 +36,7 @@ function LecturerHomePage() {
       </button>
         <Assignments assignments={activeAssignments} />
       </div>
-    </>
+    </main>
   );
 }
 

@@ -41,7 +41,7 @@ const StudentCoursePage = () => {
   
 
   return (
-    <>
+    <main>
     <Link className='flex items-center gap-1 mb-2' to="/home"><FaArrowLeft />Go back</Link>
     {currentCourse ? (
       <div className='flex justify-between w-full mb-[5rem]'>
@@ -67,7 +67,7 @@ const StudentCoursePage = () => {
     </div>
 
    
-   </>
+   </main>
   );
 };
 

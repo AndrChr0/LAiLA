@@ -77,15 +77,12 @@ function UploadAssignmentAssessment({
   return (
     <div className='flex flex-col'>
       <ul className='text-red-900'>
-        <li>ID: {assignmentId}</li>
-        <li>Filetypes: {filetypes}</li>
-        {/* <li>Description: {description}</li>
-        <li>Criteria: {JSON.stringify(criteria)}</li> */}
+        {/* <li>Description: {description}</li> */}
       </ul>
-      <h2 className='font-light text-xl'>Upload Project Zip file</h2>
+      <h2 className='text-xl font-light'>Upload Project Zip file</h2>
       <div className='flex flex-col w-4/5'>
         <input
-          className='p-2 m-2 border border-gray-300 bg-gray-50 rounded hover:bg-gray-100 hover:cursor-pointer'
+          className='p-2 w-[20%] text-white bg-black border border-gray-300 rounded hover:bg-gray-100 hover:cursor-pointer'
           type='file'
           name='zipUpload'
           onChange={handleFileChange}
