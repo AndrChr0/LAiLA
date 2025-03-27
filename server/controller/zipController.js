@@ -2,8 +2,10 @@ import decompress from "decompress";
 import path from "path";
 import fs from "fs";
 import dotenv from "dotenv";
-dotenv.config();
-const PORT = process.env.PORT || 5000;
+dotenv.config({ path: "../.env" }); // load shared env
+dotenv.config(); // load server env
+const PORT = process.env.API_PORT || 5000;
+const PATH = process.env.API_PATH || "http://localhost";
 import axios from "axios";
 import { evaluateSubmission } from "../AIFunctionalities/aiAssignmentEvaluation.js";
 import { pool as SQLpool } from "../utils/SQLPool.js";
@@ -240,7 +242,7 @@ const details = {
   student_work: studentWork,
   date: new Date().toISOString().split('T')[0]
 }
-const response = await axios.post(`http://localhost:${PORT}/api/assessment/${details.assignment}`, {details});
+const response = await axios.post(`${PATH}:${PORT}/api/assessment/${details.assignment}`, {details});
 // console.log('response', response.data);
 
     return res.status(200).json(responseObj);

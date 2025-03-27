@@ -1,7 +1,8 @@
 import OpenAI from "openai";
 import dotenv from "dotenv";
 import { aggregatedAssignmentFeedbackSchema } from "../utils/aggregatedFeedbackSchema.js";
-dotenv.config();
+dotenv.config({ path: "../.env" }); // load shared env
+dotenv.config(); // load server env
 const openai = new OpenAI({ apiKey: process.env.AI_API_KEY });
 
 export async function aggregateAssignmentFeedback(
