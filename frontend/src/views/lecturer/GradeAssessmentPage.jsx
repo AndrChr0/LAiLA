@@ -53,8 +53,7 @@ function GradeAssessmentPage() {
         },
         GetConfig(token)
       )
-      .then((response) => {
-        console.log(response.data);
+      .then(() => {
         setIsSubmitted(true);
       })
       .catch((error) => {
