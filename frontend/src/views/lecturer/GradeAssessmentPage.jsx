@@ -5,16 +5,19 @@ import { useParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { GetConfig } from "../../utils/GetConfig";
 import AssessmentFormComponent from "../../components/AssessmentFormComponent";
+import { useNavigate } from "react-router-dom";
 
 function GradeAssessmentPage() {
   const [currentAssessment, setCurrentAssessment] = useState();
   const [assessmentObject, setAssessmentObject] = useState();
   const [assessmentResult, setAssessmentResult] = useState();
-  console.log("ass obj", currentAssessment);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const path = useParams();
   const assessmentId = path.id;
   const { token } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     instance
@@ -26,6 +29,7 @@ function GradeAssessmentPage() {
       })
       .catch((error) => {
         console.error("Error fetching assessment:", error);
+        setErrorMsg(error.response.data.error);
       });
   }, [assessmentId, token]);
 
@@ -39,12 +43,34 @@ function GradeAssessmentPage() {
     }));
   };
 
+  const handleSubmitFinalAssessment = () => {
+    instance
+      .patch(
+        `api/assessment/lecturer/${assessmentId}`,
+        {
+          contents: assessmentObject,
+          result: assessmentResult,
+        },
+        GetConfig(token)
+      )
+      .then(() => {
+        setIsSubmitted(true);
+      })
+      .catch((error) => {
+        console.error("Error submitting final assessment:", error);
+        setErrorMsg(error.response.data.error);
+      });
+  };
+
   if (!currentAssessment) return <h1>Loading...</h1>;
 
   return (
     <>
-    <h1 className="text-3xl">{currentAssessment.assignment_title}</h1>
-      <h2 className="font-bold">Student: <span className="font-normal">{currentAssessment.student_name}</span></h2>
+      <h1 className="text-3xl">{currentAssessment.assignment_title}</h1>
+      <h2 className="font-bold">
+        Student:{" "}
+        <span className="font-normal">{currentAssessment.student_name}</span>
+      </h2>
       <div>
         <p>
           Suggested Result:{" "}
@@ -91,11 +117,36 @@ function GradeAssessmentPage() {
             )}
 
             <button
+              onClick={handleSubmitFinalAssessment}
               type="submit"
               className="bg-blue-500 text-white p-2 rounded hover:bg-blue-700 hover:cursor-pointer"
             >
               Submit Final Assessment
             </button>
+            {errorMsg && (
+              <>
+                <p className="text-red-500">{errorMsg}</p>{" "}
+                <button
+                  className="bg-white border-2  p-2 rounded hover:bg-gray-400 hover:cursor-pointer"
+                  onClick={() => navigate("/home")}
+                >
+                  Go Home
+                </button>
+              </>
+            )}
+            {isSubmitted && (
+              <>
+                <p className="text-green-500">
+                  Assessment submitted successfully
+                </p>
+                <button
+                  className="bg-white border-2  p-2 rounded hover:bg-gray-400 hover:cursor-pointer"
+                  onClick={() => navigate("/home")}
+                >
+                  Go Home
+                </button>
+              </>
+            )}
           </div>
         </div>
       </div>
