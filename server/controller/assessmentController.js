@@ -212,9 +212,9 @@ export async function evaluateAssessment(req, res, next) {
             throw Object.assign(new Error("Assessment not found"), { status: 404 })
         }
         // throw error if the assessment has already been reviewed
-        if (assessment[0].is_reviewed == 1) {
-            throw Object.assign(new Error("Assessment already evaluated"), { status: 403 })
-        }
+        // if (assessment[0].is_reviewed == 1) {
+        //     throw Object.assign(new Error("Assessment already evaluated"), { status: 403 })
+        // }
 
         const date = new Date().toISOString().split("T")[0];
         const [result] = await pool.query(`
