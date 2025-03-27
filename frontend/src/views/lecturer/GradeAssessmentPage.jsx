@@ -10,7 +10,7 @@ function GradeAssessmentPage() {
   const [currentAssessment, setCurrentAssessment] = useState();
   const [assessmentObject, setAssessmentObject] = useState();
   const [assessmentResult, setAssessmentResult] = useState();
-  console.log("ass obj", currentAssessment);
+  const [errorMsg, setErrorMsg] = useState("");
 
   const path = useParams();
   const assessmentId = path.id;
@@ -26,6 +26,7 @@ function GradeAssessmentPage() {
       })
       .catch((error) => {
         console.error("Error fetching assessment:", error);
+        setErrorMsg(error.response.data.error);
       });
   }, [assessmentId, token]);
 
@@ -39,7 +40,26 @@ function GradeAssessmentPage() {
     }));
   };
 
+
+  const handleSubmitFinalAssessment = ()=>{
+    instance.patch(`api/assessment/lecturer/${assessmentId}`,
+      {
+        contents: assessmentObject,
+        result: assessmentResult
+      }
+      , GetConfig(token))
+    .then((response)=>{
+      console.log(response.data)
+    })
+    .catch((error)=>{
+      console.error("Error submitting final assessment:", error);
+      setErrorMsg(error.response.data.error);
+
+    })
+  }
+
   if (!currentAssessment) return <h1>Loading...</h1>;
+
 
   return (
     <>
@@ -91,11 +111,13 @@ function GradeAssessmentPage() {
             )}
 
             <button
+            onClick={handleSubmitFinalAssessment}
               type="submit"
               className="bg-blue-500 text-white p-2 rounded hover:bg-blue-700 hover:cursor-pointer"
             >
               Submit Final Assessment
             </button>
+            {errorMsg && <p className="text-red-500">{errorMsg}</p>}
           </div>
         </div>
       </div>
