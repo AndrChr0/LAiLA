@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
-dotenv.config();
+dotenv.config({ path: "../.env" }); // load shared env
+dotenv.config(); // load server env
 import { pool as SQLpool } from "../utils/SQLPool.js";
 const pool = SQLpool;
 
@@ -73,7 +74,7 @@ export async function getMyAssessments(req, res, next) {
             LEFT JOIN student_work sw ON fa.assessment_id = sw.assessment_id
             WHERE student_id = ?
             GROUP BY fa.assessment_id;
-            `, [req.query.id]
+            `, [req.user.id]
         );
 
         if (rows.length == 0) {
@@ -212,9 +213,9 @@ export async function evaluateAssessment(req, res, next) {
             throw Object.assign(new Error("Assessment not found"), { status: 404 })
         }
         // throw error if the assessment has already been reviewed
-        if (assessment[0].is_reviewed == 1) {
-            throw Object.assign(new Error("Assessment already evaluated"), { status: 403 })
-        }
+        // if (assessment[0].is_reviewed == 1) {
+        //     throw Object.assign(new Error("Assessment already evaluated"), { status: 403 })
+        // }
 
         const date = new Date().toISOString().split("T")[0];
         const [result] = await pool.query(`

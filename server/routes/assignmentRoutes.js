@@ -7,7 +7,7 @@ const router = express.Router();
 router.get("/", auth, getAllAssignments);
 
 // get one assignment
-router.get("/:assignment_id", getOneAssignment);
+router.get("/:assignment_id", auth, getOneAssignment);
 
 // post assignment
 router.post("/", auth, authRole("lecturer"), createAssignment);

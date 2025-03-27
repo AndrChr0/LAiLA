@@ -18,6 +18,7 @@ import LecturerReportPage from "./views/lecturer/LecturerReportPage";
 import LecturerEditAssignmentPage from "./views/lecturer/LecturerEditAssignmentPage";
 import GradeAssessmentPage from "./views/lecturer/GradeAssessmentPage";
 import FinalAssessmentsPage from "./views/lecturer/FinalAssessmentsPage";
+import StudentFinalAssessment from "./views/student/StudentFinalAssessment";
 
 function App() {
   const { userRole } = useAuth();
@@ -128,6 +129,15 @@ function App() {
             element={
               <ProtectedRoute roles={["lecturer"]}>
                 <FinalAssessmentsPage />
+              </ProtectedRoute>
+            }
+          />
+
+<Route
+            path='/student/final-assessment/:id'
+            element={
+              <ProtectedRoute roles={["student"]}>
+                <StudentFinalAssessment />
               </ProtectedRoute>
             }
           />

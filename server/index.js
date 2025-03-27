@@ -1,6 +1,8 @@
 // import NPM packages
 import express from "express";
 import dotenv from "dotenv";
+dotenv.config({ path: "../.env" }); // load shared env
+dotenv.config(); // load server env
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { job } from "./utils/cron.js";
@@ -15,18 +17,20 @@ import aiZipRoutes from "./routes/zipRoutes.js";
 import assessmentRotues from "./routes/assessmentRoutes.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 
+
+const corsPATH = process.env.CORS_PATH || "http://localhost";
+const corsPORT = process.env.CORS_PORT || 5173;
 const app = express();
 
 // definte CORS options
 const corsOptions = {
-    origin: "http://localhost:5173",
+    origin: `${corsPATH}:${corsPORT}`,
     credentials: true
 };
 
 // express config
 app.use(cors(corsOptions)); // CORS policy, allowing communication between frontend and backend
-dotenv.config({ path: "../.env" }); // environmental variables
-const PORT = process.env.PORT || 5000; // app PORT from env, with 5000 as a fallback if omitted
+const PORT = process.env.API_PORT || 5000; // app PORT from env, with 5000 as a fallback if omitted
 app.use(express.json()); // JSON parsing
 app.use(cookieParser()); // cookie parsing
 

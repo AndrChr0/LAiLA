@@ -6,17 +6,21 @@ import { useAuth } from "../../context/AuthContext";
 import { GetConfig } from "../../utils/GetConfig";
 import AssessmentFormComponent from "../../components/AssessmentFormComponent";
 import BackComponent from "../../components/BackComponent";
+import { useNavigate } from "react-router-dom";
 
 function GradeAssessmentPage() {
   const [currentAssessment, setCurrentAssessment] = useState();
   const [assessmentObject, setAssessmentObject] = useState();
   const [assessmentResult, setAssessmentResult] = useState();
   const [assignmentId, setAssignmentId] = useState();
-  console.log("ass obj", currentAssessment);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const path = useParams();
   const assessmentId = path.id;
   const { token } = useAuth();
+  const navigate = useNavigate();
+  
   useEffect(() => {
     instance
       .get(`api/assessment/one/${assessmentId}`, GetConfig(token))
@@ -28,6 +32,7 @@ function GradeAssessmentPage() {
       })
       .catch((error) => {
         console.error("Error fetching assessment:", error);
+        setErrorMsg(error.response.data.error);
       });
   }, [assessmentId, token]);
 
@@ -39,6 +44,25 @@ function GradeAssessmentPage() {
         [feedbackKey]: newValue,
       },
     }));
+  };
+
+  const handleSubmitFinalAssessment = () => {
+    instance
+      .patch(
+        `api/assessment/lecturer/${assessmentId}`,
+        {
+          contents: assessmentObject,
+          result: assessmentResult,
+        },
+        GetConfig(token)
+      )
+      .then(() => {
+        setIsSubmitted(true);
+      })
+      .catch((error) => {
+        console.error("Error submitting final assessment:", error);
+        setErrorMsg(error.response.data.error);
+      });
   };
 
   if (!currentAssessment) return <h1>Loading...</h1>;
@@ -98,11 +122,36 @@ function GradeAssessmentPage() {
             )}
 
             <button
+              onClick={handleSubmitFinalAssessment}
               type="submit"
               className="p-2 text-white bg-blue-500 rounded hover:bg-blue-700 hover:cursor-pointer"
             >
               Submit Final Assessment
             </button>
+            {errorMsg && (
+              <>
+                <p className="text-red-500">{errorMsg}</p>{" "}
+                <button
+                  className="bg-white border-2  p-2 rounded hover:bg-gray-400 hover:cursor-pointer"
+                  onClick={() => navigate("/home")}
+                >
+                  Go Home
+                </button>
+              </>
+            )}
+            {isSubmitted && (
+              <>
+                <p className="text-green-500">
+                  Assessment submitted successfully
+                </p>
+                <button
+                  className="bg-white border-2  p-2 rounded hover:bg-gray-400 hover:cursor-pointer"
+                  onClick={() => navigate("/home")}
+                >
+                  Go Home
+                </button>
+              </>
+            )}
           </div>
         </div>
       </div>
