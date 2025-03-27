@@ -104,6 +104,8 @@ const LecturerEditAssignmentPage = () => {
         <span className='font-bold'>Edit </span> {assignment?.assignment_title}
       </h1>
       <form onSubmit={handleSubmit} className='flex flex-col space-y-2'>
+
+        
         <label
           htmlFor='assignment_title'
           className='block text-sm font-medium text-gray-700'
@@ -126,24 +128,32 @@ const LecturerEditAssignmentPage = () => {
           onChange={(e) => setAssignmentDescription(e.target.value)}
           className='p-2 mb-4 bg-white border border-gray-400'
         />
-        <label htmlFor='assignment_start_date'>Start Date</label>
-        <input
-          type='date'
-          id='assignment_start_date'
-          name='assignment_start_date'
-          value={assignment_start_date || ""}
-          onChange={(e) => setAssignmentStart(e.target.value)}
-          className='w-1/2 p-2 mb-4 bg-white border border-gray-400'
-        />
-        <label htmlFor='assignment_end_date'>End Date</label>
-        <input
-          type='date'
-          id='assignment_end_date'
-          name='assignment_end_date'
-          value={assignment_end_date || ""}
-          onChange={(e) => setAssignmentEnd(e.target.value)}
-          className='w-1/2 p-2 mb-4 bg-white border border-gray-400'
-        />
+        <div className="flex w-full gap-4">
+          <div className="flex flex-col">
+            <label htmlFor='assignment_start_date'>Start Date</label>
+            <input
+              type='date'
+              id='assignment_start_date'
+              name='assignment_start_date'
+              value={assignment_start_date || ""}
+              onChange={(e) => setAssignmentStart(e.target.value)}
+              className='w-full p-2 mb-4 bg-white border border-gray-400'
+            />
+          </div>
+
+          <div className="flex flex-col">
+            <label htmlFor='assignment_end_date'>End Date</label>
+            <input
+              type='date'
+              id='assignment_end_date'
+              name='assignment_end_date'
+              value={assignment_end_date || ""}
+              onChange={(e) => setAssignmentEnd(e.target.value)}
+              className='w-full p-2 mb-4 bg-white border border-gray-400'
+            />
+          </div>
+      </div>
+       
         <div className='flex items-center gap-4'>
           <label htmlFor='is_active'>Active</label>
           <input
