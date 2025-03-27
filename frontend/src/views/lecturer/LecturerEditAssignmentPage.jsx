@@ -74,7 +74,7 @@ const LecturerEditAssignmentPage = () => {
 
     try {
       const res = await instance.patch(
-        `/api/assignments/${id}`,
+        `api/assignments/${id}`,
         {
           assignment_title: assignment_title,
           assignment_start_date: assignment_start_date,

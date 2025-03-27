@@ -1,6 +1,9 @@
 import axios from "axios";
 import dotenv from "dotenv";
-dotenv.config();
+dotenv.config({ path: "../.env" }); // load shared env
+dotenv.config(); // load server env
+const PORT = process.env.API_PORT || 5000;
+const PATH = process.env.API_PATH || "http://localhost";
 import { pool as SQLpool } from "../utils/SQLPool.js";
 const pool = SQLpool;
 
@@ -29,7 +32,7 @@ export async function checkFeedbackProgress() {
 // function to query report routes to generate report(s)
 async function requestGenerateReport(id) {
     try {
-        const response = await axios.post(`http://localhost:5310/api/reports/cron/${id}`);
+        const response = await axios.post(`${PATH}:${PORT}/api/reports/cron/${id}`);
         // console.log("Report generated:", response.data);
     } catch (error) {
         console.error("API request failed:", error.response ? error.response.data : error.message);
