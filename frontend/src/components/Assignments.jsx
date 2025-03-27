@@ -48,7 +48,7 @@ const Assignments = ({ assignments }) => {
   };
 
   return (
-    <div className='mb-[100px]'>
+    <div >
       {assignments.length > 0 ? (
         assignments.map((assignment) => {
           const overdue = isOverdue(assignment.assignment_end_date);
