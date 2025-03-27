@@ -5,17 +5,18 @@ import { useParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { GetConfig } from "../../utils/GetConfig";
 import AssessmentFormComponent from "../../components/AssessmentFormComponent";
+import BackComponent from "../../components/BackComponent";
 
 function GradeAssessmentPage() {
   const [currentAssessment, setCurrentAssessment] = useState();
   const [assessmentObject, setAssessmentObject] = useState();
   const [assessmentResult, setAssessmentResult] = useState();
+  const [assignmentId, setAssignmentId] = useState();
   console.log("ass obj", currentAssessment);
 
   const path = useParams();
   const assessmentId = path.id;
   const { token } = useAuth();
-
   useEffect(() => {
     instance
       .get(`api/assessment/one/${assessmentId}`, GetConfig(token))
@@ -23,6 +24,7 @@ function GradeAssessmentPage() {
         setCurrentAssessment(response.data[0]);
         setAssessmentObject(response.data[0].assessment_contents);
         setAssessmentResult(response.data[0].assessment_result);
+        setAssignmentId(response.data[0].assignment_id)
       })
       .catch((error) => {
         console.error("Error fetching assessment:", error);
@@ -43,6 +45,7 @@ function GradeAssessmentPage() {
 
   return (
     <div className="max-w-[1700px] mx-auto px-[3%]">
+      <BackComponent destination={`/final-assessment/${assignmentId}`}/>
       <div className="p-4 bg-gray-200 rounded-lg mb-[50px]">
         <h1 className="text-3xl mb-[10px]">{currentAssessment.assignment_title}</h1>
         <h2 className="font-bold mb-[10px]">Student: <span className="font-normal">{currentAssessment.student_name}</span></h2>

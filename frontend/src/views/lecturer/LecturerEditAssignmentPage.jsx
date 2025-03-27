@@ -5,6 +5,7 @@ import instance from "../../utils/axiosInstance";
 import AssignmentCriteriaForm from "../../components/AssignmentCriteriaForm";
 import { GetConfig } from "../../utils/GetConfig";
 import { useAuth } from "../../context/AuthContext";
+import BackComponent from "../../components/BackComponent";
 
 const LecturerEditAssignmentPage = () => {
   const { id } = useParams();
@@ -98,6 +99,7 @@ const LecturerEditAssignmentPage = () => {
 
   return (
     <main>
+      <BackComponent destination="/home" />
       <h1 className='text-4xl font-normal mb-[1.5em]'>
         <span className='font-bold'>Edit </span> {assignment?.assignment_title}
       </h1>

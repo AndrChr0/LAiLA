@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { GetConfig } from "../../utils/GetConfig";
 import FeedbackCard from "../../components/FeedbackCard";
+import BackComponent from '../../components/BackComponent';
 
 function StudentAssignmentAssessmentPage() {
   const [currentAssignment, setCurrentAssignment] = useState(null);
@@ -54,6 +55,7 @@ function StudentAssignmentAssessmentPage() {
 
   return (
     <main>
+      <BackComponent destination="/home" />
       {currentAssignment ? (
         <div className="p-4 bg-gray-200 rounded-lg mb-[50px]">
           <h1 className="text-4xl">{currentAssignment.assignment_title}</h1>

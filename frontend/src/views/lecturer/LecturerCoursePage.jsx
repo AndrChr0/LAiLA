@@ -4,6 +4,7 @@ import Assignments from "../../components/Assignments";
 import { useFetchAssignments } from "../../utils/fetches/useFetchAssignments";
 import { GetConfig} from "../../utils/GetConfig"
 import { useAuth } from "../../context/AuthContext";
+import BackComponent from '../../components/BackComponent';
 
 const LecturerCoursePage = () => {
     const { token } = useAuth();
@@ -29,6 +30,7 @@ const LecturerCoursePage = () => {
     
     return (
       <main>
+        <BackComponent destination="/home" />
         <h1 className="mt-[1em] mb-2 text-5xl font-bold text-gray-800" >{courseCode} {courseName}</h1>
         <div className="mb-[3em] w-20 h-1 bg-blue-600 rounded"></div>
         

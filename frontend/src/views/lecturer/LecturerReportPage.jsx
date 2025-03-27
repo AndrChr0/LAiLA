@@ -26,6 +26,7 @@ import instance from "../../utils/axiosInstance";
 import { GetConfig } from "../../utils/GetConfig";
 import { useAuth } from "../../context/AuthContext";
 import { useParams } from "react-router-dom";
+import BackComponent from "../../components/BackComponent";
 
 const LecturerReportPage = () => {
   const [selectedReport, setSelectedReport] = useState(0);
@@ -130,6 +131,7 @@ const LecturerReportPage = () => {
     <div>Loading...</div>
   ) : (
     <main>
+      <BackComponent destination="/home" />
       <div className='min-h-screen p-6 bg-gray-50'>
         <div className='mx-auto max-w-7xl'>
           <header className='mb-8'>
