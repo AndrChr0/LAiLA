@@ -74,7 +74,7 @@ export async function getMyAssessments(req, res, next) {
             LEFT JOIN student_work sw ON fa.assessment_id = sw.assessment_id
             WHERE student_id = ?
             GROUP BY fa.assessment_id;
-            `, [req.query.id]
+            `, [req.user.id]
         );
 
         if (rows.length == 0) {

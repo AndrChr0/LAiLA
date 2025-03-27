@@ -25,7 +25,7 @@ const LecturerEditAssignmentPage = () => {
   const { token } = useAuth();
 
   useEffect(() => {
-    instance.get(`api/assignments/${id}`).then((res) => {
+    instance.get(`/api/assignments/${id}`, GetConfig(token)).then((res) => {
       setAssignment(res.data);
       const filesArray = res.data.allowed_filetypes.split(", ");
       setAssignmentTitle(res.data.assignment_title);
