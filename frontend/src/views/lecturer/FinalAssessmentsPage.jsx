@@ -7,6 +7,7 @@ import instance from "../../utils/axiosInstance";
 import BackComponent from "../../components/BackComponent";
 
 const FinalAssessmentsPage = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const { token } = useAuth();
   const [assessments, setAssessments] = useState([]);
   const path = useParams();
@@ -18,14 +19,26 @@ const FinalAssessmentsPage = () => {
       .then((res) => {
         setAssessments(res.data);
         console.log(res.data);
+        setIsLoading(false);
       })
       .catch((err) => {
+    setIsLoading(false);
+
         console.log(err);
       });
   }, []);
 
-  if (!assessments.length > 0){
+  if (isLoading){
     return <div>Loading...</div>
+  }
+
+  if(assessments.length <= 0){
+    return (
+      <div>
+        <h1>No assessments found</h1>
+        <Link to="/home">Back to home</Link>
+      </div>
+    )
   }
 
   const isNotReviewed = (assignmentId) => {

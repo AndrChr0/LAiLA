@@ -36,7 +36,7 @@ function FeedbackCard({ feedback, keyValue }) {
                     : ""
                 }
               >
-                {feedback.suggested_result}
+                {feedback.suggested_result.toUpperCase()}
               </p>
             </div>
           </div>
