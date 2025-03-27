@@ -9,24 +9,24 @@ function FeedbackCard({ feedback, keyValue }) {
   };
 
   return (
-    <div key={keyValue} className="border rounded-lg p-4 mb-4 shadow-sm">
+    <div key={keyValue} className="p-4 mb-4 border rounded-lg shadow-sm">
       <div 
-        className="flex justify-between items-center cursor-pointer"
+        className="flex items-center justify-between cursor-pointer"
         onClick={toggleExpand}
       >
-        <h3 className='font-bold'>Attempt #{feedback.attempt_nr}</h3>
+        <h3 className=''>Attempt #{feedback.attempt_nr}</h3>
         {isExpanded ? <ChevronUp /> : <ChevronDown />}
       </div>
 
       {isExpanded && (
         <div className='mt-4 transition-all duration-300 ease-in-out'>
           <div className=''>
-            <div className=' pb-2 border-gray-300 pr-4 '>
-              <h4 className='font-medium text-lg'>Feedback:</h4>
+            <div className='pb-2 pr-4 border-gray-300 '>
+              <h4 className='text-lg font-medium'>Feedback:</h4>
               <p className='font-light'>{feedback.general_comment}</p>
             </div>
             <div className=''>
-              <h4 className='font-medium text-lg'>Suggested Result:</h4>
+              <h4 className='text-lg font-medium'>Suggested Result:</h4>
               <p
                 className={
                   feedback.suggested_result === "pass"

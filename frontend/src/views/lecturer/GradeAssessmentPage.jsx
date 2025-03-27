@@ -5,12 +5,14 @@ import { useParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { GetConfig } from "../../utils/GetConfig";
 import AssessmentFormComponent from "../../components/AssessmentFormComponent";
+import BackComponent from "../../components/BackComponent";
 import { useNavigate } from "react-router-dom";
 
 function GradeAssessmentPage() {
   const [currentAssessment, setCurrentAssessment] = useState();
   const [assessmentObject, setAssessmentObject] = useState();
   const [assessmentResult, setAssessmentResult] = useState();
+  const [assignmentId, setAssignmentId] = useState();
   const [errorMsg, setErrorMsg] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -18,7 +20,7 @@ function GradeAssessmentPage() {
   const assessmentId = path.id;
   const { token } = useAuth();
   const navigate = useNavigate();
-
+  
   useEffect(() => {
     instance
       .get(`api/assessment/one/${assessmentId}`, GetConfig(token))
@@ -26,6 +28,7 @@ function GradeAssessmentPage() {
         setCurrentAssessment(response.data[0]);
         setAssessmentObject(response.data[0].assessment_contents);
         setAssessmentResult(response.data[0].assessment_result);
+        setAssignmentId(response.data[0].assignment_id)
       })
       .catch((error) => {
         console.error("Error fetching assessment:", error);
@@ -65,37 +68,39 @@ function GradeAssessmentPage() {
   if (!currentAssessment) return <h1>Loading...</h1>;
 
   return (
-    <>
-      <h1 className="text-3xl">{currentAssessment.assignment_title}</h1>
-      <h2 className="font-bold">
-        Student:{" "}
-        <span className="font-normal">{currentAssessment.student_name}</span>
-      </h2>
-      <div>
-        <p>
-          Suggested Result:{" "}
-          <span
-            className={`p-2 rounded ${
-              assessmentResult === "pass"
-                ? "bg-green-500 text-white"
-                : "bg-red-500 text-white"
-            }`}
+    <div className="max-w-[1700px] mx-auto px-[3%]">
+      <BackComponent destination={`/final-assessment/${assignmentId}`}/>
+      <div className="p-4 bg-gray-200 rounded-lg mb-[50px]">
+        <h1 className="text-3xl mb-[10px]">{currentAssessment.assignment_title}</h1>
+        <h2 className="font-bold mb-[10px]">Student: <span className="font-normal">{currentAssessment.student_name}</span></h2>
+        <div>
+          <p>
+            Suggested Result:{" "}
+            <span
+              className={`px-4 py-1 rounded ${
+                assessmentResult === "pass"
+                  ? "bg-green-200 text-green-800"
+                  : "bg-red-200 text-red-800"
+              }`}
+            >
+              {assessmentResult.toUpperCase()}
+            </span>
+          </p>
+          <button
+            type="button"
+            className="p-2 border-2 border-black"
+            onClick={() =>
+              setAssessmentResult(assessmentResult === "pass" ? "fail" : "pass")
+            }
           >
-            {assessmentResult}
-          </span>
-        </p>
-        <button
-          type="button"
-          className="border-2 p-2"
-          onClick={() =>
-            setAssessmentResult(assessmentResult === "pass" ? "fail" : "pass")
-          }
-        >
-          Change result
-        </button>
+            Change result
+          </button>
+        </div>
+
       </div>
+   
       <div className="flex gap-8">
-        <div className="flex flex-col w-2/5">
+        <div className="flex flex-col w-2/5 gap-8">
           {currentAssessment.student_work &&
             currentAssessment.student_work.map((work, index) => (
               <SyntaxHighlighterComponent
@@ -107,8 +112,8 @@ function GradeAssessmentPage() {
             ))}
         </div>
         <div className="flex flex-col w-3/5">
-          <div className="bg-gray-100 p-4 rounded-lg shadow-md">
-            <h2 className="text-xl font-semibold mb-2">Assessment</h2>
+          <div className="p-4 bg-gray-100 rounded-lg shadow-md">
+            <h2 className="mb-2 text-xl font-semibold">Assessment</h2>
             {currentAssessment.assessment_contents && (
               <AssessmentFormComponent
                 obj={assessmentObject}
@@ -119,7 +124,7 @@ function GradeAssessmentPage() {
             <button
               onClick={handleSubmitFinalAssessment}
               type="submit"
-              className="bg-blue-500 text-white p-2 rounded hover:bg-blue-700 hover:cursor-pointer"
+              className="p-2 text-white bg-blue-500 rounded hover:bg-blue-700 hover:cursor-pointer"
             >
               Submit Final Assessment
             </button>
@@ -150,7 +155,7 @@ function GradeAssessmentPage() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

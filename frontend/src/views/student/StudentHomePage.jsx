@@ -32,7 +32,7 @@ const activeAssignments = Array.isArray(assignments)
     : [];
     
 return (
-  <>
+  <main>
     <div className='mb-16'>
       <h2 className='text-4xl font-normal mb-[1.5em] border-b border-gray-200 pb-2 max-w-[30dvw] '>
         Assignments
@@ -55,7 +55,7 @@ return (
 
       <GradedAssignments assessments={gradedAssignments} />
     </div>
-  </>
+  </main>
 );
 }
 

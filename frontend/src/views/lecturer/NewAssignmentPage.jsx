@@ -5,6 +5,7 @@ import instance from "../../utils/axiosInstance";
 import { useAuth } from "../../context/AuthContext";
 import ToolTip from "../../shared/ToolTip";
 import { GetConfig } from "../../utils/GetConfig";
+import BackComponent from "../../components/BackComponent";
 
 function NewAssignmentPage() {
   const { userId } = useAuth();
@@ -104,9 +105,10 @@ function NewAssignmentPage() {
 
   console.log("course ID", courseId);
   return (
-    <>
+    <main>
+      <BackComponent destination="/home" />
       <h1 className='text-3xl font-light'>New Assignment</h1>
-      <div className='flex flex-col w-11/12 pt-4 mx-auto my-0 md:w-2/3'>
+      <div className='flex flex-col pt-4 mx-auto my-0 '>
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
 
@@ -314,7 +316,7 @@ function NewAssignmentPage() {
           Publish Assignment
         </button>
       </div>
-    </>
+    </main>
   );
 }
 

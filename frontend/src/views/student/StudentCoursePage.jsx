@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { FaArrowLeft } from "react-icons/fa";
 import { GetConfig} from "../../utils/GetConfig"
 import { useAuth } from "../../context/AuthContext";
+import BackComponent from '../../components/BackComponent';
 
 
 const StudentCoursePage = () => {
@@ -41,8 +42,8 @@ const StudentCoursePage = () => {
   
 
   return (
-    <>
-    <Link className='flex items-center gap-1 mb-2' to="/home"><FaArrowLeft />Go back</Link>
+    <main>
+    <BackComponent destination="/home" />
     {currentCourse ? (
       <div className='flex justify-between w-full mb-[5rem]'>
          <div className="mb-8">
@@ -67,7 +68,7 @@ const StudentCoursePage = () => {
     </div>
 
    
-   </>
+   </main>
   );
 };
 

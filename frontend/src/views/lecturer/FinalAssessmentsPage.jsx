@@ -4,6 +4,7 @@ import { GetConfig } from "../../utils/GetConfig";
 import { useAuth } from "../../context/AuthContext";
 import Assessments from "../../components/Assessments";
 import instance from "../../utils/axiosInstance";
+import BackComponent from "../../components/BackComponent";
 
 const FinalAssessmentsPage = () => {
   const { token } = useAuth();
@@ -44,23 +45,27 @@ const FinalAssessmentsPage = () => {
   };
 
   return (
-    <>
-      <h1>{assessments[0].assignment_title}</h1>
-      <h2 className="flex items-center gap-3">
+    <main>
+      <BackComponent destination="/home" />
+      <div className="p-4 bg-gray-200 rounded-lg mb-[50px]">
+        <h1 className="text-2xl">{assessments[0].assignment_title}</h1>
+      </div>
+      
+      <h2 className="flex items-center gap-3 mb-[20px]">
         <span className="text-3xl font-normal">AI Suggested Grade</span>
         <div className="w-auto h-auto px-3 py-[0.5px] text-white bg-purple-700 rounded">
           AI
         </div>
       </h2>
       <Assessments assessments={isNotReviewed(assignmentId)} />
-      <h2 className="flex items-center gap-3">
+      <h2 className="flex items-center gap-3 mb-[20px]" >
         <span className="text-3xl font-normal">Final Grades</span>
         <div className="w-auto h-auto px-3 py-[0.5px] text-white bg-blue-400 rounded">
           Lecturer
         </div>
       </h2>
       <Assessments assessments={isReviewed(assignmentId)} />
-    </>
+    </main>
   );
 };
 

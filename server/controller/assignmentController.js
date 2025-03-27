@@ -60,9 +60,10 @@ export async function getOneAssignment(req, res, next) {
   try {
     const [rows] = await pool.query(
       `
-			SELECT a.assignment_id, assignment_title, assignment_start_date, assignment_end_date, is_active, is_public, assignment_description, assignment_criteria, a.course_id, max_score, pass_threshold, assignment_attempts, GROUP_CONCAT(af.filetype ORDER BY af.filetype SEPARATOR ', ') AS allowed_filetypes
+			SELECT a.assignment_id, assignment_title, assignment_start_date, assignment_end_date, is_active, is_public, assignment_description, assignment_criteria, a.course_id, c.course_code, c.course_name, max_score, pass_threshold, assignment_attempts, GROUP_CONCAT(af.filetype ORDER BY af.filetype SEPARATOR ', ') AS allowed_filetypes
 			FROM assignments a
 			LEFT JOIN assignment_filetypes af ON a.assignment_id = af.assignment_id
+      LEFT JOIN courses c ON a.course_id = c.course_id
 			WHERE a.assignment_id = ? 
 			GROUP BY a.assignment_id;
 			`,

@@ -28,8 +28,8 @@ function AssessmentFormComponent({ onHandleChange, obj }) {
   return (
     <div>
       {Object.entries(localValues).map(([sectionKey, sectionValue]) => (
-        <fieldset key={sectionKey} className=" rounded-md p-2 my-2">
-          <h2 className="font-bold text-2xl capitalize">
+        <fieldset key={sectionKey} className="p-2 my-2 rounded-md ">
+          <h2 className="text-2xl font-bold capitalize">
             {sectionKey.replace(/_/g, " ").replace(/AI/, "")}
           </h2>
           {Object.entries(sectionValue).map(([feedbackKey, feedbackValue]) => (
@@ -40,9 +40,9 @@ function AssessmentFormComponent({ onHandleChange, obj }) {
               >
                 {feedbackKey.charAt(0).toUpperCase() +
                   feedbackKey
+                    .replace(/AI/, "")
                     .replace(/_/g, " ")
                     .replace(/ feedback$/, "")
-                    .replace(/AI/, "")
                     .slice(1)}{" "}
               </label>
               <textarea
@@ -50,7 +50,7 @@ function AssessmentFormComponent({ onHandleChange, obj }) {
                 type="text"
                 value={feedbackValue}
                 onChange={(e) => handleChange(sectionKey, feedbackKey, e)}
-                className="border border-gray-300 rounded-md p-1 bg-white field-sizing-content"
+                className="p-1 bg-white border border-gray-300 rounded-md field-sizing-content"
               />
             </div>
           ))}

@@ -18,6 +18,13 @@ body {
   background-color: #f9f9f9;
 }
 
+main{
+  width:100%;
+  max-width: 1410px;
+  margin: 0 auto;
+  padding: 0 5%;
+}
+
 
 :root {
   --radius: 0.625rem;
