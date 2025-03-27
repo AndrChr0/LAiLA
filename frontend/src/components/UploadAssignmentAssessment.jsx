@@ -100,14 +100,14 @@ function UploadAssignmentAssessment({
       {error && <p className='text-red-500'>{error}</p>}
       {loading && <p>Processing...</p>}
       {feedback && (
-        <div>
+        <div className="border-2 border-gray-200 rounded-lg p-4 mt-16">
           <h3 className='font-bold'>Feedback comment:</h3>
           <p>{feedback.general_comment}</p>
           <h3 className='font-bold'>Suggested grade</h3>
           {feedback.result_string === "pass" ? (
-            <p className='text-green-500'>Pass</p>
+            <p className='text-green-500'>PASS</p>
           ) : (
-            <p className='text-red-500'>Fail</p>
+            <p className='text-red-500'>FAIL</p>
           )}
         </div>
         // general_comment, result_string

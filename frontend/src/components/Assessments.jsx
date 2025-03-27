@@ -64,10 +64,12 @@ const Assessments = ({ assessments }) => {
                         </button>
                       ) : (
                         <button
-                          onClick={""}
+                        onClick={() =>
+                          handleOnClickGrade(assessment.assessment_id)
+                        }
                           className="flex items-center gap-1 px-3 py-1 text-sm text-black transition-all duration-300  hover:scale-[1.02] bg-white border border-gray-300 rounded hover:cursor-pointer"
                         >
-                          View <MdOpenInNew />
+                          Edit grade <FaFileSignature />
                         </button>
                       )}
                     </div>
@@ -77,7 +79,8 @@ const Assessments = ({ assessments }) => {
             );
           })
         ) : (
-          <p>No.</p>
+          <p>No assessments.
+          </p>
         )}
       </div>
     </>
