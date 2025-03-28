@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 
-function FeedbackCard({ feedback, keyValue }) {
+function FeedbackCard({ feedback }) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const toggleExpand = () => {
@@ -9,7 +9,7 @@ function FeedbackCard({ feedback, keyValue }) {
   };
 
   return (
-    <div key={keyValue} className="p-4 mb-4 border rounded-lg shadow-sm">
+    <div  className="p-4 mb-4 border rounded-lg shadow-sm bg-white">
       <div 
         className="flex items-center justify-between cursor-pointer"
         onClick={toggleExpand}
