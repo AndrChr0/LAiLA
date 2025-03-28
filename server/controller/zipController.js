@@ -186,8 +186,6 @@ export const getZipcontents = async (req, res, next) => {
       return obj;
     }
 
-    const sanitizedSubmission = sanitizeFeedback(evaluatedSubmission);
-
 
     // save to DB
     const [result] = await pool.query(
@@ -207,6 +205,8 @@ export const getZipcontents = async (req, res, next) => {
       ]
     );
 
+
+
     const responseObj = {
       general_comment:
         evaluatedSubmission.AI_final_assessment.AI_final_comments,
@@ -214,25 +214,8 @@ export const getZipcontents = async (req, res, next) => {
     };
 
 
+    const sanitizedSubmission = sanitizeFeedback(evaluatedSubmission);
 
-    // INSERT final submission logic to db
-
-//  student id        - req.body
-
-// assignment id     - req.body
-
-// feedback contents - evaluatedSubmission obj trenger å bli parsa 
-
-// result(fail/Pass) - resultString
-
-// student work      - studentWork Object [n{}]
-
-// -path, filtype, contents
-// console.log('student id', req.body.student_id);
-// console.log('assignment id', req.body.assignment_id);
-// console.log('feedback contents', sanitizeFeedback(evaluatedSubmission));
-// console.log('result(fail/Pass)', resultString);
-// console.log("studentWork", studentWork);
 
 const details = {
   student: req.body.student_id,
@@ -242,8 +225,7 @@ const details = {
   student_work: studentWork,
   date: new Date().toISOString().split('T')[0]
 }
-const response = await axios.post(`${PATH}:${PORT}/api/assessment/${details.assignment}`, {details});
-// console.log('response', response.data);
+ await axios.post(`${PATH}:${PORT}/api/assessment/${details.assignment}`, {details});
 
     return res.status(200).json(responseObj);
   } catch (error) {
