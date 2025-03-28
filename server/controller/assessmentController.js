@@ -38,9 +38,20 @@ export async function getAssignmentAssessments(req, res, next) {
             throw Object.assign(new Error("No assessments found"), { status: 404 });
         }
 
-        // remove time from date attributes
+
         for (let i = 0; i < rows.length; i++) {
-            rows[i].submission_date = new Date(rows[i].submission_date).toLocaleDateString("sv-SE");
+            const localDate = new Date(rows[i].submission_date);
+            
+            // .toLocaleString() formats the date and time correctly in the local timezone.
+            rows[i].submission_date = localDate.toLocaleString("sv-SE", {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+                hour12: false
+            });
         }
 
         return res.status(200).json(rows);
@@ -217,7 +228,11 @@ export async function evaluateAssessment(req, res, next) {
         //     throw Object.assign(new Error("Assessment already evaluated"), { status: 403 })
         // }
 
-        const date = new Date().toISOString().split("T")[0];
+       const date = new Date()
+       .toISOString()
+       .slice(0, 19)
+       .replace("T", " ")
+
         const [result] = await pool.query(`
             UPDATE final_assessments
             SET

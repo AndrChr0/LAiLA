@@ -86,7 +86,7 @@ CREATE TABLE final_assessments (
     assessment_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
     student_id SMALLINT UNSIGNED,
     assignment_id SMALLINT UNSIGNED,
-    submission_date DATE NOT NULL,
+    submission_date DATETIME NOT NULL, 
     assessment_contents JSON NOT NULL,
     assessment_result ENUM('pass', 'fail') NOT NULL,
     is_reviewed BOOLEAN NOT NULL DEFAULT FALSE,
