@@ -10,8 +10,25 @@ const FinalAssessmentsPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const { token } = useAuth();
   const [assessments, setAssessments] = useState([]);
+  const [assignment, setAssignment] = useState([]);
   const path = useParams();
   const assignmentId = path.id;
+
+  useEffect(() => {
+    instance
+      .get(`api/assignments/${assignmentId}`, GetConfig(token))
+      .then((res) => {
+        setAssignment(res.data);
+        console.log(res.data);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setIsLoading(false);
+
+        console.log(err);
+      });
+  }
+  , []);
 
   useEffect(() => {
     instance
@@ -52,11 +69,11 @@ const FinalAssessmentsPage = () => {
   return (
     <>
       <main>
-        <BackComponent destination="/home" />
+        <BackComponent destination={`/courses/${assignment.course_id}`} />
         <div className="p-4 bg-gray-200 rounded-lg mb-[50px]">
-          {assessments.length > 0 && (
+          {assessments.length > 0 ? (
             <h1 className="text-2xl">{assessments[0].assignment_title}</h1>
-          )}
+          ): <h1 className="text-2xl">{assignment.assignment_title}</h1>}
         </div>
 
         <h2 className="flex items-center gap-3 mb-[20px]">

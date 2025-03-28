@@ -109,7 +109,7 @@ const Assignments = ({ assignments }) => {
                      <button
                      onClick={() => handleOnClickGrade(assignment.assignment_id)}
                      className='flex items-center gap-1 px-3 py-1 text-sm text-black transition-all duration-300  hover:scale-[1.02] bg-white border border-gray-300 rounded hover:cursor-pointer'
-                   >Grade <FaFileSignature />
+                   >Grades <FaFileSignature />
                    <div className="flex items-center justify-center w-[25px] h-[25px] bg-[#9AEFFF] absolute rounded-full translate-x-[55px] translate-y-[-15px]  ">{assignment.total_assessments_not_reviewed}</div>
                    </button>
                   )}
