@@ -18,9 +18,6 @@ function UploadAssignmentAssessment({
 
   const criteriaString = JSON.stringify(criteria);
 
-  // demo - fix selection
-  // const allowedExtensions = [".css", ".html"];
-
   function handleFileChange(e) {
     setFile(e.target.files[0]);
   }
@@ -164,14 +161,22 @@ function UploadAssignmentAssessment({
       {error && <p className="text-red-500">{error}</p>}
       {loading && <p>Processing...</p>}
       {feedback && (
-        <div className="border-2 border-gray-200 rounded-lg p-4 mt-16">
-          <h3 className="font-bold">Feedback comment:</h3>
-          <p>{feedback.general_comment}</p>
-          <h3 className="font-bold">Suggested grade</h3>
+        <div className="bg-white shadow-md border border-gray-300 rounded-lg p-6 mt-10">
+          <h3 className="text-lg font-semibold text-gray-800 mb-2">
+            Feedback comment:
+          </h3>
+          <p className="text-gray-600 mb-4">{feedback.general_comment}</p>
+          <h3 className="text-lg font-semibold text-gray-800 mb-2">
+            Suggested Grade:
+          </h3>
           {feedback.result_string === "pass" ? (
-            <p className="text-green-500">PASS</p>
+            <span className="inline-block bg-green-100 text-green-800 rounded-full px-3 py-1 text-sm font-medium">
+              PASS
+            </span>
           ) : (
-            <p className="text-red-500">FAIL</p>
+            <span className="inline-block bg-red-100 text-red-800 rounded-full px-3 py-1 text-sm font-medium">
+              FAIL
+            </span>
           )}
         </div>
       )}

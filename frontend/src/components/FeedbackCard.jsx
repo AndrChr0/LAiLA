@@ -9,7 +9,7 @@ function FeedbackCard({ feedback, keyValue }) {
   };
 
   return (
-    <div key={keyValue} className="p-4 mb-4 border rounded-lg shadow-sm">
+    <div key={keyValue} className="p-4 mb-4 border rounded-lg shadow-sm bg-white">
       <div 
         className="flex items-center justify-between cursor-pointer"
         onClick={toggleExpand}
