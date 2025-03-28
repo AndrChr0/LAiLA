@@ -4,11 +4,12 @@ import { vs2015 } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { ChevronUp, ChevronDown, File, Copy, Check } from "lucide-react";
 
 function SyntaxHighlighterComponent({
+  open = false,
   codeString = "<h1>title</h1>",
   language = "html",
   filePath = "path/to/file",
 }) {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(open);
 
   const languageMap = {
     js: "javascript",
@@ -77,7 +78,7 @@ function SyntaxHighlighterComponent({
           </SyntaxHighlighter>
 
           <div className='absolute px-2 py-1 text-xs text-gray-400 bg-gray-800 rounded-md bottom-2 right-2 opacity-70'>
-            {highlightLanguage}
+            {highlightLanguage == 'htmlbars' ? 'HTML' : highlightLanguage}
           </div>
         </div>
       </div>

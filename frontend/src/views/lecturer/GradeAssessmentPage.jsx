@@ -104,6 +104,7 @@ function GradeAssessmentPage() {
           {currentAssessment.student_work &&
             currentAssessment.student_work.map((work, index) => (
               <SyntaxHighlighterComponent
+                open={index > 0}
                 language={work.filetype.split(".")[1]}
                 codeString={work.file_contents}
                 filePath={work.filepath}
