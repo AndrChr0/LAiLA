@@ -11,7 +11,6 @@ function AssignmentCriteriaForm({
   criteria = {},
 }) {
   const [isSaved, setIsSaved] = useState("");
-  const [schemaName, setSchemaName] = useState("new_schema");
   const [sections, setSections] = useState([
     {
       sectionId: crypto.randomUUID(),
@@ -33,7 +32,6 @@ function AssignmentCriteriaForm({
 
   useEffect(() => {
     if (isEditing) {
-      setSchemaName(criteria.name);
 
       const loadedSections = [];
       // skip the final assessment section
@@ -190,7 +188,7 @@ function AssignmentCriteriaForm({
 
   const generateJsonSchema = () => {
     const schemaObject = {
-      name: schemaName,
+      name: 'assignment_criteria',
       schema: {
         type: "object",
         properties: {},
@@ -312,17 +310,6 @@ function AssignmentCriteriaForm({
             </li>
           </ul>
         </div>
-      </div>
-
-      <div className='mb-4'>
-        <label className='block mb-2 font-semibold'>Assignment Name:</label>
-        <input
-          className='w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
-          type='text'
-          placeholder='Enter assignment name'
-          value={schemaName}
-          onChange={(e) => setSchemaName(e.target.value)}
-        />
       </div>
 
       <hr className='my-6' />
