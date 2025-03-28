@@ -132,7 +132,7 @@ function GradeAssessmentPage() {
               <>
                 <p className="text-red-500">{errorMsg}</p>{" "}
                 <button
-                  className="bg-white border-2  p-2 rounded hover:bg-gray-400 hover:cursor-pointer"
+                  className="p-2 bg-white border-2 rounded hover:bg-gray-400 hover:cursor-pointer"
                   onClick={() => navigate("/home")}
                 >
                   Go Home
@@ -145,10 +145,10 @@ function GradeAssessmentPage() {
                   Assessment submitted successfully
                 </p>
                 <button
-                  className="bg-white border-2  p-2 rounded hover:bg-gray-400 hover:cursor-pointer"
-                  onClick={() => navigate("/home")}
+                  className="p-2 bg-white border-2 rounded hover:bg-gray-400 hover:cursor-pointer"
+                  onClick={() => navigate("/final-assessment/" + assignmentId)}
                 >
-                  Go Home
+                  Back to assessment overview
                 </button>
               </>
             )}
