@@ -320,7 +320,7 @@ function AssignmentCriteriaForm({
                       className="flex-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                       type="text"
                       placeholder="Section name"
-                      value={section.sectionName}
+                      value={section.sectionName.replaceAll("_", " ")}
                       onChange={(e) => {
                         e.stopPropagation();
                         handleSectionNameChange(section.sectionId, e.target.value);
@@ -381,7 +381,7 @@ function AssignmentCriteriaForm({
                                   {subIndex + 1}
                                 </span>
                                 <span className="font-medium">
-                                  {sub.subsectionName || "Unnamed subsection"}
+                                  {sub.subsectionName.replaceAll('_', ' ') || "Unnamed subsection"}
                                 </span>
                               </div>
                               <div className="flex items-center">
