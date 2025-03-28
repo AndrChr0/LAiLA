@@ -89,7 +89,8 @@ function StudentAssignmentAssessmentPage() {
         <div className="mt-[80px] p-4 border-2 border-gray-200 rounded-lg">
           <h2 className='font-bold'>Previous Feedback</h2>
           {previousFeedback.map((feedback) => (
-            <FeedbackCard feedback={feedback} keyValue={feedback.feedback_id} />
+            <FeedbackCard feedback={feedback} 
+             key={feedback.feedback_id} />
           ))}
         </div>
       ) : (
