@@ -196,16 +196,17 @@ function AssignmentCriteriaForm({
     };
 
     sections.forEach((section) => {
-      const sectionKey = section.sectionName;
+        const sectionKey = section.sectionName.replace(/\s+/g, "_").toLowerCase(); 
+        // const sectionKey = section.sectionName;
       const sectionProperties = {};
       const requiredFields = [];
 
       section.subsections.forEach((sub) => {
-        const scoreKey = `${sub.subsectionName.replace(/\s+/g, "_")}_score`;
+        const scoreKey = `${sub.subsectionName.replace(/\s+/g, "_").toLowerCase()}_score`;
         const feedbackKey = `${sub.subsectionName.replace(
           /\s+/g,
           "_"
-        )}_feedback`;
+        ).toLowerCase()}_feedback`;
 
         sectionProperties[scoreKey] = {
           type: "integer",
