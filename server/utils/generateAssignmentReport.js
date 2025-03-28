@@ -4,7 +4,8 @@ const pool = SQLpool;
 
 export async function generateAssignmentReport(
   assignment_id,
-  isManuallyCreated
+  isManuallyCreated,
+  date
 ) {
   // fetch all of the most recent feedback
 
@@ -118,8 +119,8 @@ WHERE assignment_id = ?;`,
   // add to DB
   const [result] = await pool.query(
     `
-        INSERT INTO assignment_reports (assignment_id, report_nr, report_contents, students_passed, students_failed, total_feedback, students_evaluated, isManuallyCreated)
-        VALUES (?, ?, ?, ?, ?, ?, ?, COALESCE(?, false));
+        INSERT INTO assignment_reports (assignment_id, report_nr, report_contents, students_passed, students_failed, total_feedback, students_evaluated, isManuallyCreated, date_created)
+        VALUES (?, ?, ?, ?, ?, ?, ?, COALESCE(?, false), ?);
         `,
     [
       assignment_id,
@@ -130,13 +131,14 @@ WHERE assignment_id = ?;`,
       metaData.totalFeedback,
       metaData.uniqueStudents,
       isManuallyCreatedReport,
+      date,
     ]
   );
 
   // get the latest assignment_report
   const [newestReport] = await pool.query(
     `
-     SELECT ar.report_id, ar.assignment_id, ar.report_nr, ar.report_contents, ar.students_passed, ar.students_failed, ar.total_feedback, ar.students_evaluated, ar.isManuallyCreated, a.assignment_title, c.course_name
+     SELECT ar.report_id, ar.assignment_id, ar.report_nr, ar.report_contents, ar.students_passed, ar.students_failed, ar.total_feedback, ar.students_evaluated, ar.isManuallyCreated, ar.date_created, a.assignment_title, c.course_name
 FROM assignment_reports ar
 JOIN assignments a ON a.assignment_id = ar.assignment_id
 JOIN courses c on c.course_id = a.course_id

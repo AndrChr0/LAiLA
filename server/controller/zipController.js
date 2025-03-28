@@ -223,7 +223,10 @@ const details = {
   contents: sanitizedSubmission, // (sanitized)
   result: resultString,
   student_work: studentWork,
-  date: new Date().toISOString().split('T')[0]
+  date: new Date()
+  .toISOString()
+  .slice(0, 19)
+  .replace("T", " ")
 }
  await axios.post(`${PATH}:${PORT}/api/assessment/${details.assignment}`, {details});
 

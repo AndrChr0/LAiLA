@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { MdOpenInNew } from "react-icons/md";
 import { FaFileSignature } from "react-icons/fa";
@@ -7,10 +7,16 @@ import { useNavigate } from "react-router-dom";
 const Assessments = ({ assessments }) => {
   const { userRole } = useAuth();
   const navigate = useNavigate();
+  const [isReviewed, setIsReviewed] = useState(false)
 
   const handleOnClickGrade = (assessment_id) => {
     navigate(`/grade-assessment/${assessment_id}`);
   };
+
+  useEffect(() => {
+    setIsReviewed(assessments.some(assessment => assessment.is_reviewed === 1))
+  }
+  , [assessments])
 
   return (
     <>
@@ -33,7 +39,7 @@ const Assessments = ({ assessments }) => {
                         FAIL
                       </span>
                     )}
-                    <h2 className="px-2 py-1 text-xs font-medium bg-gray-100 rounded-full text-gray">{assessment.submission_date}</h2>
+                    <h2 className="px-2 py-1 text-xs font-medium bg-gray-100 rounded-full text-gray"> {isReviewed ? <span>Graded: </span> : <span>Submitted: </span> } {assessment.submission_date}</h2>
                     <h3 className="text-lg font-medium text-gray-800">
                       {assessment.student_name}
                     </h3>

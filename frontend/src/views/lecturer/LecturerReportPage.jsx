@@ -54,7 +54,7 @@ const LecturerReportPage = () => {
     setIsLoading(true);
 
     instance
-      .post(`/api/reports/${id}`, { isManuallyCreated: true }, GetConfig(token))
+      .post(`/api/reports/${id}`, { isManuallyCreated: true, date: new Date().toISOString().slice(0, 19).replace("T", " ") }, GetConfig(token))
       .then((res) => {
         setIsLoading(false);
         setReportData([res.data[0], ...reportData]);
@@ -127,6 +127,11 @@ const LecturerReportPage = () => {
   const additionalNotes =
     reportData[selectedReport].report_contents.additionalNotes;
 
+    const date = new Date(reportData[selectedReport].date_created);
+    const formattedDate = date.toISOString().split('T')[0] + ' ' + date.toISOString().split('T')[1].split('.')[0];
+
+
+
   return !reportData && !reportData[selectedReport] ? (
     <div>Loading...</div>
   ) : (
@@ -171,7 +176,7 @@ const LecturerReportPage = () => {
               {errorMsg && <div className='text-red-700'>{errorMsg}</div>}
               <div className='flex items-center gap-2 text-sm text-gray-600'>
                 <Clock size={16} />
-                <span>Last updated: March 17, 2025, 10:42 AM</span>
+                <span>{formattedDate}</span>
               </div>
             </div>
           </header>
