@@ -105,13 +105,20 @@ function UploadAssignmentAssessment({
         )}
       </div>
       {submitModule && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
+        <div className="fixed inset-0  flex items-center justify-center bg-[rgba(0,0,0,0.5)] p-4">
           <div className="bg-white rounded-xl shadow-2xl w-full max-w-md p-6 mx-auto">
             <div className="mb-4">
               <h2 className="text-2xl font-semibold text-gray-800 mb-4">
                 Disclaimer
               </h2>
               <ul className="space-y-3 text-gray-700 pl-5 list-disc">
+              <li className="pl-2">
+                  <span className="font-medium text-red-600">
+                    Grading:
+                  </span>{" "}
+                  Your most current submission will count as your final submission and graded by your lecturer after the due date. 
+                  The AI feedback will be provided to the lecturer for review.         
+                </li>
                 <li className="pl-2">
                   <span className="font-medium text-yellow-600">
                     AI Feedback:
