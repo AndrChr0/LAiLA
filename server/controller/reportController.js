@@ -9,7 +9,7 @@ export async function getAllAssignmentReports(req, res, next) {
   try {
     const [rows] = await pool.query(
       `
-            SELECT ar.report_id, ar.assignment_id, ar.report_nr, ar.report_contents, ar.students_passed, ar.students_failed, ar.total_feedback, ar.students_evaluated, a.assignment_title, c.course_name
+            SELECT ar.report_id, ar.assignment_id, ar.report_nr, ar.report_contents, ar.students_passed, ar.students_failed, ar.total_feedback, ar.students_evaluated, a.assignment_title, c.course_name, ar.date_created
             FROM assignment_reports ar
             JOIN assignments a ON ar.assignment_id = a.assignment_id
             JOIN courses c ON a.course_id = c.course_id
@@ -37,7 +37,8 @@ export async function createAssignmentReport(req, res, next) {
 
     const result = await generateAssignmentReport(
       req.params.assignment_id,
-      req.body.isManuallyCreated
+      req.body.isManuallyCreated,
+      req.body.date
     );
 
     return res.status(200).json(result);
