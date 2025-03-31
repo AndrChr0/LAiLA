@@ -64,7 +64,7 @@ function AssignmentCriteriaForm({
 
           const subObj = subsectionMap.get(baseName);
 
-          if (propName.endsWith("_score")) {
+          if ((propName.endsWith("_score") && !propName.endsWith("_max_score"))) {
             subObj.scoreDescription = property.description || "";
           } else if (propName.endsWith("_feedback")) {
             subObj.feedbackDescription = property.description || "";
