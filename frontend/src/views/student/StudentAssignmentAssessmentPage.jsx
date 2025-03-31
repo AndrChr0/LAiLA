@@ -82,14 +82,14 @@ function StudentAssignmentAssessmentPage() {
       )}
 
       {currentAssignment &&
-        totalAttempts >= currentAssignment.assignment_attempts && (
+        attemptsUsed >= currentAssignment.assignment_attempts && (
           <p className='font-bold'>
-            You have reached the maximum number of attempts
+            You have reached the maximum number of attempts.
           </p>
         )}
       {currentAssignment &&
       currentAssignment.is_active === 1 &&
-      totalAttempts < currentAssignment.assignment_attempts ? (
+      attemptsUsed < currentAssignment.assignment_attempts ? (
         <UploadAssignmentAssessment
           assignmentId={currentAssignment.assignment_id}
           filetypes={currentAssignment.allowed_filetypes}
