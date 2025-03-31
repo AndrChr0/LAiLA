@@ -1,6 +1,7 @@
 import mysql from "mysql2";
 import dotenv from "dotenv";
-dotenv.config();
+dotenv.config({ path: "../.env" }); // load shared env
+dotenv.config(); // load server env
 
 // pool of connection, no need for new connection each query
 export const pool = mysql

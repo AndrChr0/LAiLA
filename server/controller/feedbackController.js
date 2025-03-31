@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
-dotenv.config();
+dotenv.config({ path: "../.env" }); // load shared env
+dotenv.config(); // load server env
 import { pool as SQLpool } from "../utils/SQLPool.js";
 
 const pool = SQLpool;

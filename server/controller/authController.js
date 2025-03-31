@@ -1,7 +1,8 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-dotenv.config();
+dotenv.config({ path: "../.env" }); // load shared env
+dotenv.config(); // load server env
 import { pool as SQLpool } from '../utils/SQLPool.js';
 const pool = SQLpool;
 
@@ -58,12 +59,13 @@ export const login = async (req, res, next) => {
             WHERE email = ?;
             `, [email]
         );
-        const user = rows[0];
-        const validPassword = await bcrypt.compare(password, user.password);
 
         if (rows.length === 0) {
             throw Object.assign(new Error("Email could not be found in database"), { status: 400 });
         }
+
+        const user = rows[0];
+        const validPassword = await bcrypt.compare(password, user.password);
 
         if (!validPassword) {
             throw Object.assign(new Error("Invalid password"), { status: 400 });

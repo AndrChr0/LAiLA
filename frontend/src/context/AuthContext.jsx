@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
-import refreshToken from "../utils/refreshToken";
+import refreshToken from "../utils/RefreshToken";
 import instance from "../utils/axiosInstance";
 
 const AuthContext = createContext();
@@ -71,7 +71,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     // remove cookie
-    await instance.get("/api/auth/logout");
+    await instance.get("api/auth/logout");
     setToken(null);
     setAuthState({ userRole: "", userId: null, isLoading: false });
     navigate("/");

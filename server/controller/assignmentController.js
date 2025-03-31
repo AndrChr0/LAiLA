@@ -1,21 +1,24 @@
 import dotenv from "dotenv";
-dotenv.config();
+dotenv.config({ path: "../.env" }); // load shared env
+dotenv.config(); // load server env
 import { pool as SQLpool } from "../utils/SQLPool.js";
 const pool = SQLpool;
 
-// get all assignments (for user) - auth(S/L)
-// (req.body would be JWT attribute once authentication is integrated)
+// get all assignments
 export async function getAllAssignments(req, res, next) {
   try {
     if (req.user.role == "lecturer") {
       const [rows] = await pool.query(
         `
-				SELECT a.assignment_id, a.assignment_title, a.assignment_start_date, a.assignment_end_date, a.is_active, a.is_public, a.assignment_description, a.assignment_criteria, a.course_id, c.course_name, c.course_code, a.max_score, a.pass_threshold, GROUP_CONCAT(af.filetype ORDER BY af.filetype SEPARATOR ', ') AS allowed_filetypes, a.assignment_attempts
-				FROM assignments a
-				JOIN courses c ON a.course_id = c.course_id
-				LEFT JOIN assignment_filetypes af ON a.assignment_id = af.assignment_id
-				WHERE c.course_coordinator = ?
-				GROUP BY a.assignment_id, c.course_name;
+			
+
+        SELECT a.assignment_id, a.assignment_title, a.assignment_start_date, a.assignment_end_date, a.is_active, a.is_public, a.assignment_description, a.assignment_criteria, a.course_id, c.course_name, c.course_code, a.max_score, a.pass_threshold, GROUP_CONCAT(DISTINCT af.filetype ORDER BY af.filetype SEPARATOR ', ') AS allowed_filetypes, a.assignment_attempts, COUNT(DISTINCT fa.assessment_id) AS total_assessments_not_reviewed
+        FROM assignments a
+        JOIN courses c ON a.course_id = c.course_id
+        LEFT JOIN final_assessments fa ON a.assignment_id = fa.assignment_id AND fa.is_reviewed = 0
+        LEFT JOIN assignment_filetypes af ON a.assignment_id = af.assignment_id
+        WHERE c.course_coordinator = ?
+        GROUP BY a.assignment_id;
 				`,
         [req.user.id]
       );
@@ -28,12 +31,12 @@ export async function getAllAssignments(req, res, next) {
     } else if (req.user.role == "student") {
       const [rows] = await pool.query(
         `
-				SELECT a.assignment_id, a.assignment_title, a.assignment_start_date, a.assignment_end_date, a.is_active, a.assignment_description, a.course_id, c.course_name, c.course_code, a.max_score, a.pass_threshold, GROUP_CONCAT(af.filetype ORDER BY af.filetype SEPARATOR ', ') AS allowed_filetypes, a.assignment_attempts
+				SELECT a.assignment_id, a.assignment_title, a.assignment_start_date, a.assignment_end_date, a.is_active, a.is_public, a.assignment_description, a.course_id, c.course_name, c.course_code, a.max_score, a.pass_threshold, GROUP_CONCAT(af.filetype ORDER BY af.filetype SEPARATOR ', ') AS allowed_filetypes, a.assignment_attempts
 				FROM assignments a
 				JOIN enrollment e ON a.course_id = e.course_id
         		JOIN courses c ON a.course_id = c.course_id
 				LEFT JOIN assignment_filetypes af ON a.assignment_id = af.assignment_id
-				WHERE e.student_id = ? AND is_public = TRUE
+				WHERE e.student_id = ? 
 				GROUP BY a.assignment_id, c.course_name;
 				`,
         [req.user.id]
@@ -57,10 +60,11 @@ export async function getOneAssignment(req, res, next) {
   try {
     const [rows] = await pool.query(
       `
-			SELECT a.assignment_id, assignment_title, assignment_start_date, assignment_end_date, is_active, assignment_description, assignment_criteria, a.course_id, max_score, pass_threshold, assignment_attempts, GROUP_CONCAT(af.filetype ORDER BY af.filetype SEPARATOR ', ') AS allowed_filetypes
+			SELECT a.assignment_id, assignment_title, assignment_start_date, assignment_end_date, is_active, is_public, assignment_description, assignment_criteria, a.course_id, c.course_code, c.course_name, max_score, pass_threshold, assignment_attempts, GROUP_CONCAT(af.filetype ORDER BY af.filetype SEPARATOR ', ') AS allowed_filetypes
 			FROM assignments a
 			LEFT JOIN assignment_filetypes af ON a.assignment_id = af.assignment_id
-			WHERE a.assignment_id = ? AND is_public = TRUE
+      LEFT JOIN courses c ON a.course_id = c.course_id
+			WHERE a.assignment_id = ? 
 			GROUP BY a.assignment_id;
 			`,
       [req.params.assignment_id]
@@ -78,7 +82,7 @@ export async function getOneAssignment(req, res, next) {
   }
 }
 
-// post assignment - auth(L)
+// post assignment
 export async function createAssignment(req, res, next) {
   try {
     if (
@@ -146,24 +150,12 @@ export async function createAssignment(req, res, next) {
   }
 }
 
-// put/patch assignment details - auth(L)   (only before submissions?)
+// put/patch assignment details
 export async function updateAssignment(req, res, next) {
   try {
     if (!Object.keys(req.body).length) {
       throw Object.assign(new Error("No values to alter"), { status: 400 });
     }
-
-    // check if answered
-    // const [answers] = await pool.query(`
-    // 	SELECT feedback_id
-    // 	FROM feedback
-    // 	WHERE assignment_id = ?;
-    // 	`, [req.params.assignment_id]
-    // );
-
-    // if (answers.length) {
-    // 	throw Object.assign(new Error("Assignment has already been answered"), { status: 403 });
-    // }
 
     // update assignment
     const [result] = await pool.query(

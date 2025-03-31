@@ -1,3 +1,5 @@
+// Practically not used as of sprint-4.
+
 import { createContext, useState, useContext } from "react";
 
 const UserContext = createContext();

@@ -4,6 +4,8 @@ import instance from "../../utils/axiosInstance";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { GetConfig } from "../../utils/GetConfig";
+import FeedbackCard from "../../components/FeedbackCard";
+import BackComponent from '../../components/BackComponent';
 
 function StudentAssignmentAssessmentPage() {
   const [currentAssignment, setCurrentAssignment] = useState(null);
@@ -49,14 +51,18 @@ function StudentAssignmentAssessmentPage() {
       totalAttempts = feedback.attempt_nr;
     }
   });
+  console.log(previousFeedback)
 
   return (
-    <>
+    <main>
+      <BackComponent destination="/home" />
       {currentAssignment ? (
-        <div>
-          <h1>{currentAssignment.assignment_title}</h1>
-          <p>Start Date: {currentAssignment.assignment_start_date}</p>
-          <p>End Date: {currentAssignment.assignment_end_date}</p>
+        <div className="p-4 bg-gray-200 rounded-lg mb-[50px]">
+          <h1 className="text-4xl">{currentAssignment.assignment_title}</h1>
+          <h2 className="text-2xl text-gray-500">{currentAssignment.course_code} {currentAssignment.course_name}</h2>
+          <p className="py-[20px]">Due: {currentAssignment.assignment_end_date.split("T")[0]}</p>
+          <p>Attempts: {previousFeedback.length}/{currentAssignment.assignment_attempts}</p>
+          <p>You have {currentAssignment.assignment_attempts - previousFeedback.length} attempts left </p>
         </div>
       ) : (
         <p>Loading...</p>
@@ -80,38 +86,17 @@ function StudentAssignmentAssessmentPage() {
       ) : null}
 
       {previousFeedback.length > 0 ? (
-        <div>
+        <div className="mt-[80px] p-4 border-2 border-gray-200 rounded-lg">
           <h2 className='font-bold'>Previous Feedback</h2>
           {previousFeedback.map((feedback) => (
-            <div key={feedback.feedback_id}>
-              <h3 className='font-bold'>Attempt #{feedback.attempt_nr}</h3>
-              <div className='flex'>
-                <div className='border-r-2 border-gray-300 pr-4'>
-                  <h4 className='font-bold'>Feedback:</h4>
-                  <p>{feedback.general_comment}</p>
-                </div>
-                <div>
-                  <h4 className='font-bold'>Suggested Result:</h4>
-                  <p
-                    className={
-                      feedback.suggested_result === "pass"
-                        ? "text-green-500"
-                        : feedback.suggested_result === "fail"
-                        ? "text-red-500"
-                        : ""
-                    }
-                  >
-                    {feedback.suggested_result}
-                  </p>
-                </div>
-              </div>
-            </div>
+            <FeedbackCard feedback={feedback} 
+             key={feedback.feedback_id} />
           ))}
         </div>
       ) : (
-        <p>You have yet to receive any feedback</p>
+        <p className="mt-[100px]">You have yet to receive any feedback.</p>
       )}
-    </>
+    </main>
   );
 }
 
