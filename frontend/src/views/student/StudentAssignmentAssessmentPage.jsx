@@ -10,6 +10,7 @@ import BackComponent from '../../components/BackComponent';
 function StudentAssignmentAssessmentPage() {
   const [currentAssignment, setCurrentAssignment] = useState(null);
   const [previousFeedback, setPreviousFeedback] = useState([]);
+  const [attemptsUsed, setAttemptsUsed] = useState(0)
   const path = useParams();
   const assignmentId = parseInt(path.id, 10);
   const { userId, token } = useAuth();
@@ -44,14 +45,26 @@ function StudentAssignmentAssessmentPage() {
       });
   }, [userId, assignmentId]);
 
-  // calculate nr of attempts
+
+
   let totalAttempts = 0;
-  previousFeedback.forEach((feedback) => {
-    if (feedback.attempt_nr > totalAttempts) {
-      totalAttempts = feedback.attempt_nr;
-    }
-  });
-  console.log(previousFeedback)
+  useEffect(()=>{
+    // calculate nr of attempts
+    previousFeedback.forEach((feedback) => {
+      if (feedback.attempt_nr > totalAttempts) {
+        totalAttempts = feedback.attempt_nr;
+      }
+    });
+    setAttemptsUsed(totalAttempts)
+  }, [previousFeedback])
+
+  const incrementAttempt = () =>{
+    setAttemptsUsed(prev => prev + 1)
+  }
+
+
+  
+  
 
   return (
     <main>
@@ -61,27 +74,28 @@ function StudentAssignmentAssessmentPage() {
           <h1 className="text-4xl">{currentAssignment.assignment_title}</h1>
           <h2 className="text-2xl text-gray-500">{currentAssignment.course_code} {currentAssignment.course_name}</h2>
           <p className="py-[20px]">Due: {currentAssignment.assignment_end_date.split("T")[0]}</p>
-          <p>Attempts: {previousFeedback.length}/{currentAssignment.assignment_attempts}</p>
-          <p>You have {currentAssignment.assignment_attempts - previousFeedback.length} attempts left </p>
+          <p>Attempts: {attemptsUsed}/{currentAssignment.assignment_attempts}</p>
+          <p>You have {currentAssignment.assignment_attempts - attemptsUsed} {currentAssignment.assignment_attempts - attemptsUsed <=1 ? "attempt left" : "attempts left"} </p>
         </div>
       ) : (
         <p>Loading...</p>
       )}
 
       {currentAssignment &&
-        totalAttempts >= currentAssignment.assignment_attempts && (
+        attemptsUsed >= currentAssignment.assignment_attempts && (
           <p className='font-bold'>
-            You have reached the maximum number of attempts
+            You have reached the maximum number of attempts.
           </p>
         )}
       {currentAssignment &&
       currentAssignment.is_active === 1 &&
-      totalAttempts < currentAssignment.assignment_attempts ? (
+      attemptsUsed < currentAssignment.assignment_attempts ? (
         <UploadAssignmentAssessment
           assignmentId={currentAssignment.assignment_id}
           filetypes={currentAssignment.allowed_filetypes}
           description={currentAssignment.assignment_description}
           criteria={currentAssignment.assignment_criteria}
+          onUploadDone={() => incrementAttempt()}
         />
       ) : null}
 

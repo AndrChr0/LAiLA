@@ -8,6 +8,7 @@ function UploadAssignmentAssessment({
   filetypes,
   description,
   criteria,
+  onUploadDone
 }) {
   const [feedback, setFeedback] = useState("");
   const [file, setFile] = useState(null);
@@ -71,6 +72,7 @@ function UploadAssignmentAssessment({
       setFile(null);
       setFeedback(response.data || "");
       setLoading(false);
+      onUploadDone()
     } catch (error) {
       console.error(error);
       setError(error.message);
@@ -86,7 +88,7 @@ function UploadAssignmentAssessment({
       <h2 className="text-xl font-light">Upload Project Zip file</h2>
       <div className="flex flex-col w-4/5">
         <input
-          className="p-2 w-[20%] text-white bg-black border border-gray-300 rounded hover:bg-gray-100 hover:cursor-pointer"
+          className="p-2 w-[20%] text-white bg-black border border-gray-300 rounded hover:bg-gray-700 hover:cursor-pointer"
           type="file"
           name="zipUpload"
           onChange={handleFileChange}
@@ -106,12 +108,12 @@ function UploadAssignmentAssessment({
       </div>
       {submitModule && (
         <div className="fixed inset-0  flex items-center justify-center bg-[rgba(0,0,0,0.5)] p-4">
-          <div className="bg-white rounded-xl shadow-2xl w-full max-w-md p-6 mx-auto">
+          <div className="w-full max-w-md p-6 mx-auto bg-white shadow-2xl rounded-xl">
             <div className="mb-4">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+              <h2 className="mb-4 text-2xl font-semibold text-gray-800">
                 Disclaimer
               </h2>
-              <ul className="space-y-3 text-gray-700 pl-5 list-disc">
+              <ul className="pl-5 space-y-3 text-gray-700 list-disc">
               <li className="pl-2">
                   <span className="font-medium text-red-600">
                     Grading:
@@ -146,9 +148,9 @@ function UploadAssignmentAssessment({
               </ul>
             </div>
 
-            <div className="flex space-x-4 mt-6">
+            <div className="flex mt-6 space-x-4">
               <button
-                className="flex-1 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
+                className="flex-1 py-3 text-white transition-colors duration-300 ease-in-out transform bg-green-600 rounded-lg hover:bg-green-700 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
                 onClick={uploadFile}
               >
                 Submit Assignment
@@ -156,7 +158,7 @@ function UploadAssignmentAssessment({
               <button
                 type="button"
                 onClick={() => setSubmitModule(false)}
-                className="flex-1 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
+                className="flex-1 py-3 text-white transition-colors duration-300 ease-in-out transform bg-red-600 rounded-lg hover:bg-red-700 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
               >
                 Close
               </button>
@@ -168,20 +170,20 @@ function UploadAssignmentAssessment({
       {error && <p className="text-red-500">{error}</p>}
       {loading && <p>Processing...</p>}
       {feedback && (
-        <div className="bg-white shadow-md border border-gray-300 rounded-lg p-6 mt-10">
-          <h3 className="text-lg font-semibold text-gray-800 mb-2">
+        <div className="p-6 mt-10 bg-white border border-gray-300 rounded-lg shadow-md">
+          <h3 className="mb-2 text-lg font-semibold text-gray-800">
             Feedback comment:
           </h3>
-          <p className="text-gray-600 mb-4">{feedback.general_comment}</p>
-          <h3 className="text-lg font-semibold text-gray-800 mb-2">
+          <p className="mb-4 text-gray-600">{feedback.general_comment}</p>
+          <h3 className="mb-2 text-lg font-semibold text-gray-800">
             Suggested Grade:
           </h3>
           {feedback.result_string === "pass" ? (
-            <span className="inline-block bg-green-100 text-green-800 rounded-full px-3 py-1 text-sm font-medium">
+            <span className="inline-block px-3 py-1 text-sm font-medium text-green-800 bg-green-100 rounded-full">
               PASS
             </span>
           ) : (
-            <span className="inline-block bg-red-100 text-red-800 rounded-full px-3 py-1 text-sm font-medium">
+            <span className="inline-block px-3 py-1 text-sm font-medium text-red-800 bg-red-100 rounded-full">
               FAIL
             </span>
           )}
