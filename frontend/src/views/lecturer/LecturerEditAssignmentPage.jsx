@@ -234,7 +234,7 @@ const LecturerEditAssignmentPage = () => {
           onChange={(e) => setPassPercentage(e.target.value)}
           className="w-16 p-2 mb-4 bg-white border border-gray-400"
         />
-        <label htmlFor="max_score">Max Score</label>
+        {/* <label htmlFor="max_score">Max Score</label>
         <input
           type="number"
           id="max_score"
@@ -242,7 +242,7 @@ const LecturerEditAssignmentPage = () => {
           value={maxScore || 0}
           onChange={(e) => setMaxScore(e.target.value)}
           className="w-16 p-2 mb-4 bg-white border border-gray-400"
-        />
+        /> */}
         <div className="flex flex-col items-start">
           <label htmlFor="allowed_filetype">Allowed Filetypes</label>
           <input
