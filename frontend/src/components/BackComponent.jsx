@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from "react-icons/fa";
 
-const BackComponent = ({ destination }) => {
+const BackComponent = ({ destination='/' }) => {
     const navigate = useNavigate();
 
     return (
