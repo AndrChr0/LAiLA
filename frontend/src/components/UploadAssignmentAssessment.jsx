@@ -88,7 +88,7 @@ function UploadAssignmentAssessment({
       <h2 className="text-xl font-light">Upload Project Zip file</h2>
       <div className="flex flex-col w-4/5">
         <input
-          className="p-2 w-[20%] text-white bg-black border border-gray-300 rounded hover:bg-gray-100 hover:cursor-pointer"
+          className="p-2 w-[20%] text-white bg-black border border-gray-300 rounded hover:bg-gray-700 hover:cursor-pointer"
           type="file"
           name="zipUpload"
           onChange={handleFileChange}
