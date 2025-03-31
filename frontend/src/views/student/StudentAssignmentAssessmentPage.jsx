@@ -59,7 +59,7 @@ function StudentAssignmentAssessmentPage() {
   }, [previousFeedback])
 
   const incrementAttempt = () =>{
-    setAttemptsUsed(attemptsUsed+1)
+    setAttemptsUsed(prev => prev + 1)
   }
 
 
