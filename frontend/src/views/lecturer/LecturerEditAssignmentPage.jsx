@@ -42,7 +42,7 @@ const LecturerEditAssignmentPage = () => {
       setAssignmentDescription(res.data.assignment_description);
       setAssignmentFiletypes(filesArray);
       setAssignmentCriteria(res.data.assignment_criteria);
-      setPassPercentage(parseInt(res.data.pass_threshold) * 100);
+      setPassPercentage(parseInt(res.data.pass_threshold* 100) );
       setMaxScore(res.data.max_score);
     });
   }, [id]);
@@ -140,6 +140,8 @@ const LecturerEditAssignmentPage = () => {
       setSuccessMsg("");
     }
   }
+
+
 
   return (
     <main>
