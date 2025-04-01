@@ -32,9 +32,6 @@ export async function getAllAssignmentReports(req, res, next) {
 // two identical functions to create new reports (they only differ in terms of authentication in the router)
 export async function createAssignmentReport(req, res, next) {
   try {
-    console.log("ÆÆÆÆÆÆÆÆÆÆÆÆ");
-    console.log(req.body);
-
     const result = await generateAssignmentReport(
       req.params.assignment_id,
       req.body.isManuallyCreated,
