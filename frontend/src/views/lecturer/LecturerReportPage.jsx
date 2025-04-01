@@ -36,6 +36,7 @@ const LecturerReportPage = () => {
   const { token } = useAuth();
   const path = useParams();
   const pathId = path.id;
+  console.log(reportData);
 
   useEffect(() => {
     instance
@@ -53,14 +54,7 @@ const LecturerReportPage = () => {
     setIsLoading(true);
 
     instance
-      .post(
-        `/api/reports/${id}`,
-        {
-          isManuallyCreated: true,
-          date: new Date().toISOString().slice(0, 19).replace("T", " "),
-        },
-        GetConfig(token)
-      )
+      .post(`/api/reports/${id}`, { isManuallyCreated: true, date: new Date().toISOString().slice(0, 19).replace("T", " ") }, GetConfig(token))
       .then((res) => {
         setIsLoading(false);
         setReportData([res.data[0], ...reportData]);
@@ -133,17 +127,16 @@ const LecturerReportPage = () => {
   const additionalNotes =
     reportData[selectedReport].report_contents.additionalNotes;
 
-  const date = new Date(reportData[selectedReport].date_created);
-  const formattedDate =
-    date.toISOString().split("T")[0] +
-    " " +
-    date.toISOString().split("T")[1].split(".")[0];
+    const date = new Date(reportData[selectedReport].date_created);
+    const formattedDate = date.toISOString().split('T')[0] + ' ' + date.toISOString().split('T')[1].split('.')[0];
+
+
 
   return !reportData && !reportData[selectedReport] ? (
     <div>Loading...</div>
   ) : (
     <main>
-      <BackComponent destination='/home' />
+      <BackComponent destination="/home" />
       <div className='min-h-screen p-6 bg-gray-50'>
         <div className='mx-auto max-w-7xl'>
           <header className='mb-8'>
@@ -193,9 +186,7 @@ const LecturerReportPage = () => {
               <CardContent className='p-6'>
                 <div className='flex items-center justify-between'>
                   <div>
-                    <p className='text-sm font-medium text-gray-500'>
-                      Pass Rate
-                    </p>
+                    <p className='text-sm font-medium text-gray-500'>Pass Rate</p>
                     <p className='text-2xl font-bold text-gray-900'>
                       {(
                         (passFailData[0].value /
@@ -350,9 +341,7 @@ const LecturerReportPage = () => {
                     <CheckCircle className='w-5 h-5 text-green-500' />
                     Strong areas
                   </CardTitle>
-                  <CardDescription>
-                    Where students performed well
-                  </CardDescription>
+                  <CardDescription>Where students performed well</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className='space-y-6'>

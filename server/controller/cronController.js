@@ -9,31 +9,33 @@ const pool = SQLpool;
 
 // cronjob function to find assignments with feedback
 export async function checkFeedbackProgress() {
-  try {
-    // get assignments that are active
-    const [activeAssignments] = await pool.query(`
+    try {
+        // get assignments that are active
+        const [activeAssignments] = await pool.query(`
             SELECT f.assignment_id
             FROM feedback f
             JOIN assignments a ON f.assignment_id = a.assignment_id
             WHERE a.is_active = 1
-            GROUP BY f.assignment_id;`);
+            GROUP BY f.assignment_id;`
+        );
 
-    for (let i = 0; i < activeAssignments.length; i++) {
-      await requestGenerateReport(activeAssignments[i].assignment_id);
+        // console.log(activeAssignments);
+
+        for (let i = 0; i < activeAssignments.length; i++) {
+            await requestGenerateReport(activeAssignments[i].assignment_id);
+        }
+    } catch (error) {
+        console.error(error);
     }
-  } catch (error) {
-    console.error(error);
-  }
 }
 
 // function to query report routes to generate report(s)
 async function requestGenerateReport(id) {
-  try {
-    const response = await axios.post(`${PATH}:${PORT}/api/reports/cron/${id}`);
-  } catch (error) {
-    console.error(
-      "API request failed:",
-      error.response ? error.response.data : error.message
-    );
-  }
+    try {
+        const response = await axios.post(`${PATH}:${PORT}/api/reports/cron/${id}`);
+        // console.log("Report generated:", response.data);
+    } catch (error) {
+        console.error("API request failed:", error.response ? error.response.data : error.message);
+    }
 }
+

@@ -34,6 +34,8 @@ function StudentAssignmentAssessmentPage() {
     instance
       .get(`api/feedback?student_id=${userId}`, GetConfig(token))
       .then((response) => {
+        console.log("Feedback API Response:", response.data);
+
         setPreviousFeedback(
           response.data.filter(
             (feedback) => feedback.assignment_id === assignmentId

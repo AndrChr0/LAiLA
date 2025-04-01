@@ -51,6 +51,7 @@ Do not provide any text outside of the JSON.
     model: "claude-3-7-sonnet-latest",
   });
 
+  console.log(message.content[1].input);
   const parsedMessage = message.content[1].input;
 
   return parsedMessage;

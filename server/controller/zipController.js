@@ -127,7 +127,7 @@ export const getZipcontents = async (req, res, next) => {
       criteriaString,
       description
     );
-    // Evaluate - CLAUDE
+    // Evaluate - Claude
     // const evaluatedSubmission = await claudeAssessmentEvaluation(
     //   zipContents,
     //   criteriaString,
@@ -137,6 +137,10 @@ export const getZipcontents = async (req, res, next) => {
     if (evaluatedSubmission) {
       deleteZipFileContent();
     }
+    // console.log(
+    //   "Evaluated submission:",
+    //   evaluatedSubmission.AI_final_assessment.AI_final_comments
+    // );
 
     // get pass threshold and max score
     const [assignmentEvaluationData] = await pool.query(
@@ -206,14 +210,12 @@ export const getZipcontents = async (req, res, next) => {
       ]
     );
 
-    // assign response values - general comment and result string
     const responseObj = {
       general_comment:
         evaluatedSubmission.AI_final_assessment.AI_final_comments,
       result_string: resultString,
     };
 
-    // remove score/max score from feedback JSON
     const sanitizedSubmission = sanitizeFeedback(evaluatedSubmission);
 
     const details = {
@@ -224,7 +226,6 @@ export const getZipcontents = async (req, res, next) => {
       student_work: studentWork,
       date: new Date().toISOString().slice(0, 19).replace("T", " "),
     };
-
     await axios.post(`${PATH}:${PORT}/api/assessment/${details.assignment}`, {
       details,
     });

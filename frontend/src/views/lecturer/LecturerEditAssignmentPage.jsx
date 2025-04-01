@@ -42,7 +42,7 @@ const LecturerEditAssignmentPage = () => {
       setAssignmentDescription(res.data.assignment_description);
       setAssignmentFiletypes(filesArray);
       setAssignmentCriteria(res.data.assignment_criteria);
-      setPassPercentage(parseInt(res.data.pass_threshold * 100));
+      setPassPercentage(parseInt(res.data.pass_threshold* 100) );
       setMaxScore(res.data.max_score);
     });
   }, [id]);
@@ -74,6 +74,8 @@ const LecturerEditAssignmentPage = () => {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    console.log("submitting");
+    console.log(assignment_criteria);
 
     if (!assignment_title) {
       setErrorMsg("Please enter a title for the assignment.");
@@ -129,6 +131,7 @@ const LecturerEditAssignmentPage = () => {
         },
         GetConfig(token)
       );
+      console.log(res);
       setSuccessMsg("Assignment updated successfully!");
       setErrorMsg("");
     } catch (error) {
@@ -138,98 +141,100 @@ const LecturerEditAssignmentPage = () => {
     }
   }
 
+
+
   return (
     <main>
-      <BackComponent destination='/home' />
-      <h1 className='text-4xl font-normal mb-[1.5em]'>
-        <span className='font-bold'>Edit </span> {assignment?.assignment_title}
+      <BackComponent destination="/home" />
+      <h1 className="text-4xl font-normal mb-[1.5em]">
+        <span className="font-bold">Edit </span> {assignment?.assignment_title}
       </h1>
-      <form onSubmit={handleSubmit} className='flex flex-col space-y-2'>
+      <form onSubmit={handleSubmit} className="flex flex-col space-y-2">
         <label
-          htmlFor='assignment_title'
-          className='block text-sm font-medium text-gray-700'
+          htmlFor="assignment_title"
+          className="block text-sm font-medium text-gray-700"
         >
           Title
         </label>
         <input
-          type='text'
-          id='assignment_title'
-          name='assignment_title'
+          type="text"
+          id="assignment_title"
+          name="assignment_title"
           value={assignment_title || ""}
           onChange={(e) => setAssignmentTitle(e.target.value)}
-          className='p-2 mb-4 bg-white border border-gray-400'
+          className="p-2 mb-4 bg-white border border-gray-400"
         />
-        <label htmlFor='assignment_description'>Description</label>
+        <label htmlFor="assignment_description">Description</label>
         <textarea
-          id='assignment_description'
-          name='assignment_description'
+          id="assignment_description"
+          name="assignment_description"
           value={assignment_description || ""}
           onChange={(e) => setAssignmentDescription(e.target.value)}
-          className='p-2 mb-4 bg-white border border-gray-400'
+          className="p-2 mb-4 bg-white border border-gray-400"
         />
-        <div className='flex w-full gap-4'>
-          <div className='flex flex-col'>
-            <label htmlFor='assignment_start_date'>Start Date</label>
+        <div className="flex w-full gap-4">
+          <div className="flex flex-col">
+            <label htmlFor="assignment_start_date">Start Date</label>
             <input
-              type='date'
-              id='assignment_start_date'
-              name='assignment_start_date'
+              type="date"
+              id="assignment_start_date"
+              name="assignment_start_date"
               value={assignment_start_date || ""}
               onChange={(e) => setAssignmentStart(e.target.value)}
-              className='w-full p-2 mb-4 bg-white border border-gray-400'
+              className="w-full p-2 mb-4 bg-white border border-gray-400"
             />
           </div>
 
-          <div className='flex flex-col'>
-            <label htmlFor='assignment_end_date'>End Date</label>
+          <div className="flex flex-col">
+            <label htmlFor="assignment_end_date">End Date</label>
             <input
-              type='date'
-              id='assignment_end_date'
-              name='assignment_end_date'
+              type="date"
+              id="assignment_end_date"
+              name="assignment_end_date"
               value={assignment_end_date || ""}
               onChange={(e) => setAssignmentEnd(e.target.value)}
-              className='w-full p-2 mb-4 bg-white border border-gray-400'
+              className="w-full p-2 mb-4 bg-white border border-gray-400"
             />
           </div>
         </div>
 
-        <div className='flex items-center gap-4'>
-          <label htmlFor='is_active'>Active</label>
+        <div className="flex items-center gap-4">
+          <label htmlFor="is_active">Active</label>
           <input
-            type='checkbox'
-            id='is_active'
-            name='is_active'
+            type="checkbox"
+            id="is_active"
+            name="is_active"
             checked={isActive}
             onChange={(e) => setIsActive(e.target.checked)}
           />
         </div>
-        <div className='flex items-center gap-4'>
-          <label htmlFor='is_public'>Public</label>
+        <div className="flex items-center gap-4">
+          <label htmlFor="is_public">Public</label>
           <input
-            type='checkbox'
-            id='is_public'
-            name='is_public'
+            type="checkbox"
+            id="is_public"
+            name="is_public"
             checked={isPublic}
             onChange={(e) => setIsPublic(e.target.checked)}
           />
         </div>
-        <label htmlFor='assignment_attempts'>Attempts</label>
+        <label htmlFor="assignment_attempts">Attempts</label>
         <input
-          type='number'
-          id='assignment_attempts'
-          name='assignment_attempts'
+          type="number"
+          id="assignment_attempts"
+          name="assignment_attempts"
           value={assignment_attempts || 0}
           onChange={(e) => setAssignmentAttempts(e.target.value)}
-          className='p-2 mb-4 bg-white border border-gray-400'
+          className="p-2 mb-4 bg-white border border-gray-400"
         />
-        <label htmlFor='pass_percentage'>Pass Percentage</label>
+        <label htmlFor="pass_percentage">Pass Percentage</label>
         <input
-          type='number'
-          id='pass_percentage'
-          name='pass_percentage'
+          type="number"
+          id="pass_percentage"
+          name="pass_percentage"
           value={passPercentage || 70}
           onChange={(e) => setPassPercentage(e.target.value)}
-          className='w-16 p-2 mb-4 bg-white border border-gray-400'
+          className="w-16 p-2 mb-4 bg-white border border-gray-400"
         />
         {/* <label htmlFor="max_score">Max Score</label>
         <input
@@ -240,32 +245,32 @@ const LecturerEditAssignmentPage = () => {
           onChange={(e) => setMaxScore(e.target.value)}
           className="w-16 p-2 mb-4 bg-white border border-gray-400"
         /> */}
-        <div className='flex flex-col items-start'>
-          <label htmlFor='allowed_filetype'>Allowed Filetypes</label>
+        <div className="flex flex-col items-start">
+          <label htmlFor="allowed_filetype">Allowed Filetypes</label>
           <input
-            type='text'
-            id='allowed_filetype'
-            name='allowed_filetype'
+            type="text"
+            id="allowed_filetype"
+            name="allowed_filetype"
             value={allowed_filetype || ""}
             onChange={(e) => setAssignmentFiletype(e.target.value)}
-            className='w-40 p-2 mb-4 bg-white border border-gray-400'
+            className="w-40 p-2 mb-4 bg-white border border-gray-400"
           />
           <button
-            className='w-40 p-2 mb-4 bg-white border border-gray-400 hover:bg-gray-100 hover:cursor-pointer'
-            type='button'
+            className="w-40 p-2 mb-4 bg-white border border-gray-400 hover:bg-gray-100 hover:cursor-pointer"
+            type="button"
             onClick={handleFileChange}
           >
             Add Filetype
           </button>
         </div>
-        <div className='flex flex-wrap gap-2'>
+        <div className="flex flex-wrap gap-2">
           {allowed_filetypes &&
             allowed_filetypes.map((filetype, index) => (
-              <span key={index} className=''>
+              <span key={index} className="">
                 <span>{filetype}</span>
                 <button
-                  className='w-16 mb-4 ml-2 bg-white border border-gray-400 hover:cursor-pointer hover:bg-gray-100'
-                  type='button'
+                  className="w-16 mb-4 ml-2 bg-white border border-gray-400 hover:cursor-pointer hover:bg-gray-100"
+                  type="button"
                   onClick={() => {
                     setAssignmentFiletypes(
                       allowed_filetypes.filter((file) => file !== filetype)
@@ -288,21 +293,19 @@ const LecturerEditAssignmentPage = () => {
         )}
 
         <button
-          type='submit'
-          className='w-40 p-2 mb-4 bg-white border border-gray-400 hover:bg-gray-100 hover:cursor'
+          type="submit"
+          className="w-40 p-2 mb-4 bg-white border border-gray-400 hover:bg-gray-100 hover:cursor"
         >
           Update Assignment
         </button>
 
-        {errorMsg && <p className='text-red-500'>{errorMsg}</p>}
-        {successMsg && (
-          <>
-            <p className='text-green-500'>{successMsg}</p>
-            <Link to={`/home`} className='text-blue-500 underline'>
-              Go to Home
-            </Link>
-          </>
-        )}
+        {errorMsg && <p className="text-red-500">{errorMsg}</p>}
+        {successMsg && 
+        <>
+        <p className="text-green-500">{successMsg}</p>
+        <Link to={`/home`} className="text-blue-500 underline">Go to Home</Link>
+        </>
+        }
       </form>
     </main>
   );

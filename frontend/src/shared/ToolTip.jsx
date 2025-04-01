@@ -8,9 +8,11 @@ function ToolTip({ toolText = "tooltip text", size = 20 }) {
     <span className='w-8'>
       <span
         onMouseOver={() => {
+          console.log("hovered");
           setIsHovered(true);
         }}
         onMouseLeave={() => {
+          console.log("left");
           setIsHovered(false);
         }}
       >

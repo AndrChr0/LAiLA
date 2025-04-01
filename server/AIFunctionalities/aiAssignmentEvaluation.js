@@ -5,6 +5,8 @@ dotenv.config(); // load server env
 const openai = new OpenAI({ apiKey: process.env.AI_API_KEY });
 
 export async function evaluateSubmission(submission, criteria, description) {
+  // console.log(submission);
+
   const submissionString = submission.join("");
 
   const jsonCriteria = JSON.parse(criteria);
