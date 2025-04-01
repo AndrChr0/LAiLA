@@ -32,12 +32,9 @@ function SyntaxHighlighterComponent({
       <div className='flex items-center justify-between px-4 py-3 text-gray-200 bg-gray-800'>
         <div className='flex items-center space-x-2'>
           <File size={16} className='text-gray-400' />
-          <span className='font-mono text-base truncate '>
-            {filePath}
-          </span>
+          <span className='font-mono text-base  '>{filePath}</span>
         </div>
         <div className='flex items-center space-x-2'>
-     
           <button
             className='p-1.5 hover:bg-gray-700 rounded-md transition-colors'
             onClick={() => setIsCollapsed(!isCollapsed)}
@@ -64,7 +61,7 @@ function SyntaxHighlighterComponent({
         <div className='relative'>
           <SyntaxHighlighter
             showLineNumbers={highlightLanguage !== "plaintext"}
-            wrapLongLines = {language = 'plaintext'}
+            wrapLongLines={(language = "plaintext")}
             language={highlightLanguage}
             style={vs2015}
             customStyle={{
@@ -78,7 +75,7 @@ function SyntaxHighlighterComponent({
           </SyntaxHighlighter>
 
           <div className='absolute px-2 py-1 text-xs text-gray-400 bg-gray-800 rounded-md bottom-2 right-2 opacity-70'>
-            {highlightLanguage == 'htmlbars' ? 'HTML' : highlightLanguage}
+            {highlightLanguage == "htmlbars" ? "HTML" : highlightLanguage}
           </div>
         </div>
       </div>
