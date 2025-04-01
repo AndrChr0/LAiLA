@@ -127,7 +127,7 @@ export const getZipcontents = async (req, res, next) => {
       criteriaString,
       description
     );
-    // Evaluate - Claude
+    // Evaluate - CLAUDE
     // const evaluatedSubmission = await claudeAssessmentEvaluation(
     //   zipContents,
     //   criteriaString,
@@ -137,10 +137,6 @@ export const getZipcontents = async (req, res, next) => {
     if (evaluatedSubmission) {
       deleteZipFileContent();
     }
-    // console.log(
-    //   "Evaluated submission:",
-    //   evaluatedSubmission.AI_final_assessment.AI_final_comments
-    // );
 
     // get pass threshold and max score
     const [assignmentEvaluationData] = await pool.query(

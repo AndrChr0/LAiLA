@@ -16,7 +16,6 @@ WHERE assignment_id = ?;`,
     [assignment_id]
   );
 
-  console.log(manualCreationCount[0]["COUNT(isManuallyCreated)"]);
   if (manualCreationCount[0]["COUNT(isManuallyCreated)"] >= 5) {
     throw Object.assign(
       new Error("Max number of manually created reports reached"),
@@ -146,8 +145,6 @@ where report_id = ?;
     `,
     [result.insertId]
   );
-
-  console.log(newestReport);
 
   return newestReport;
 }

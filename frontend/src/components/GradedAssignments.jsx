@@ -1,11 +1,6 @@
 import { Link } from "react-router-dom";
 
 function GradedAssignments({ assessments }) {
-  console.log("gradd ass: ", assessments);
-
-  assessments.map((item, index) => {
-    console.log(item.assignment_title, index);
-  });
   return (
     <div>
       {assessments &&

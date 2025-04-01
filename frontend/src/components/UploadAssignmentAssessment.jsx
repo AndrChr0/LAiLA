@@ -24,8 +24,6 @@ function UploadAssignmentAssessment({
     setFile(e.target.files[0]);
   }
 
-  console.log("file:", file);
-
   async function uploadFile() {
     try {
       setSubmitModule(false);
@@ -41,8 +39,6 @@ function UploadAssignmentAssessment({
 
       setError("");
       setLoading(true);
-
-      console.log("Uploading file...");
 
       const formData = new FormData();
       // zipUpload - see multer config in zipRoutes.js
@@ -69,7 +65,6 @@ function UploadAssignmentAssessment({
         }
       );
 
-      console.log("Server response:", response.data);
       setFile(null);
       setFeedback(response.data);
       setLoading(false);
@@ -81,7 +76,6 @@ function UploadAssignmentAssessment({
     }
   }
 
-  // console.log("feedback:", feedback);
   return (
     <div className='flex flex-col'>
       <ul className='text-red-900'>
