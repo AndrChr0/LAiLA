@@ -48,7 +48,16 @@ const LecturerReportPage = () => {
       });
   }, [pathId]);
 
-  if (!reportData) return <div>No reports yet.</div>;
+  if (!reportData) return <div>No reports yet. <button
+  disabled={isLoading}
+  onClick={() => handleNewAssignmentReport(pathId)}
+  type='button'
+  className={`h-auto min-h-10 px-5 m-2 duration-150 rounded-lg focus:shadow-outline bg-white hover:bg-neutral-200 border border-neutral-300 hover:border-neutral-400 text-neutral-700 hover:text-neutral-800 ${
+    isLoading ? "hidden" : ""
+  }`}
+>
+  Generate New Report
+</button></div>;
   function handleNewAssignmentReport(id) {
     setIsLoading(true);
 

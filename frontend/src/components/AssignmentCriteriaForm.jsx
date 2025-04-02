@@ -115,11 +115,12 @@ function AssignmentCriteriaForm({
         if (s.sectionId === sectionId) {
           const newSub = {
             subsectionId: crypto.randomUUID(),
-            subsectionName: `criteria_${s.subsections.length + 1}`,
-            scoreDescription: "Criteria (0-3) ...",
-            feedbackDescription: "Feedback on ...",
+            subsectionName: "",
+            scoreDescription: "",
+            feedbackDescription: "",
             maxScore: 3,
           };
+          setExpandedSubsections(prev => ({ ...prev, [newSub.subsectionId]: true }));
           return { ...s, subsections: [...s.subsections, newSub] };
         }
         return s;

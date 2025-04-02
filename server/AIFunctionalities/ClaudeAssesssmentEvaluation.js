@@ -13,7 +13,7 @@ export async function claudeAssessmentEvaluation(
   const submissionString = submission.join("");
 
   const message = await client.messages.create({
-    max_tokens: 10000,
+    max_tokens: 5000,
     tools: [
       {
         name: "evaluate_student_submission",
