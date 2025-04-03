@@ -5,6 +5,7 @@ import { GetConfig } from "../../utils/GetConfig";
 import instance from "../../utils/axiosInstance";
 import StudentFinalAssessmentDisplay from "../../components/StudentFinalAssessmentDisplay";
 import { Link } from "react-router-dom";
+import BackComponent from "../../components/BackComponent";
 
 function StudentFinalAssessment() {
   const [currentAssessment, setCurrentAssessment] = useState();
@@ -49,6 +50,9 @@ function StudentFinalAssessment() {
   console.log(errorMsg);
   return (
     <main>
+      <BackComponent
+        destination={`/home`}
+      />
       <div className="flex justify-between">
         <h1 className="text-2xl font-light">
           {currentAssessment.assignment_title}
