@@ -1,4 +1,7 @@
 import { aggregateAssignmentFeedback } from "../AIFunctionalities/aiAggregatedAssignmentFeedback.js";
+
+import { claudeReportGenerator } from "../AIFunctionalities/ClaudeAggregateFeedback.js";
+
 import { pool as SQLpool } from "./SQLPool.js";
 const pool = SQLpool;
 
@@ -16,7 +19,6 @@ WHERE assignment_id = ?;`,
     [assignment_id]
   );
 
-  console.log(manualCreationCount[0]["COUNT(isManuallyCreated)"]);
   if (manualCreationCount[0]["COUNT(isManuallyCreated)"] >= 5) {
     throw Object.assign(
       new Error("Max number of manually created reports reached"),
@@ -104,12 +106,19 @@ WHERE assignment_id = ?;`,
     throw Object.assign(new Error("Assignment not found"), { status: 404 });
   }
 
-  // AI stuff
+  // generate the report - GPT
   const newReport = await aggregateAssignmentFeedback(
     aiData[0]["assignment_description"],
     aiData[0]["assignment_criteria"],
     feedbackContents
   );
+
+  // generate the report - Claude
+  // const newReport = await claudeReportGenerator(
+  //   aiData[0]["assignment_description"],
+  //   aiData[0]["assignment_criteria"],
+  //   feedbackContents
+  // );
 
   let isManuallyCreatedReport = isManuallyCreated;
   if (!isManuallyCreatedReport) {
@@ -146,8 +155,6 @@ where report_id = ?;
     `,
     [result.insertId]
   );
-
-  console.log(newestReport);
 
   return newestReport;
 }

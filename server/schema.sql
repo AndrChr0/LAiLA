@@ -117,7 +117,18 @@ INSERT INTO users (first_name, last_name, role, email, password) VALUES
 ('Luvin', 'Ragoo', 'lecturer', 'mrragoo@ntnu', '$2b$10$72WZIieimJ17Kmtfo50FXuAbFDybh.fwrbQhsCKwEevrdpxGrrjXS'),
 ('Nipuna', 'Wee', 'lecturer', 'wutang@ntnu', '$2b$10$72WZIieimJ17Kmtfo50FXuAbFDybh.fwrbQhsCKwEevrdpxGrrjXS'),
 ('Emil', 'Bakk', 'lecturer', 'emba@ntnu', '$2b$10$72WZIieimJ17Kmtfo50FXuAbFDybh.fwrbQhsCKwEevrdpxGrrjXS'),
-('Paul', 'Knut', 'lecturer', 'apku@ntnu', '$2b$10$72WZIieimJ17Kmtfo50FXuAbFDybh.fwrbQhsCKwEevrdpxGrrjXS');
+('Paul', 'Knut', 'lecturer', 'apku@ntnu', '$2b$10$72WZIieimJ17Kmtfo50FXuAbFDybh.fwrbQhsCKwEevrdpxGrrjXS'),
+('test', 'one', 'student', 'test@one', '$2b$10$72WZIieimJ17Kmtfo50FXuAbFDybh.fwrbQhsCKwEevrdpxGrrjXS'),
+('test', 'two', 'student', 'test@two', '$2b$10$72WZIieimJ17Kmtfo50FXuAbFDybh.fwrbQhsCKwEevrdpxGrrjXS'),
+('test', 'three', 'student', 'test@three', '$2b$10$72WZIieimJ17Kmtfo50FXuAbFDybh.fwrbQhsCKwEevrdpxGrrjXS'),
+('test', 'four', 'student', 'test@four', '$2b$10$72WZIieimJ17Kmtfo50FXuAbFDybh.fwrbQhsCKwEevrdpxGrrjXS'),
+('test', 'five', 'student', 'test@five', '$2b$10$72WZIieimJ17Kmtfo50FXuAbFDybh.fwrbQhsCKwEevrdpxGrrjXS'),
+('test', 'six', 'student', 'test@six', '$2b$10$72WZIieimJ17Kmtfo50FXuAbFDybh.fwrbQhsCKwEevrdpxGrrjXS'),
+('test', 'seven', 'student', 'test@seven', '$2b$10$72WZIieimJ17Kmtfo50FXuAbFDybh.fwrbQhsCKwEevrdpxGrrjXS'),
+('test', 'eight', 'student', 'test@eight', '$2b$10$72WZIieimJ17Kmtfo50FXuAbFDybh.fwrbQhsCKwEevrdpxGrrjXS'),
+('test', 'nine', 'student', 'test@nine', '$2b$10$72WZIieimJ17Kmtfo50FXuAbFDybh.fwrbQhsCKwEevrdpxGrrjXS'),
+('test', 'ten', 'student', 'test@ten', '$2b$10$72WZIieimJ17Kmtfo50FXuAbFDybh.fwrbQhsCKwEevrdpxGrrjXS');
+
 
 INSERT INTO courses (course_code, course_name, course_description, course_link, course_coordinator) VALUES
 ('IDG1292', 'Webcoding', 'lorem ipsum', 'https://www.ntnu.edu/studies/courses/IDG1292', 4),
@@ -133,7 +144,9 @@ INSERT INTO courses (course_code, course_name, course_description, course_link, 
 INSERT INTO enrollment (student_id, course_id) VALUES
 (1, 1), (1, 2), (1, 3), (1, 4), (1, 6),
 (2, 1), (2, 4), (2, 5), (2, 6),
-(3, 1), (3, 7), (3, 8), (3, 9);
+(3, 1), (3, 7), (3, 8), (3, 9),
+(11, 1), (12, 1), (13, 1), (14, 1), (15, 1), (16, 1),
+(17, 1), (18, 1), (19, 1), (20, 1);
 
 INSERT INTO assignments (assignment_title, assignment_start_date, assignment_end_date, is_active, is_public, assignment_description, assignment_criteria, course_id, max_score, pass_threshold, assignment_attempts) VALUES
 (

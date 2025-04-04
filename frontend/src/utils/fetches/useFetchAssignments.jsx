@@ -18,7 +18,6 @@ export const useFetchAssignments = (config) => {
         });
 
         setAssignments(response.data || []);
-        console.log("Assignments fetched:", response.data);
       } catch (error) {
         console.error("Error fetching assignments:", error);
         setAssignments([]);

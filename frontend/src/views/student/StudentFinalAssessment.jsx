@@ -5,6 +5,7 @@ import { GetConfig } from "../../utils/GetConfig";
 import instance from "../../utils/axiosInstance";
 import StudentFinalAssessmentDisplay from "../../components/StudentFinalAssessmentDisplay";
 import { Link } from "react-router-dom";
+import BackComponent from "../../components/BackComponent";
 
 function StudentFinalAssessment() {
   const [currentAssessment, setCurrentAssessment] = useState();
@@ -38,24 +39,24 @@ function StudentFinalAssessment() {
   if (!currentAssessment) {
     return (
       <>
-        {errorMsg && <p className="text-red-500">{errorMsg}</p>}
-        <Link className="text-blue-500 underline" to="/home">
+        {errorMsg && <p className='text-red-500'>{errorMsg}</p>}
+        <Link className='text-blue-500 underline' to='/home'>
           Back to home
         </Link>
       </>
     );
   }
 
-  console.log(errorMsg);
   return (
     <main>
-      <div className="flex justify-between">
-        <h1 className="text-2xl font-light">
+      <BackComponent destination={`/home`} />
+      <div className='flex justify-between'>
+        <h1 className='text-2xl font-light'>
           {currentAssessment.assignment_title}
         </h1>
-        <div className="flex flex-col">
+        <div className='flex flex-col'>
           <p>
-            Suggested Result:{" "}
+            Final Result:{" "}
             <span
               className={`px-2 rounded ${
                 currentAssessment.assessment_result === "pass"
@@ -67,14 +68,14 @@ function StudentFinalAssessment() {
             </span>
           </p>
           <Link
-            className="text-blue-500 underline"
+            className='text-blue-500 underline'
             to={`/assignment-assessment/${currentAssessment.assignment_id}`}
           >
             View assignment
           </Link>
         </div>
       </div>
-      {errorMsg && <p className="text-red-500">{errorMsg}</p>}
+      {errorMsg && <p className='text-red-500'>{errorMsg}</p>}
 
       {currentAssessment && currentAssessment.assessment_contents && (
         <StudentFinalAssessmentDisplay

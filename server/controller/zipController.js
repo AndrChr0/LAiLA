@@ -9,6 +9,7 @@ const PATH = process.env.API_PATH || "http://localhost";
 import axios from "axios";
 import { evaluateSubmission } from "../AIFunctionalities/aiAssignmentEvaluation.js";
 import { pool as SQLpool } from "../utils/SQLPool.js";
+import { claudeAssessmentEvaluation } from "../AIFunctionalities/ClaudeAssesssmentEvaluation.js";
 const pool = SQLpool;
 
 // https://www.geeksforgeeks.org/node-js-fs-rm-method/
@@ -42,21 +43,31 @@ async function decompressZip(zipPath, allowedExtensions) {
     const files = await decompress(zipPath, "zipDist", {
       filter: (file) => allowedExtensions.includes(path.extname(file.path)),
     });
-const studentWork = [];
+    const studentWork = [];
     const allFilesContent = [];
+
+    const MAX_FILE_LENGTH = 50000;
+
     for (let file of files) {
       const filePath = path.join("zipDist", file.path);
       const content = fs.readFileSync(filePath, "utf-8");
+
+      // Skip files that are too long
+      if (content.length > MAX_FILE_LENGTH) {
+        console.warn(
+          `Skipping ${file.path} – content exceeds the maximum length. attached file length: ${content.length}`
+        );
+        continue;
+      }
+
       const ext = path.extname(file.path);
-     
+
       allFilesContent.push(`${ext}\n${file.path}${content}`);
       studentWork.push({ path: file.path, type: ext, contents: content });
       console.log("Decompressed:", file.path);
     }
 
-
-   return { zipContents: allFilesContent, studentWork: studentWork};
-
+    return { zipContents: allFilesContent, studentWork: studentWork };
   } catch (error) {
     console.error("decompressZip error:", error);
     throw error;
@@ -111,8 +122,10 @@ export const getZipcontents = async (req, res, next) => {
 
     // zipContents is an array of strings, each string is a file's content - is sent to AI
     // studentWork is an array of objects, each object is a file's path, filetype, and content - is saved to final assessment
-    const {zipContents, studentWork } = await decompressZip(file.path, parsedExtensions);
-
+    const { zipContents, studentWork } = await decompressZip(
+      file.path,
+      parsedExtensions
+    );
 
     if (!zipContents.length) {
       throw Object.assign(new Error("No files found in zip after filtering"), {
@@ -120,21 +133,22 @@ export const getZipcontents = async (req, res, next) => {
       });
     }
 
-    // Evaluate
+    // Evaluate - GPT
     const evaluatedSubmission = await evaluateSubmission(
       zipContents,
       criteriaString,
       description
     );
-
+    // Evaluate - CLAUDE
+    // const evaluatedSubmission = await claudeAssessmentEvaluation(
+    //   zipContents,
+    //   criteriaString,
+    //   description
+    // );
 
     if (evaluatedSubmission) {
       deleteZipFileContent();
     }
-    // console.log(
-    //   "Evaluated submission:",
-    //   evaluatedSubmission.AI_final_assessment.AI_final_comments
-    // );
 
     // get pass threshold and max score
     const [assignmentEvaluationData] = await pool.query(
@@ -186,7 +200,6 @@ export const getZipcontents = async (req, res, next) => {
       return obj;
     }
 
-
     // save to DB
     const [result] = await pool.query(
       `
@@ -205,30 +218,28 @@ export const getZipcontents = async (req, res, next) => {
       ]
     );
 
-
-
+    // assign response values - general comment and result string
     const responseObj = {
       general_comment:
         evaluatedSubmission.AI_final_assessment.AI_final_comments,
       result_string: resultString,
     };
 
-
+    // remove score/max score from feedback JSON
     const sanitizedSubmission = sanitizeFeedback(evaluatedSubmission);
 
+    const details = {
+      student: req.body.student_id,
+      assignment: req.body.assignment_id,
+      contents: sanitizedSubmission, // (sanitized)
+      result: resultString,
+      student_work: studentWork,
+      date: new Date().toISOString().slice(0, 19).replace("T", " "),
+    };
 
-const details = {
-  student: req.body.student_id,
-  assignment: req.body.assignment_id,
-  contents: sanitizedSubmission, // (sanitized)
-  result: resultString,
-  student_work: studentWork,
-  date: new Date()
-  .toISOString()
-  .slice(0, 19)
-  .replace("T", " ")
-}
- await axios.post(`${PATH}:${PORT}/api/assessment/${details.assignment}`, {details});
+    await axios.post(`${PATH}:${PORT}/api/assessment/${details.assignment}`, {
+      details,
+    });
 
     return res.status(200).json(responseObj);
   } catch (error) {

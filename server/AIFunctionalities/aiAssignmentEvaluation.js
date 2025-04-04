@@ -5,15 +5,12 @@ dotenv.config(); // load server env
 const openai = new OpenAI({ apiKey: process.env.AI_API_KEY });
 
 export async function evaluateSubmission(submission, criteria, description) {
-  // console.log(submission);
-
   const submissionString = submission.join("");
 
   const jsonCriteria = JSON.parse(criteria);
 
   const completion = await openai.chat.completions.create({
     model: process.env.AI_MODEL,
-    // migth need to change this to a different effort lvl
     reasoning_effort: "medium",
     response_format: { type: "json_schema", json_schema: jsonCriteria },
     messages: [

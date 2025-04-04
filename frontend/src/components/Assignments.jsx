@@ -22,7 +22,7 @@ const Assignments = ({ assignments }) => {
   };
   const handleOnClickGrade = (assignmentId) => {
     navigate(`/final-assessment/${assignmentId}`);
-  }
+  };
 
   const formatDate = (dateString) => {
     try {
@@ -48,13 +48,13 @@ const Assignments = ({ assignments }) => {
   };
 
   return (
-    <div >
+    <div>
       {assignments.length > 0 ? (
         assignments.map((assignment) => {
           const overdue = isOverdue(assignment.assignment_end_date);
           return (
             <div
-              key={assignment.assignment_id}           
+              key={assignment.assignment_id}
               className={`p-4 border rounded-lg transition-all  flex items-center justify-between mb-4 border-gray-200 bg-white `}
             >
               <div>
@@ -69,65 +69,69 @@ const Assignments = ({ assignments }) => {
                     </span>
                   )}
 
-                {assignment.is_public === 1 && userRole === "lecturer" ? (
-                  <span className='px-2 py-1 text-xs font-medium text-gray-800 bg-gray-100 rounded-full'>
-                    Public
-                  </span>
-                ) : assignment.is_public === 0 && userRole === "lecturer" ? (
-                  <span className='px-2 py-1 text-xs font-medium text-gray-800 bg-gray-100 rounded-full'>
-                    Not Public
-                  </span>
-                ) : null}
+                  {assignment.is_public === 1 && userRole === "lecturer" ? (
+                    <span className='px-2 py-1 text-xs font-medium text-gray-800 bg-gray-100 rounded-full'>
+                      Public
+                    </span>
+                  ) : assignment.is_public === 0 && userRole === "lecturer" ? (
+                    <span className='px-2 py-1 text-xs font-medium text-gray-800 bg-gray-100 rounded-full'>
+                      Not Public
+                    </span>
+                  ) : null}
 
                   <h3 className='mb-1 text-lg font-medium text-gray-800'>
-                  {assignment.course_code} {" "}
-                  {assignment.course_name}: {" "}
-                  {assignment.assignment_title} 
-                  {console.log(assignment.total_assessments_not_reviewed)}
+                    {assignment.course_code} {assignment.course_name}:{" "}
+                    {assignment.assignment_title}
                   </h3>
                 </div>
-      
-                <div
-                  className="text-sm font-medium text-gray-600"
-                >
-                  {overdue ? "Overdued: "  : "Due: "} {formatDate(assignment.assignment_end_date)}
+
+                <div className='text-sm font-medium text-gray-600'>
+                  {overdue ? "Overdued: " : "Due: "}{" "}
+                  {formatDate(assignment.assignment_end_date)}
                 </div>
               </div>
 
               <div className=''>
-                {userRole === "student" ?(
-                   <button
-                   onClick={() => handleViewDetails(assignment.assignment_id)}
-                   className='flex items-center gap-1 px-3 py-1 text-sm text-black bg-white border border-gray-300 rounded hover:cursor-pointer transition-all duration-300  hover:scale-[1.02]'
-                 >
-                   View Details
-                 </button>
+                {userRole === "student" ? (
+                  <button
+                    onClick={() => handleViewDetails(assignment.assignment_id)}
+                    className='flex items-center gap-1 px-3 py-1 text-sm text-black bg-white border border-gray-300 rounded hover:cursor-pointer transition-all duration-300  hover:scale-[1.02]'
+                  >
+                    View Details
+                  </button>
                 ) : (
-                  <div className="flex gap-3">
-                
-                  {assignment.is_active === 0 && (
-                     <button
-                     onClick={() => handleOnClickGrade(assignment.assignment_id)}
-                     className='flex items-center gap-1 px-3 py-1 text-sm text-black transition-all duration-300  hover:scale-[1.02] bg-white border border-gray-300 rounded hover:cursor-pointer'
-                   >Grades <FaFileSignature />
-                   <div className="flex items-center justify-center w-[25px] h-[25px] bg-[#9AEFFF] absolute rounded-full translate-x-[55px] translate-y-[-15px]  ">{assignment.total_assessments_not_reviewed}</div>
-                   </button>
-                  )}
+                  <div className='flex gap-3'>
+                    {assignment.is_active === 0 && (
+                      <button
+                        onClick={() =>
+                          handleOnClickGrade(assignment.assignment_id)
+                        }
+                        className='flex items-center gap-1 px-3 py-1 text-sm text-black transition-all duration-300  hover:scale-[1.02] bg-white border border-gray-300 rounded hover:cursor-pointer'
+                      >
+                        Grades <FaFileSignature />
+                        <div className='flex items-center justify-center w-[25px] h-[25px] bg-[#9AEFFF] absolute rounded-full translate-x-[55px] translate-y-[-15px]  '>
+                          {assignment.total_assessments_not_reviewed}
+                        </div>
+                      </button>
+                    )}
 
-                <button
-                  onClick={() => handleViewReport(assignment.assignment_id)}
-                  className='flex items-center gap-1 px-3 py-1 text-sm text-black transition-all duration-300  hover:scale-[1.02] bg-white border border-gray-300 rounded hover:cursor-pointer'
-                >View report <MdOpenInNew />
-                </button>
+                    <button
+                      onClick={() => handleViewReport(assignment.assignment_id)}
+                      className='flex items-center gap-1 px-3 py-1 text-sm text-black transition-all duration-300  hover:scale-[1.02] bg-white border border-gray-300 rounded hover:cursor-pointer'
+                    >
+                      View report <MdOpenInNew />
+                    </button>
 
-                <button
-                onClick={() => handleEditAssignment(assignment.assignment_id)}
-                className='flex items-center gap-1 px-3 py-1 text-sm text-black transition-all duration-300  hover:scale-[1.02] bg-white border border-gray-300 rounded hover:cursor-pointer'
-                >Edit <CiEdit />
-                </button>
-                </div>
-              )}
-               
+                    <button
+                      onClick={() =>
+                        handleEditAssignment(assignment.assignment_id)
+                      }
+                      className='flex items-center gap-1 px-3 py-1 text-sm text-black transition-all duration-300  hover:scale-[1.02] bg-white border border-gray-300 rounded hover:cursor-pointer'
+                    >
+                      Edit <CiEdit />
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           );

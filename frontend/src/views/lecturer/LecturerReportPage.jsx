@@ -27,135 +27,140 @@ import { GetConfig } from "../../utils/GetConfig";
 import { useAuth } from "../../context/AuthContext";
 import { useParams } from "react-router-dom";
 import BackComponent from "../../components/BackComponent";
+import Loading from "../../components/Loading";
 
 const LecturerReportPage = () => {
+  const [reportData, setReportData] = useState([]);
   const [selectedReport, setSelectedReport] = useState(0);
-  const [reportData, setReportData] = useState(null);
   const [errorMsg, setErrorMsg] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { token } = useAuth();
-  const path = useParams();
-  const pathId = path.id;
-  console.log(reportData);
+  const { id: pathId } = useParams();
 
   useEffect(() => {
     instance
       .get(`api/reports/${pathId}`, GetConfig(token))
       .then((response) => {
-        setReportData(response.data);
+        setReportData(response.data || []);
       })
       .catch((error) => {
         console.error("Failed to fetch report data:", error);
       });
-  }, [pathId]);
+  }, [pathId, token]);
 
-  if (!reportData) return <div>No reports yet.</div>;
-  function handleNewAssignmentReport(id) {
+  const handleNewAssignmentReport = (id) => {
     setIsLoading(true);
+    setErrorMsg("");
 
     instance
-      .post(`/api/reports/${id}`, { isManuallyCreated: true, date: new Date().toISOString().slice(0, 19).replace("T", " ") }, GetConfig(token))
+      .post(
+        `/api/reports/${id}`,
+        {
+          isManuallyCreated: true,
+          date: new Date().toISOString().slice(0, 19).replace("T", " "),
+        },
+        GetConfig(token)
+      )
       .then((res) => {
+        setReportData((prevReports) => [res.data[0], ...prevReports]);
         setIsLoading(false);
-        setReportData([res.data[0], ...reportData]);
       })
       .catch((error) => {
         setIsLoading(false);
-        setErrorMsg(error.response.data.error);
+        setErrorMsg(error.response?.data?.error || "Something went wrong.");
         console.error(
           "API request failed:",
-          error.response ? error.response.data : error.message
+          error.response?.data || error.message
         );
       });
+  };
+
+  if (reportData.length === 0) {
+    return (
+      <div>
+        No reports yet.
+        <button
+          disabled={isLoading}
+          onClick={() => handleNewAssignmentReport(pathId)}
+          type='button'
+          className={`h-auto min-h-10 px-5 m-2 duration-150 rounded-lg focus:shadow-outline bg-white hover:bg-neutral-200 border border-neutral-300 hover:border-neutral-400 text-neutral-700 hover:text-neutral-800 ${
+            isLoading ? "hidden" : ""
+          }`}
+        >
+          Generate New Report
+        </button>
+        {isLoading && <Loading />}
+      </div>
+    );
   }
 
-  if (!reportData) return;
-
-  const reports = reportData.map((report, index) => {
-    return {
-      id: index,
-      name: "Report " + report.report_nr,
-    };
-  });
+  const currentReport = reportData[selectedReport];
+  if (!currentReport) {
+    return <Loading />;
+  }
 
   const passFailData = [
     {
       name: "Passed",
-      value: reportData[selectedReport].students_passed,
+      value: currentReport.students_passed,
       color: "#4ade80",
     },
     {
       name: "Failed",
-      value: reportData[selectedReport].students_failed,
+      value: currentReport.students_failed,
       color: "#f87171",
     },
   ];
 
   const feedbackMetrics = {
-    totalFeedback: reportData[selectedReport].total_feedback,
-    uniqueStudents: reportData[selectedReport].students_evaluated,
+    totalFeedback: currentReport.total_feedback,
+    uniqueStudents: currentReport.students_evaluated,
   };
 
-  const commonProblemsData = reportData[
-    selectedReport
-  ].report_contents.commonProblems.map((problem) => {
-    return {
-      problemName: problem.problemName,
-      description: problem.description,
-      occurrences: problem.occurrences,
-      recommendedActions: problem.recommendedActions,
-    };
-  });
+  const {
+    strongAreas = [],
+    commonProblems = [],
+    additionalNotes = "",
+    overallLecturerSuggestions = [],
+  } = currentReport.report_contents || {};
 
-  const strongAreasData = reportData[
-    selectedReport
-  ].report_contents.strongAreas.map((area) => {
-    return {
-      areaName: area.areaName,
-      description: area.description,
-    };
-  });
+  const date = new Date(currentReport.date_created);
+  date.setHours(date.getHours() + 4);
+  const formattedDate =
+    date.toISOString().split("T")[0] +
+    " " +
+    date.toISOString().split("T")[1].split(".")[0];
 
-  const overallLecturerSuggestions = reportData[
-    selectedReport
-  ].report_contents.overallLecturerSuggestions.map((suggestion) => {
-    return {
-      suggestion: suggestion,
-    };
-  });
+  const reports = reportData.map((report, index) => ({
+    id: index,
+    name: "Report " + report.report_nr,
+  }));
 
-  const additionalNotes =
-    reportData[selectedReport].report_contents.additionalNotes;
-
-    const date = new Date(reportData[selectedReport].date_created);
-    const formattedDate = date.toISOString().split('T')[0] + ' ' + date.toISOString().split('T')[1].split('.')[0];
-
-
-
-  return !reportData && !reportData[selectedReport] ? (
-    <div>Loading...</div>
-  ) : (
+  return (
     <main>
-      <BackComponent destination="/home" />
+      <BackComponent destination='/home' />
       <div className='min-h-screen p-6 bg-gray-50'>
         <div className='mx-auto max-w-7xl'>
           <header className='mb-8'>
             <h1 className='flex flex-col mb-4 text-3xl text-gray-800'>
-              <span className='text-[15px] text-gray-500  '>
-                {reportData[selectedReport].course_name}
+              <span className='text-[15px] text-gray-500'>
+                {currentReport.course_name}
               </span>
               <span className='font-bold'>
-                {reportData[selectedReport].assignment_title}
+                {currentReport.assignment_title}
               </span>
             </h1>
             <div className='flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center'>
-              <Select value={selectedReport} onValueChange={setSelectedReport}>
+              <Select
+                value={String(selectedReport)}
+                onValueChange={(val) => setSelectedReport(Number(val))}
+              >
                 <SelectTrigger className='w-full sm:w-64'>
-                  <SelectValue placeholder='Select an assignment' />
+                  <SelectValue placeholder='Select a report' />
                 </SelectTrigger>
                 <SelectContent>
                   {reports.map((report) => (
-                    <SelectItem key={report.id} value={report.id}>
+                    <SelectItem key={report.id} value={String(report.id)}>
                       {report.name}
                     </SelectItem>
                   ))}
@@ -172,8 +177,10 @@ const LecturerReportPage = () => {
               >
                 Generate New Report
               </button>
-              {isLoading && <div>Loading...</div>}
+
+              {isLoading && <Loading />}
               {errorMsg && <div className='text-red-700'>{errorMsg}</div>}
+
               <div className='flex items-center gap-2 text-sm text-gray-600'>
                 <Clock size={16} />
                 <span>{formattedDate}</span>
@@ -181,16 +188,19 @@ const LecturerReportPage = () => {
             </div>
           </header>
 
+          {/* Cards */}
           <div className='grid grid-cols-1 gap-4 mb-6 sm:grid-cols-2 lg:grid-cols-3'>
             <Card>
               <CardContent className='p-6'>
                 <div className='flex items-center justify-between'>
                   <div>
-                    <p className='text-sm font-medium text-gray-500'>Pass Rate</p>
+                    <p className='text-sm font-medium text-gray-500'>
+                      Pass Rate
+                    </p>
                     <p className='text-2xl font-bold text-gray-900'>
                       {(
                         (passFailData[0].value /
-                          (passFailData[1].value + passFailData[0].value)) *
+                          (passFailData[0].value + passFailData[1].value)) *
                         100
                       ).toFixed(2)}
                       %
@@ -202,6 +212,7 @@ const LecturerReportPage = () => {
                 </div>
               </CardContent>
             </Card>
+
             <Card>
               <CardContent className='p-6'>
                 <div className='flex items-center justify-between'>
@@ -219,6 +230,7 @@ const LecturerReportPage = () => {
                 </div>
               </CardContent>
             </Card>
+
             <Card>
               <CardContent className='p-6'>
                 <div className='flex items-center justify-between'>
@@ -238,6 +250,7 @@ const LecturerReportPage = () => {
             </Card>
           </div>
 
+          {/* Tabs */}
           <Tabs defaultValue='overview' className='mb-6'>
             <TabsList>
               <TabsTrigger value='overview'>Overview</TabsTrigger>
@@ -245,8 +258,10 @@ const LecturerReportPage = () => {
               <TabsTrigger value='problems'>Common Problems</TabsTrigger>
             </TabsList>
 
+            {/* Overview Tab */}
             <TabsContent value='overview' className='space-y-6'>
               <div className='grid grid-cols-1 gap-6 lg:grid-cols-3'>
+                {/* Pie Chart */}
                 <Card className='lg:col-span-1'>
                   <CardHeader>
                     <CardTitle>Pass/Fail Count</CardTitle>
@@ -269,7 +284,7 @@ const LecturerReportPage = () => {
                             label={({ name, value }) => `${name}: ${value}`}
                           >
                             {passFailData.map((entry, index) => (
-                              <Cell key={`cell-${index}`} fill={entry.color} />
+                              <Cell key={index} fill={entry.color} />
                             ))}
                           </Pie>
                           <Tooltip />
@@ -279,12 +294,10 @@ const LecturerReportPage = () => {
                   </CardContent>
                 </Card>
 
+                {/* Overall course suggestions */}
                 <Card className='lg:col-span-2'>
                   <CardHeader>
-                    <CardTitle className='flex items-center gap-2'>
-                      {/* <CheckCircle className="w-5 h-5 text-green-500" /> */}
-                      Overall course suggestions
-                    </CardTitle>
+                    <CardTitle>Overall Course Suggestions</CardTitle>
                     <CardDescription>
                       Suggestions for improvement across all assignment
                       submissions
@@ -292,19 +305,12 @@ const LecturerReportPage = () => {
                   </CardHeader>
                   <CardContent>
                     <div className='space-y-6'>
-                      {overallLecturerSuggestions.map((data, index) => (
+                      {overallLecturerSuggestions.map((item, index) => (
                         <div
                           key={index}
                           className='pb-4 border-b last:border-0 last:pb-0'
                         >
-                          <div className='flex items-start justify-between mb-2'>
-                            <h3 className='text-lg font-semibold'>
-                              {data.areaName}
-                            </h3>
-                          </div>
-                          <p className='mb-3 text-muted-foreground'>
-                            {data.suggestion}
-                          </p>
+                          <p className='mb-3 text-muted-foreground'>{item}</p>
                         </div>
                       ))}
                     </div>
@@ -313,27 +319,22 @@ const LecturerReportPage = () => {
               </div>
             </TabsContent>
 
+            {/* Additional Notes in the same "Overview" */}
             <TabsContent value='overview' className='space-y-6'>
               <Card className='shadow-md mt-[20px]'>
                 <CardHeader>
-                  <CardTitle className='flex items-center gap-2'>
-                    {/* <CheckCircle className="w-5 h-5 text-green-500" /> */}
-                    Additional notes
-                  </CardTitle>
+                  <CardTitle>Additional notes</CardTitle>
                   <CardDescription>
                     Additional notes for the lecturer
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className='space-y-6'>
-                    <p className='mb-3 text-muted-foreground'>
-                      {additionalNotes}
-                    </p>
-                  </div>
+                  <p className='text-muted-foreground'>{additionalNotes}</p>
                 </CardContent>
               </Card>
             </TabsContent>
 
+            {/* Strong Areas Tab */}
             <TabsContent value='strong' className='space-y-6'>
               <Card className='shadow-md'>
                 <CardHeader>
@@ -341,20 +342,20 @@ const LecturerReportPage = () => {
                     <CheckCircle className='w-5 h-5 text-green-500' />
                     Strong areas
                   </CardTitle>
-                  <CardDescription>Where students performed well</CardDescription>
+                  <CardDescription>
+                    Where students performed well
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className='space-y-6'>
-                    {strongAreasData.map((data, index) => (
+                    {strongAreas.map((data, index) => (
                       <div
                         key={index}
                         className='pb-4 border-b last:border-0 last:pb-0'
                       >
-                        <div className='flex items-start justify-between mb-2'>
-                          <h3 className='text-lg font-semibold'>
-                            {data.areaName}
-                          </h3>
-                        </div>
+                        <h3 className='mb-2 text-lg font-semibold'>
+                          {data.areaName}
+                        </h3>
                         <p className='mb-3 text-muted-foreground'>
                           {data.description}
                         </p>
@@ -365,6 +366,7 @@ const LecturerReportPage = () => {
               </Card>
             </TabsContent>
 
+            {/* Common Problems Tab */}
             <TabsContent value='problems' className='space-y-6'>
               <Card className='shadow-md'>
                 <CardHeader>
@@ -378,7 +380,7 @@ const LecturerReportPage = () => {
                 </CardHeader>
                 <CardContent>
                   <div className='space-y-6'>
-                    {commonProblemsData.map((problem, index) => (
+                    {commonProblems.map((problem, index) => (
                       <div
                         key={index}
                         className='pb-4 border-b last:border-0 last:pb-0'
