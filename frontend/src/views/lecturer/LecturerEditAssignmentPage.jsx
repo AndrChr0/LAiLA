@@ -105,6 +105,14 @@ const LecturerEditAssignmentPage = () => {
       return;
     }
 
+    if (assignment_attempts < 1 || assignment_attempts > 5) {
+      setErrorMsg(
+        "Please enter a valid number of attempts for the assignment."
+      );
+      setSuccessMsg("");
+      return;
+    }
+
     if (!allowed_filetypes.length) {
       setErrorMsg("Please enter at least one allowed filetype.");
       setSuccessMsg("");
@@ -215,12 +223,14 @@ const LecturerEditAssignmentPage = () => {
         </div>
         <label htmlFor='assignment_attempts'>Attempts</label>
         <input
+          max={5}
+          min={1}
           type='number'
           id='assignment_attempts'
           name='assignment_attempts'
           value={assignment_attempts || 0}
           onChange={(e) => setAssignmentAttempts(e.target.value)}
-          className='p-2 mb-4 bg-white border border-gray-400'
+          className='p-2 mb-4 bg-white border border-gray-400 w-16'
         />
         <label htmlFor='pass_percentage'>Pass Percentage</label>
         <input
@@ -231,15 +241,7 @@ const LecturerEditAssignmentPage = () => {
           onChange={(e) => setPassPercentage(e.target.value)}
           className='w-16 p-2 mb-4 bg-white border border-gray-400'
         />
-        {/* <label htmlFor="max_score">Max Score</label>
-        <input
-          type="number"
-          id="max_score"
-          name="max_score"
-          value={maxScore || 0}
-          onChange={(e) => setMaxScore(e.target.value)}
-          className="w-16 p-2 mb-4 bg-white border border-gray-400"
-        /> */}
+
         <div className='flex flex-col items-start'>
           <label htmlFor='allowed_filetype'>Allowed Filetypes</label>
           <input
