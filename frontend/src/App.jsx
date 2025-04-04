@@ -11,7 +11,6 @@ import NewAssignmentPage from "./views/lecturer/NewAssignmentPage";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./protectedroute/ProtectedRoute";
 import { useAuth } from "./context/AuthContext";
-import { UserProvider } from "./context/UserContext";
 import StudentCoursePage from "./views/student/StudentCoursePage";
 import LecturerCoursePage from "./views/lecturer/LecturerCoursePage";
 import LecturerReportPage from "./views/lecturer/LecturerReportPage";
@@ -35,9 +34,7 @@ function App() {
               path='/home'
               element={
                 <ProtectedRoute roles={["lecturer"]}>
-                  <UserProvider>
-                    <LecturerHomePage />
-                  </UserProvider>
+                  <LecturerHomePage />
                 </ProtectedRoute>
               }
             />
@@ -48,9 +45,7 @@ function App() {
               path='/home'
               element={
                 <ProtectedRoute roles={["student"]}>
-                  <UserProvider>
-                    <StudentHomePage />
-                  </UserProvider>
+                  <StudentHomePage />
                 </ProtectedRoute>
               }
             />
@@ -64,34 +59,20 @@ function App() {
             path='/courses/:id'
             element={
               <ProtectedRoute roles={["student", "lecturer"]}>
-                <UserProvider>
-                  {userRole === "student" ? (
-                    <StudentCoursePage />
-                  ) : (
-                    <LecturerCoursePage />
-                  )}
-                </UserProvider>
+                {userRole === "student" ? (
+                  <StudentCoursePage />
+                ) : (
+                  <LecturerCoursePage />
+                )}
               </ProtectedRoute>
             }
           />
-
-          {/* <Route path='/student-homepage-placeholder' element={ <ProtectedRoute roles={["student"]}><StudentHomePage /></ProtectedRoute> }/> */}
-          {/* <Route
-            path='/assignment-assessment'
-            element={
-              <ProtectedRoute roles={["student"]}>
-                <StudentAssignmentAssessmentPage />
-              </ProtectedRoute>
-            }
-          /> */}
 
           <Route
             path='/assignment-assessment/:id'
             element={
               <ProtectedRoute roles={["student"]}>
-                <UserProvider>
-                  <StudentAssignmentAssessmentPage />
-                </UserProvider>
+                <StudentAssignmentAssessmentPage />
               </ProtectedRoute>
             }
           />
@@ -133,7 +114,7 @@ function App() {
             }
           />
 
-<Route
+          <Route
             path='/student/final-assessment/:id'
             element={
               <ProtectedRoute roles={["student"]}>
@@ -151,14 +132,6 @@ function App() {
             }
           />
 
-          {/* <Route
-            path="/reports"
-            element={
-              <ProtectedRoute roles={["lecturer"]}>
-                <LecturerReportPage />
-              </ProtectedRoute>
-            }
-          /> */}
           <Route path='*' element={<NotFoundPage />} />
         </Routes>
       </div>

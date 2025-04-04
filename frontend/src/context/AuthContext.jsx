@@ -22,7 +22,6 @@ export const AuthProvider = ({ children }) => {
       .then((response) => {
         if (response) {
           const jwt = response.data;
-          console.log(response);
           setToken(jwt);
           const decoded = jwtDecode(jwt);
           setAuthState({
@@ -40,8 +39,6 @@ export const AuthProvider = ({ children }) => {
         navigate("/login");
       });
   }, [navigate]);
-
-  console.log("Auth State:", authState);
 
   useEffect(() => {
     const refreshInterval = setInterval(() => {

@@ -246,90 +246,89 @@ function AssignmentCriteriaForm({
       });
     });
     onHandleCriteria(generated);
-    console.log("Generated JSON Schema:", generated);
     onHandleMaxScoreChange(totalMaxScore);
   }, [sections]);
 
   return (
-    <div className="w-full p-6 mx-auto bg-white rounded-lg shadow-lg">
-      <div className="mb-6">
-        <h2 className="mb-2 text-2xl font-bold">Assignment Criteria Builder</h2>
-        <p className="max-w-4xl mb-4">
+    <div className='w-full p-6 mx-auto bg-white rounded-lg shadow-lg'>
+      <div className='mb-6'>
+        <h2 className='mb-2 text-2xl font-bold'>Assignment Criteria Builder</h2>
+        <p className='max-w-4xl mb-4'>
           Create guidelines for the Athea AI tutor to follow. A section
           references a larger piece of work, while subsections are smaller parts
           of the section.
         </p>
 
-        <div className="p-4 mb-4 rounded-lg bg-blue-50">
-          <h3 className="mb-2 font-semibold">Each subsection needs:</h3>
-          <ul className="space-y-2">
-            <li className="flex items-center">
-              <span className="flex items-center justify-center w-6 h-6 mr-2 bg-blue-100 rounded-full">
+        <div className='p-4 mb-4 rounded-lg bg-blue-50'>
+          <h3 className='mb-2 font-semibold'>Each subsection needs:</h3>
+          <ul className='space-y-2'>
+            <li className='flex items-center'>
+              <span className='flex items-center justify-center w-6 h-6 mr-2 bg-blue-100 rounded-full'>
                 <VscFeedback />
               </span>
-              A <span className="mx-1 font-bold">feedback description</span>{" "}
+              A <span className='mx-1 font-bold'>feedback description</span>{" "}
               telling the AI what to provide feedback on
             </li>
-            <li className="flex items-center">
-              <span className="flex items-center justify-center w-6 h-6 mr-2 bg-blue-100 rounded-full">
+            <li className='flex items-center'>
+              <span className='flex items-center justify-center w-6 h-6 mr-2 bg-blue-100 rounded-full'>
                 <GoTrophy />
               </span>
-              A <span className="mx-1 font-bold">max score</span> representing
+              A <span className='mx-1 font-bold'>max score</span> representing
               the highest score that can be given
             </li>
-            <li className="flex items-center">
-              <span className="flex items-center justify-center w-6 h-6 mr-2 bg-blue-100 rounded-full">
+            <li className='flex items-center'>
+              <span className='flex items-center justify-center w-6 h-6 mr-2 bg-blue-100 rounded-full'>
                 <PiRoadHorizonLight />
               </span>
-              A <span className="mx-1 font-bold">score description</span>{" "}
+              A <span className='mx-1 font-bold'>score description</span>{" "}
               detailing requirements for different scores
             </li>
           </ul>
         </div>
       </div>
 
-      <hr className="my-6" />
+      <hr className='my-6' />
 
-      <div className="mb-4">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-xl font-bold">Sections</h3>
+      <div className='mb-4'>
+        <div className='flex items-center justify-between mb-4'>
+          <h3 className='text-xl font-bold'>Sections</h3>
           <button
-            className="flex items-center px-4 py-2 text-white transition-colors bg-blue-500 rounded-md hover:bg-blue-600"
+            className='flex items-center px-4 py-2 text-white transition-colors bg-blue-500 rounded-md hover:bg-blue-600'
             onClick={handleAddSection}
           >
-            <FiPlus className="mr-2" /> Add Section
+            <FiPlus className='mr-2' /> Add Section
           </button>
         </div>
 
         {sections.length === 0 ? (
-          <div className="py-10 text-center border-2 border-gray-300 border-dashed rounded-lg bg-gray-50">
-            <p className="mb-4 text-gray-500">No sections added yet</p>
+          <div className='py-10 text-center border-2 border-gray-300 border-dashed rounded-lg bg-gray-50'>
+            <p className='mb-4 text-gray-500'>No sections added yet</p>
             <button
-              className="px-4 py-2 text-white transition-colors bg-blue-500 rounded-md hover:bg-blue-600"
+              className='px-4 py-2 text-white transition-colors bg-blue-500 rounded-md hover:bg-blue-600'
               onClick={handleAddSection}
             >
-              <FiPlus className="inline mr-2" /> Add Your First Section
+              <FiPlus className='inline mr-2' /> Add Your First Section
             </button>
           </div>
         ) : (
-          <div className="space-y-6">
+          <div className='space-y-6'>
             {sections.map((section, sectionIndex) => (
               <div
                 key={section.sectionId}
-                className="overflow-hidden border border-gray-200 rounded-lg"
+                className='overflow-hidden border border-gray-200 rounded-lg'
               >
                 <div
-                  className="flex items-center justify-between p-4 cursor-pointer bg-gray-50"
+                  className='flex items-center justify-between p-4 cursor-pointer bg-gray-50'
                   onClick={() => toggleSection(section.sectionId)}
                 >
-                  <div className="flex items-center flex-1">
-                    <span className="flex items-center justify-center w-8 h-8 mr-3 text-white bg-blue-500 rounded-full">
+                  <div className='flex items-center flex-1'>
+                    <span className='flex items-center justify-center w-8 h-8 mr-3 text-white bg-blue-500 rounded-full'>
                       {sectionIndex + 1}
                     </span>
                     <input
-                      className="flex-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      type="text"
-                      placeholder="Section name"
+                      className='flex-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
+                      type='text'
+                      placeholder='Section name'
                       value={section.sectionName.replaceAll("_", " ")}
                       onChange={(e) => {
                         e.stopPropagation();
@@ -341,9 +340,9 @@ function AssignmentCriteriaForm({
                       onClick={(e) => e.stopPropagation()}
                     />
                   </div>
-                  <div className="flex items-center ml-4">
+                  <div className='flex items-center ml-4'>
                     <button
-                      className="p-2 text-red-500 hover:text-red-700"
+                      className='p-2 text-red-500 hover:text-red-700'
                       onClick={(e) => {
                         e.stopPropagation();
                         handleRemoveSection(section.sectionId);
@@ -352,63 +351,63 @@ function AssignmentCriteriaForm({
                       <FiTrash2 size={18} />
                     </button>
                     {expandedSections[section.sectionId] ? (
-                      <FiChevronUp size={24} className="ml-2 text-gray-500" />
+                      <FiChevronUp size={24} className='ml-2 text-gray-500' />
                     ) : (
-                      <FiChevronDown size={24} className="ml-2 text-gray-500" />
+                      <FiChevronDown size={24} className='ml-2 text-gray-500' />
                     )}
                   </div>
                 </div>
 
                 {expandedSections[section.sectionId] && (
-                  <div className="p-4 border-t border-gray-200">
-                    <div className="flex items-center justify-between mb-4">
-                      <h4 className="text-lg font-semibold">Criterias</h4>
+                  <div className='p-4 border-t border-gray-200'>
+                    <div className='flex items-center justify-between mb-4'>
+                      <h4 className='text-lg font-semibold'>Criterias</h4>
                       <button
-                        className="flex items-center bg-green-500 hover:bg-green-600 text-white px-3 py-1.5 rounded-md transition-colors"
+                        className='flex items-center bg-green-500 hover:bg-green-600 text-white px-3 py-1.5 rounded-md transition-colors'
                         onClick={() => handleAddSubsection(section.sectionId)}
                       >
-                        <FiPlus className="mr-1" /> Add Criteria
+                        <FiPlus className='mr-1' /> Add Criteria
                       </button>
                     </div>
 
                     {section.subsections.length === 0 ? (
-                      <div className="py-8 text-center border-2 border-gray-300 border-dashed rounded-lg bg-gray-50">
-                        <p className="mb-3 text-gray-500">
+                      <div className='py-8 text-center border-2 border-gray-300 border-dashed rounded-lg bg-gray-50'>
+                        <p className='mb-3 text-gray-500'>
                           No criteria added yet
                         </p>
                         <button
-                          className="bg-green-500 hover:bg-green-600 text-white px-3 py-1.5 rounded-md transition-colors"
+                          className='bg-green-500 hover:bg-green-600 text-white px-3 py-1.5 rounded-md transition-colors'
                           onClick={() => handleAddSubsection(section.sectionId)}
                         >
-                          <FiPlus className="inline mr-1" /> Add Criteria
+                          <FiPlus className='inline mr-1' /> Add Criteria
                         </button>
                       </div>
                     ) : (
-                      <div className="space-y-4">
+                      <div className='space-y-4'>
                         {section.subsections.map((sub, subIndex) => (
                           <div
                             key={sub.subsectionId}
-                            className="overflow-hidden border border-gray-200 rounded-md"
+                            className='overflow-hidden border border-gray-200 rounded-md'
                           >
                             <div
-                              className="flex items-center justify-between p-3 cursor-pointer bg-gray-50"
+                              className='flex items-center justify-between p-3 cursor-pointer bg-gray-50'
                               onClick={() => toggleSubsection(sub.subsectionId)}
                             >
-                              <div className="flex items-center">
-                                <span className="flex items-center justify-center w-6 h-6 mr-2 text-sm text-white bg-green-500 rounded-full">
+                              <div className='flex items-center'>
+                                <span className='flex items-center justify-center w-6 h-6 mr-2 text-sm text-white bg-green-500 rounded-full'>
                                   {subIndex + 1}
                                 </span>
-                                <span className="font-medium">
+                                <span className='font-medium'>
                                   {sub.subsectionName.replaceAll("_", " ") ||
                                     "Unnamed subsection"}
                                 </span>
                               </div>
-                              <div className="flex items-center">
-                                <span className="text-sm bg-blue-100 text-blue-800 px-2 py-0.5 rounded mr-2">
+                              <div className='flex items-center'>
+                                <span className='text-sm bg-blue-100 text-blue-800 px-2 py-0.5 rounded mr-2'>
                                   Max: {sub.maxScore} pts
                                 </span>
                                 <button
-                                  className="text-red-500 hover:text-red-700 p-1.5 mr-1"
+                                  className='text-red-500 hover:text-red-700 p-1.5 mr-1'
                                   onClick={(e) => {
                                     e.stopPropagation();
                                     handleRemoveSubsection(
@@ -422,28 +421,28 @@ function AssignmentCriteriaForm({
                                 {expandedSubsections[sub.subsectionId] ? (
                                   <FiChevronUp
                                     size={20}
-                                    className="text-gray-500"
+                                    className='text-gray-500'
                                   />
                                 ) : (
                                   <FiChevronDown
                                     size={20}
-                                    className="text-gray-500"
+                                    className='text-gray-500'
                                   />
                                 )}
                               </div>
                             </div>
 
                             {expandedSubsections[sub.subsectionId] && (
-                              <div className="grid grid-cols-1 gap-3 p-3 border-t border-gray-200">
+                              <div className='grid grid-cols-1 gap-3 p-3 border-t border-gray-200'>
                                 <div>
-                                  <label className="block mb-1 font-medium">
-                                    <PiSignatureThin className="inline-block mr-1" />
+                                  <label className='block mb-1 font-medium'>
+                                    <PiSignatureThin className='inline-block mr-1' />
                                     Criteria Name:
                                   </label>
                                   <input
-                                    className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    type="text"
-                                    placeholder="Enter name"
+                                    className='w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
+                                    type='text'
+                                    placeholder='Enter name'
                                     value={sub.subsectionName}
                                     onChange={(e) =>
                                       handleSubsectionChange(
@@ -457,14 +456,14 @@ function AssignmentCriteriaForm({
                                 </div>
 
                                 <div>
-                                  <label className="block mb-1 font-medium">
-                                    <VscFeedback className="inline-block mr-1" />
+                                  <label className='block mb-1 font-medium'>
+                                    <VscFeedback className='inline-block mr-1' />
                                     Feedback Description:
                                   </label>
                                   <textarea
-                                    className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    placeholder="What should the AI provide feedback on?"
-                                    rows="2"
+                                    className='w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
+                                    placeholder='What should the AI provide feedback on?'
+                                    rows='2'
                                     value={sub.feedbackDescription}
                                     onChange={(e) =>
                                       handleSubsectionChange(
@@ -478,15 +477,15 @@ function AssignmentCriteriaForm({
                                 </div>
 
                                 <div>
-                                  <label className="block mb-1 font-medium">
-                                    <GoTrophy className="inline-block mr-1" />
+                                  <label className='block mb-1 font-medium'>
+                                    <GoTrophy className='inline-block mr-1' />
                                     Max Score:
                                   </label>
                                   <input
-                                    className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    type="number"
-                                    min="1"
-                                    max="100"
+                                    className='w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
+                                    type='number'
+                                    min='1'
+                                    max='100'
                                     value={sub.maxScore}
                                     onChange={(e) =>
                                       handleSubsectionChange(
@@ -500,14 +499,14 @@ function AssignmentCriteriaForm({
                                 </div>
 
                                 <div>
-                                  <label className="block mb-1 font-medium">
-                                    <PiRoadHorizonLight className="inline-block mr-1" />
+                                  <label className='block mb-1 font-medium'>
+                                    <PiRoadHorizonLight className='inline-block mr-1' />
                                     Score Description:
                                   </label>
                                   <textarea
-                                    className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    placeholder="Detail the requirements for different score levels"
-                                    rows="3"
+                                    className='w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
+                                    placeholder='Detail the requirements for different score levels'
+                                    rows='3'
                                     value={sub.scoreDescription}
                                     onChange={(e) =>
                                       handleSubsectionChange(

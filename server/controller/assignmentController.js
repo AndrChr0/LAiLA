@@ -284,21 +284,3 @@ export async function deleteAssignment(req, res, next) {
     next(error);
   }
 }
-
-// remove later
-export async function undeleteAssignment(req, res, next) {
-  try {
-    const [results] = await pool.query(
-      `
-			UPDATE assignments
-			SET is_deleted = 0, is_public = 1
-			WHERE assignment_id = ?;
-			`,
-      [req.params.assignment_id]
-    );
-
-    return res.status(200).json("Successfully undeleted assignment");
-  } catch (error) {
-    next(error);
-  }
-}

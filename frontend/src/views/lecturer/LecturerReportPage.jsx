@@ -125,6 +125,7 @@ const LecturerReportPage = () => {
   } = currentReport.report_contents || {};
 
   const date = new Date(currentReport.date_created);
+  date.setHours(date.getHours() + 4);
   const formattedDate =
     date.toISOString().split("T")[0] +
     " " +
