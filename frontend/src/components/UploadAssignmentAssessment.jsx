@@ -164,8 +164,11 @@ function UploadAssignmentAssessment({
       )}
 
       {error && <p className='text-red-500'>{error}</p>}
-      {loading && <Loading
-      loadingText="Processing"/>}
+      {loading && (
+        <div className='mt-8'>
+          <Loading loadingText='Processing' />
+        </div>
+      )}
     </div>
   );
 }
