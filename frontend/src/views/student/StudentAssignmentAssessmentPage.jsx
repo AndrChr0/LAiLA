@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { GetConfig } from "../../utils/GetConfig";
 import FeedbackCard from "../../components/FeedbackCard";
 import BackComponent from "../../components/BackComponent";
+import { Star, Calendar } from 'lucide-react';
 
 function StudentAssignmentAssessmentPage() {
   const [currentAssignment, setCurrentAssignment] = useState(null);
@@ -66,32 +67,21 @@ function StudentAssignmentAssessmentPage() {
       {currentAssignment ? (
         <div className='p-4 bg-gray-200 rounded-lg mb-[50px]'>
           <h1 className='text-4xl'>{currentAssignment.assignment_title}</h1>
-          <h2 className='text-2xl text-gray-500'>
+          <h2 className='text-2xl text-gray-700'>
             {currentAssignment.course_code} {currentAssignment.course_name}
           </h2>
-          <p className='py-[20px]'>
-            Due: {currentAssignment.assignment_end_date.split("T")[0]}
-          </p>
-          <p>
-            Attempts: {attemptsUsed}/{currentAssignment.assignment_attempts}
-          </p>
-          <p>
-            You have {currentAssignment.assignment_attempts - attemptsUsed}{" "}
-            {currentAssignment.assignment_attempts - attemptsUsed <= 1
-              ? "attempt left"
-              : "attempts left"}{" "}
-          </p>
+          <div className="flex items-center gap-3 mt-[20px]">
+            <span className="flex items-center gap-1"><Calendar size={20}/> Due: {currentAssignment.assignment_end_date.split("T")[0]}</span>
+            <span className="flex items-center gap-1"><Star size={20}/><p>Attempts: {attemptsUsed}/{currentAssignment.assignment_attempts}</p></span>
+          </div>
+        
+          {currentAssignment.assignment_attempts - attemptsUsed === 0 && (
+            <p className="inline-block w-auto px-3 py-1 font-semibold text-red-500 bg-red-100 rounded-full mt-[20px]" >You have reached the maximum number of attempts.</p>
+          )}  
         </div>
       ) : (
         <p>Loading...</p>
       )}
-
-      {currentAssignment &&
-        attemptsUsed >= currentAssignment.assignment_attempts && (
-          <p className='font-bold'>
-            You have reached the maximum number of attempts.
-          </p>
-        )}
 
       {feedback && (
         <div className='p-6 mt-10 bg-white border border-gray-300 rounded-lg shadow-md'>
