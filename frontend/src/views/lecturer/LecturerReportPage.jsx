@@ -50,6 +50,7 @@ const LecturerReportPage = () => {
 
   const handleNewAssignmentReport = (id) => {
     setIsLoading(true);
+    setErrorMsg("");
 
     instance
       .post(
@@ -81,7 +82,7 @@ const LecturerReportPage = () => {
         <button
           disabled={isLoading}
           onClick={() => handleNewAssignmentReport(pathId)}
-          type="button"
+          type='button'
           className={`h-auto min-h-10 px-5 m-2 duration-150 rounded-lg focus:shadow-outline bg-white hover:bg-neutral-200 border border-neutral-300 hover:border-neutral-400 text-neutral-700 hover:text-neutral-800 ${
             isLoading ? "hidden" : ""
           }`}
@@ -136,25 +137,25 @@ const LecturerReportPage = () => {
 
   return (
     <main>
-      <BackComponent destination="/home" />
-      <div className="min-h-screen p-6 bg-gray-50">
-        <div className="mx-auto max-w-7xl">
-          <header className="mb-8">
-            <h1 className="flex flex-col mb-4 text-3xl text-gray-800">
-              <span className="text-[15px] text-gray-500">
+      <BackComponent destination='/home' />
+      <div className='min-h-screen p-6 bg-gray-50'>
+        <div className='mx-auto max-w-7xl'>
+          <header className='mb-8'>
+            <h1 className='flex flex-col mb-4 text-3xl text-gray-800'>
+              <span className='text-[15px] text-gray-500'>
                 {currentReport.course_name}
               </span>
-              <span className="font-bold">
+              <span className='font-bold'>
                 {currentReport.assignment_title}
               </span>
             </h1>
-            <div className="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center">
+            <div className='flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center'>
               <Select
                 value={String(selectedReport)}
                 onValueChange={(val) => setSelectedReport(Number(val))}
               >
-                <SelectTrigger className="w-full sm:w-64">
-                  <SelectValue placeholder="Select a report" />
+                <SelectTrigger className='w-full sm:w-64'>
+                  <SelectValue placeholder='Select a report' />
                 </SelectTrigger>
                 <SelectContent>
                   {reports.map((report) => (
@@ -168,7 +169,7 @@ const LecturerReportPage = () => {
               <button
                 disabled={isLoading}
                 onClick={() => handleNewAssignmentReport(pathId)}
-                type="button"
+                type='button'
                 className={`h-auto min-h-10 px-5 m-2 duration-150 rounded-lg focus:shadow-outline bg-white hover:bg-neutral-200 border border-neutral-300 hover:border-neutral-400 text-neutral-700 hover:text-neutral-800 ${
                   isLoading ? "hidden" : ""
                 }`}
@@ -176,10 +177,10 @@ const LecturerReportPage = () => {
                 Generate New Report
               </button>
 
-              {isLoading && <Loading/>}
-              {errorMsg && <div className="text-red-700">{errorMsg}</div>}
+              {isLoading && <Loading />}
+              {errorMsg && <div className='text-red-700'>{errorMsg}</div>}
 
-              <div className="flex items-center gap-2 text-sm text-gray-600">
+              <div className='flex items-center gap-2 text-sm text-gray-600'>
                 <Clock size={16} />
                 <span>{formattedDate}</span>
               </div>
@@ -187,15 +188,15 @@ const LecturerReportPage = () => {
           </header>
 
           {/* Cards */}
-          <div className="grid grid-cols-1 gap-4 mb-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className='grid grid-cols-1 gap-4 mb-6 sm:grid-cols-2 lg:grid-cols-3'>
             <Card>
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
+              <CardContent className='p-6'>
+                <div className='flex items-center justify-between'>
                   <div>
-                    <p className="text-sm font-medium text-gray-500">
+                    <p className='text-sm font-medium text-gray-500'>
                       Pass Rate
                     </p>
-                    <p className="text-2xl font-bold text-gray-900">
+                    <p className='text-2xl font-bold text-gray-900'>
                       {(
                         (passFailData[0].value /
                           (passFailData[0].value + passFailData[1].value)) *
@@ -204,44 +205,44 @@ const LecturerReportPage = () => {
                       %
                     </p>
                   </div>
-                  <div className="p-2 bg-green-100 rounded-full">
-                    <CheckCircle className="w-6 h-6 text-green-600" />
+                  <div className='p-2 bg-green-100 rounded-full'>
+                    <CheckCircle className='w-6 h-6 text-green-600' />
                   </div>
                 </div>
               </CardContent>
             </Card>
 
             <Card>
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
+              <CardContent className='p-6'>
+                <div className='flex items-center justify-between'>
                   <div>
-                    <p className="text-sm font-medium text-gray-500">
+                    <p className='text-sm font-medium text-gray-500'>
                       Total Feedback
                     </p>
-                    <p className="text-2xl font-bold text-gray-900">
+                    <p className='text-2xl font-bold text-gray-900'>
                       {feedbackMetrics.totalFeedback}
                     </p>
                   </div>
-                  <div className="p-2 bg-blue-100 rounded-full">
-                    <FileText className="w-6 h-6 text-blue-600" />
+                  <div className='p-2 bg-blue-100 rounded-full'>
+                    <FileText className='w-6 h-6 text-blue-600' />
                   </div>
                 </div>
               </CardContent>
             </Card>
 
             <Card>
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
+              <CardContent className='p-6'>
+                <div className='flex items-center justify-between'>
                   <div>
-                    <p className="text-sm font-medium text-gray-500">
+                    <p className='text-sm font-medium text-gray-500'>
                       Students with Feedback
                     </p>
-                    <p className="text-2xl font-bold text-gray-900">
+                    <p className='text-2xl font-bold text-gray-900'>
                       {feedbackMetrics.uniqueStudents}
                     </p>
                   </div>
-                  <div className="p-2 bg-purple-100 rounded-full">
-                    <Users className="w-6 h-6 text-purple-600" />
+                  <div className='p-2 bg-purple-100 rounded-full'>
+                    <Users className='w-6 h-6 text-purple-600' />
                   </div>
                 </div>
               </CardContent>
@@ -249,18 +250,18 @@ const LecturerReportPage = () => {
           </div>
 
           {/* Tabs */}
-          <Tabs defaultValue="overview" className="mb-6">
+          <Tabs defaultValue='overview' className='mb-6'>
             <TabsList>
-              <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="strong">Strong Areas</TabsTrigger>
-              <TabsTrigger value="problems">Common Problems</TabsTrigger>
+              <TabsTrigger value='overview'>Overview</TabsTrigger>
+              <TabsTrigger value='strong'>Strong Areas</TabsTrigger>
+              <TabsTrigger value='problems'>Common Problems</TabsTrigger>
             </TabsList>
 
             {/* Overview Tab */}
-            <TabsContent value="overview" className="space-y-6">
-              <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+            <TabsContent value='overview' className='space-y-6'>
+              <div className='grid grid-cols-1 gap-6 lg:grid-cols-3'>
                 {/* Pie Chart */}
-                <Card className="lg:col-span-1">
+                <Card className='lg:col-span-1'>
                   <CardHeader>
                     <CardTitle>Pass/Fail Count</CardTitle>
                     <CardDescription>
@@ -268,17 +269,17 @@ const LecturerReportPage = () => {
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div className="h-64">
-                      <ResponsiveContainer width="100%" height="100%">
+                    <div className='h-64'>
+                      <ResponsiveContainer width='100%' height='100%'>
                         <PieChart>
                           <Pie
                             data={passFailData}
-                            cx="50%"
-                            cy="50%"
+                            cx='50%'
+                            cy='50%'
                             innerRadius={60}
                             outerRadius={80}
                             paddingAngle={5}
-                            dataKey="value"
+                            dataKey='value'
                             label={({ name, value }) => `${name}: ${value}`}
                           >
                             {passFailData.map((entry, index) => (
@@ -293,7 +294,7 @@ const LecturerReportPage = () => {
                 </Card>
 
                 {/* Overall course suggestions */}
-                <Card className="lg:col-span-2">
+                <Card className='lg:col-span-2'>
                   <CardHeader>
                     <CardTitle>Overall Course Suggestions</CardTitle>
                     <CardDescription>
@@ -302,13 +303,13 @@ const LecturerReportPage = () => {
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div className="space-y-6">
+                    <div className='space-y-6'>
                       {overallLecturerSuggestions.map((item, index) => (
                         <div
                           key={index}
-                          className="pb-4 border-b last:border-0 last:pb-0"
+                          className='pb-4 border-b last:border-0 last:pb-0'
                         >
-                          <p className="mb-3 text-muted-foreground">{item}</p>
+                          <p className='mb-3 text-muted-foreground'>{item}</p>
                         </div>
                       ))}
                     </div>
@@ -318,8 +319,8 @@ const LecturerReportPage = () => {
             </TabsContent>
 
             {/* Additional Notes in the same "Overview" */}
-            <TabsContent value="overview" className="space-y-6">
-              <Card className="shadow-md mt-[20px]">
+            <TabsContent value='overview' className='space-y-6'>
+              <Card className='shadow-md mt-[20px]'>
                 <CardHeader>
                   <CardTitle>Additional notes</CardTitle>
                   <CardDescription>
@@ -327,17 +328,17 @@ const LecturerReportPage = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted-foreground">{additionalNotes}</p>
+                  <p className='text-muted-foreground'>{additionalNotes}</p>
                 </CardContent>
               </Card>
             </TabsContent>
 
             {/* Strong Areas Tab */}
-            <TabsContent value="strong" className="space-y-6">
-              <Card className="shadow-md">
+            <TabsContent value='strong' className='space-y-6'>
+              <Card className='shadow-md'>
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <CheckCircle className="w-5 h-5 text-green-500" />
+                  <CardTitle className='flex items-center gap-2'>
+                    <CheckCircle className='w-5 h-5 text-green-500' />
                     Strong areas
                   </CardTitle>
                   <CardDescription>
@@ -345,16 +346,16 @@ const LecturerReportPage = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-6">
+                  <div className='space-y-6'>
                     {strongAreas.map((data, index) => (
                       <div
                         key={index}
-                        className="pb-4 border-b last:border-0 last:pb-0"
+                        className='pb-4 border-b last:border-0 last:pb-0'
                       >
-                        <h3 className="mb-2 text-lg font-semibold">
+                        <h3 className='mb-2 text-lg font-semibold'>
                           {data.areaName}
                         </h3>
-                        <p className="mb-3 text-muted-foreground">
+                        <p className='mb-3 text-muted-foreground'>
                           {data.description}
                         </p>
                       </div>
@@ -365,11 +366,11 @@ const LecturerReportPage = () => {
             </TabsContent>
 
             {/* Common Problems Tab */}
-            <TabsContent value="problems" className="space-y-6">
-              <Card className="shadow-md">
+            <TabsContent value='problems' className='space-y-6'>
+              <Card className='shadow-md'>
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <AlertCircle className="w-5 h-5 text-amber-500" />
+                  <CardTitle className='flex items-center gap-2'>
+                    <AlertCircle className='w-5 h-5 text-amber-500' />
                     Common Problems
                   </CardTitle>
                   <CardDescription>
@@ -377,28 +378,28 @@ const LecturerReportPage = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-6">
+                  <div className='space-y-6'>
                     {commonProblems.map((problem, index) => (
                       <div
                         key={index}
-                        className="pb-4 border-b last:border-0 last:pb-0"
+                        className='pb-4 border-b last:border-0 last:pb-0'
                       >
-                        <div className="flex items-start justify-between mb-2">
-                          <h3 className="text-lg font-semibold">
+                        <div className='flex items-start justify-between mb-2'>
+                          <h3 className='text-lg font-semibold'>
                             {problem.problemName}
                           </h3>
-                          <Badge variant="outline" className="bg-amber-50">
+                          <Badge variant='outline' className='bg-amber-50'>
                             {problem.occurrences} occurrences
                           </Badge>
                         </div>
-                        <p className="mb-3 text-muted-foreground">
+                        <p className='mb-3 text-muted-foreground'>
                           {problem.description}
                         </p>
                         <div>
-                          <h4 className="mb-2 text-sm font-medium">
+                          <h4 className='mb-2 text-sm font-medium'>
                             Recommended Actions:
                           </h4>
-                          <ul className="pl-5 space-y-1 text-sm list-disc">
+                          <ul className='pl-5 space-y-1 text-sm list-disc'>
                             {problem.recommendedActions.map(
                               (action, actionIndex) => (
                                 <li key={actionIndex}>{action}</li>
