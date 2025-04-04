@@ -9,6 +9,7 @@ import { FaArrowLeft } from "react-icons/fa";
 import { GetConfig } from "../../utils/GetConfig";
 import { useAuth } from "../../context/AuthContext";
 import BackComponent from "../../components/BackComponent";
+import Loading from "../../components/Loading";
 
 const StudentCoursePage = () => {
   const [currentCourse, setCurrentCourse] = useState({});
@@ -74,7 +75,7 @@ const StudentCoursePage = () => {
           </div>
         </div>
       ) : (
-        <p>Loading...</p>
+        <Loading/>
       )}
 
       <div>

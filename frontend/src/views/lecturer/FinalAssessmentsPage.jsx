@@ -5,6 +5,7 @@ import { useAuth } from "../../context/AuthContext";
 import Assessments from "../../components/Assessments";
 import instance from "../../utils/axiosInstance";
 import BackComponent from "../../components/BackComponent";
+import Loading from "../../components/Loading";
 
 const FinalAssessmentsPage = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -43,7 +44,7 @@ const FinalAssessmentsPage = () => {
   }, []);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loading/>;
   }
 
   const isNotReviewed = (assignmentId) => {
