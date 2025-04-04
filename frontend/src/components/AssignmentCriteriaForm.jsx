@@ -227,7 +227,7 @@ function AssignmentCriteriaForm({
         AI_final_comments: {
           type: "string",
           description:
-            "Provide a detailed analysis of the submission with constructive feedback. Identify specific areas that need improvement, explain why they're problematic, and offer actionable suggestions for enhancement. While you may briefly acknowledge strengths if relevant, focus 80% of your response on constructive critique and specific recommendations for improvement.",
+            "Analyze the student’s programming submission and generate clear, specific, and supportive feedback. Focus primarily on identifying and explaining 2–3 key areas for improvement in the code, including logic errors, inefficient structures, poor readability, or missed requirements. For each issue, explain why it matters, reference relevant parts of the code, and provide actionable suggestions the student can use to revise or learn from. You may briefly highlight strengths (e.g., effective use of functions or clear naming), but keep the main focus—around 80%—on constructive, educational critique that promotes learning and improvement. Use a tone that is respectful, encouraging, and oriented toward growth. The max amount of words should be 250. ",
         },
       },
       required: ["AI_final_comments"],
