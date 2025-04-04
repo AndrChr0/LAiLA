@@ -105,6 +105,14 @@ const LecturerEditAssignmentPage = () => {
       return;
     }
 
+    if (assignment_attempts < 1 || assignment_attempts > 5) {
+      setErrorMsg(
+        "Please enter a valid number of attempts for the assignment."
+      );
+      setSuccessMsg("");
+      return;
+    }
+
     if (!allowed_filetypes.length) {
       setErrorMsg("Please enter at least one allowed filetype.");
       setSuccessMsg("");
@@ -193,68 +201,58 @@ const LecturerEditAssignmentPage = () => {
           className='p-2 mb-4 bg-white border border-gray-400'
         />
 
-      <div className='flex justify-between w-full h-auto p-4 border border-gray-400 rounded'>
-      <div className='flex flex-col'>
-          <label htmlFor='is_active'>Active</label>
-          <input
-            type='checkbox'
-            id='is_active'
-            name='is_active'
-            checked={isActive}
-            className="mt-1 bg-white border-2 border-blue-500 rounded-sm h-7 w-15 shrink-0 checked:bg-blue-500 checked:border-0"
-            onChange={(e) => setIsActive(e.target.checked)}
-          />
-        </div>
-        <div className='flex flex-col'>
-          <label htmlFor='is_public'>Public</label>
-          <input
-            type='checkbox'
-            id='is_public'
-            name='is_public'
-            checked={isPublic}
-            className="mt-1 bg-white border-2 border-blue-500 rounded-sm h-7 w-15 shrink-0 checked:bg-blue-500 checked:border-0"
-            onChange={(e) => setIsPublic(e.target.checked)}
-          />
-        </div>
-        <div className="flex flex-col">
-          <label htmlFor='assignment_attempts'>Attempts allowed</label>
-          <input
-            type='number'
-            id='assignment_attempts'
-            name='assignment_attempts'
-            value={assignment_attempts || 0}
-            onChange={(e) => setAssignmentAttempts(e.target.value)}
-            className='p-2 mb-4 bg-white border border-gray-400'
-          />
-        </div>
+        <div className='flex justify-between w-full h-auto p-4 border border-gray-400 rounded'>
+          <div className='flex flex-col'>
+            <label htmlFor='is_active'>Active</label>
+            <input
+              type='checkbox'
+              id='is_active'
+              name='is_active'
+              checked={isActive}
+              className='mt-1 bg-white border-2 border-blue-500 rounded-sm h-7 w-15 shrink-0 checked:bg-blue-500 checked:border-0'
+              onChange={(e) => setIsActive(e.target.checked)}
+            />
+          </div>
+          <div className='flex flex-col'>
+            <label htmlFor='is_public'>Public</label>
+            <input
+              type='checkbox'
+              id='is_public'
+              name='is_public'
+              checked={isPublic}
+              className='mt-1 bg-white border-2 border-blue-500 rounded-sm h-7 w-15 shrink-0 checked:bg-blue-500 checked:border-0'
+              onChange={(e) => setIsPublic(e.target.checked)}
+            />
+          </div>
+          <div className='flex flex-col'>
+            <label htmlFor='assignment_attempts'>Attempts allowed</label>
+            <input
+              min={1}
+              max={5}
+              type='number'
+              id='assignment_attempts'
+              name='assignment_attempts'
+              value={assignment_attempts || 0}
+              onChange={(e) => setAssignmentAttempts(e.target.value)}
+              className='p-2 mb-4 bg-white border border-gray-400'
+            />
+          </div>
 
-        <div className="flex flex-col">
-          <label htmlFor='pass_percentage'>Pass Percentage</label>
-          <input
-            type='number'
-            id='pass_percentage'
-            name='pass_percentage'
-            value={passPercentage || 70}
-            onChange={(e) => setPassPercentage(e.target.value)}
-            className='w-16 p-2 mb-4 bg-white border border-gray-400'
-          />
+          <div className='flex flex-col'>
+            <label htmlFor='pass_percentage'>Pass Percentage</label>
+            <input
+              type='number'
+              id='pass_percentage'
+              name='pass_percentage'
+              value={passPercentage || 70}
+              onChange={(e) => setPassPercentage(e.target.value)}
+              className='w-16 p-2 mb-4 bg-white border border-gray-400'
+            />
+          </div>
         </div>
-      </div>
-        
-
-       
-        {/* <label htmlFor="max_score">Max Score</label>
-        <input
-          type="number"
-          id="max_score"
-          name="max_score"
-          value={maxScore || 0}
-          onChange={(e) => setMaxScore(e.target.value)}
-          className="w-16 p-2 mb-4 bg-white border border-gray-400"
-        /> */}
         <div className='flex flex-col'>
           <label htmlFor='allowed_filetype'>Add filetypes to be analyzed</label>
-          <div className="flex flex-row gap-2">
+          <div className='flex flex-row gap-2'>
             <input
               type='text'
               id='allowed_filetype'
@@ -271,7 +269,6 @@ const LecturerEditAssignmentPage = () => {
               Add Filetype
             </button>
           </div>
-         
         </div>
         <div className='flex flex-wrap gap-2 mb-7'>
           {allowed_filetypes.map((filetype, index) => (
