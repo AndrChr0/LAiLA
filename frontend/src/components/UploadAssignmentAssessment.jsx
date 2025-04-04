@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import instance from "../utils/axiosInstance";
 import { GetConfig } from "../utils/GetConfig";
+import Loading from "./Loading";
 
 function UploadAssignmentAssessment({
   assignmentId,
@@ -163,7 +164,8 @@ function UploadAssignmentAssessment({
       )}
 
       {error && <p className='text-red-500'>{error}</p>}
-      {loading && <p>Processing...</p>}
+      {loading && <Loading
+      loadingText="Processing"/>}
     </div>
   );
 }

@@ -59,7 +59,7 @@ function StudentFinalAssessment() {
         </h1>
         <div className="flex flex-col">
           <p>
-            Suggested Result:{" "}
+            Final Result:{" "}
             <span
               className={`px-2 rounded ${
                 currentAssessment.assessment_result === "pass"

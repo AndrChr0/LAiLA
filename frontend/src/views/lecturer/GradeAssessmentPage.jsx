@@ -7,6 +7,7 @@ import { GetConfig } from "../../utils/GetConfig";
 import AssessmentFormComponent from "../../components/AssessmentFormComponent";
 import BackComponent from "../../components/BackComponent";
 import { useNavigate } from "react-router-dom";
+import Loading from "../../components/Loading";
 
 function GradeAssessmentPage() {
   const [currentAssessment, setCurrentAssessment] = useState();
@@ -65,7 +66,7 @@ function GradeAssessmentPage() {
       });
   };
 
-  if (!currentAssessment) return <h1>Loading...</h1>;
+  if (!currentAssessment) return <Loading/>;
 
   return (
     <div className="max-w-[1700px] mx-auto px-[3%]">
