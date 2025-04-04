@@ -1,6 +1,12 @@
 import express from "express";
 import { auth, authRole } from "../middleware/verifyToken.js";
-import { getAllAssignments, createAssignment, updateAssignment, deleteAssignment, undeleteAssignment, getOneAssignment } from "../controller/assignmentController.js";
+import {
+  getAllAssignments,
+  createAssignment,
+  updateAssignment,
+  deleteAssignment,
+  getOneAssignment,
+} from "../controller/assignmentController.js";
 const router = express.Router();
 
 // get all assignments (for user)
@@ -17,6 +23,5 @@ router.patch("/:assignment_id", auth, authRole("lecturer"), updateAssignment);
 
 // delete assignment
 router.delete("/:assignment_id", auth, authRole("lecturer"), deleteAssignment);
-router.patch("/ohno/:assignment_id", undeleteAssignment); // remove later
 
 export default router;

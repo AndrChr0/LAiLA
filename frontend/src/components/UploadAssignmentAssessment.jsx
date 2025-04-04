@@ -12,7 +12,6 @@ function UploadAssignmentAssessment({
   onUploadDone,
   setFeedback,
 }) {
-  // const [feedback, setFeedback] = useState("");
   const [file, setFile] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -42,7 +41,7 @@ function UploadAssignmentAssessment({
       setLoading(true);
 
       const formData = new FormData();
-      // zipUpload - see multer config in zipRoutes.js
+
       formData.append("zipUpload", file);
 
       formData.append("allowedExtensions", JSON.stringify(filetypes));
@@ -79,9 +78,6 @@ function UploadAssignmentAssessment({
 
   return (
     <div className='flex flex-col'>
-      <ul className='text-red-900'>
-        {/* <li>Description: {description}</li> */}
-      </ul>
       <h2 className='text-xl font-light'>Upload Project Zip file</h2>
       <div className='flex flex-col w-4/5'>
         <input
@@ -95,7 +91,6 @@ function UploadAssignmentAssessment({
             disabled={loading}
             className='h-10 px-5 m-2 text-white transition-colors duration-150 bg-[#2b6cb0] rounded-lg focus:shadow-outline hover:bg-[#2c5282]'
             onClick={() => {
-              // uploadFile();
               setSubmitModule(true);
             }}
           >

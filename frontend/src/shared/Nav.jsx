@@ -57,35 +57,6 @@ function Nav({ role = "" }) {
               Home
             </NavLink>
           </li>
-          {/* {role === "lecturer" ? (
-            <li>
-              <NavLink
-                className={({ isActive }) =>
-                  isActive
-                    ? "hover:text-black border-b border-black"
-                    : "hover:text-gray-600"
-                }
-                to='/reports'
-              >
-                Reports
-              </NavLink>
-            </li>
-          ) : null} */}
-
-          {/* {role === "student" ? (
-            <li>
-              <NavLink
-                className={({ isActive }) =>
-                  isActive
-                    ? "hover:text-black border-b border-black"
-                    : "hover:text-gray-600"
-                }
-                to='/chatbots'
-              >
-                Chatbots
-              </NavLink>
-            </li>
-          ) : null} */}
         </div>
         {role ? (
           <>

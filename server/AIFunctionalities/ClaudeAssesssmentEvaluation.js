@@ -53,5 +53,3 @@ Generate the completed JSON object below, ensuring every required property is pr
 
   return parsedMessage;
 }
-
-// main();

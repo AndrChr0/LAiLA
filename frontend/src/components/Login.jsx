@@ -23,7 +23,6 @@ const Login = () => {
       });
 
       const token = response.data.accessToken;
-      console.log(token);
 
       if (token) {
         login(token);
