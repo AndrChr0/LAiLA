@@ -45,9 +45,21 @@ async function decompressZip(zipPath, allowedExtensions) {
     });
     const studentWork = [];
     const allFilesContent = [];
+
+    const MAX_FILE_LENGTH = 50000;
+
     for (let file of files) {
       const filePath = path.join("zipDist", file.path);
       const content = fs.readFileSync(filePath, "utf-8");
+
+      // Skip files that are too long
+      if (content.length > MAX_FILE_LENGTH) {
+        console.warn(
+          `Skipping ${file.path} – content exceeds the maximum length. attached file length: ${content.length}`
+        );
+        continue;
+      }
+
       const ext = path.extname(file.path);
 
       allFilesContent.push(`${ext}\n${file.path}${content}`);
