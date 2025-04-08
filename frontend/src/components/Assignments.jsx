@@ -80,7 +80,9 @@ const Assignments = ({ assignments }) => {
                   ) : null}
 
                   <h3 className='mb-1 text-lg font-medium text-gray-800'>
-                    <span className="text-gray-500 ">{assignment.course_code} {assignment.course_name}:{" "}</span> 
+                    <span className='text-gray-500 '>
+                      {assignment.course_code} {assignment.course_name}:{" "}
+                    </span>
                     {assignment.assignment_title}
                   </h3>
                 </div>
@@ -137,7 +139,7 @@ const Assignments = ({ assignments }) => {
           );
         })
       ) : (
-        <p className="pt-2 pb-30">No assignments found.</p>
+        <p className='pt-2 pb-30'>No assignments found.</p>
       )}
     </div>
   );

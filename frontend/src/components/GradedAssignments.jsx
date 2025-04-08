@@ -6,7 +6,7 @@ function GradedAssignments({ assessments }) {
       {assessments &&
         assessments.map((item, index) => (
           <div
-            className='flex flex-col md:flex-row justify-between items-center bg-white rounded-lg shadow-md p-6 mb-4 w-full transition-all duration-200 hover:shadow-lg border-l-4 border-blue-500'
+            className='flex flex-col md:flex-row justify-between items-center bg-white rounded-lg p-6 mb-4 w-full transition-all duration-200 border border-gray-200   '
             key={index}
           >
             <div className='flex flex-col w-full md:w-1/2 mb-4 md:mb-0'>
@@ -18,7 +18,7 @@ function GradedAssignments({ assessments }) {
               </p>
             </div>
             <Link
-              className='w-full md:w-auto px-4 py-2 bg-blue-500 text-white font-medium rounded hover:bg-blue-600 transition-colors duration-200 text-center'
+              className='flex items-center gap-1 px-3 py-1 text-sm text-black bg-white border border-gray-300 rounded hover:cursor-pointer transition-all duration-300  hover:scale-[1.02]'
               to={`/student/final-assessment/${item.assessment_id}`}
             >
               View Grade
