@@ -225,7 +225,7 @@ function NewAssignmentPage() {
             <div className='flex flex-col items-center gap-3 '>
               <div className='flex items-center gap-2'>
                 <label htmlFor='is_active'>Is Active</label>
-                <ToolTip toolText='Students can recieve feedback on their assignments by Athea AI' />
+                <ToolTip toolText='Students can recieve feedback on their assignments by LAiLA' />
               </div>
               <input
                 onChange={handleIsActiveChange}
@@ -285,7 +285,7 @@ function NewAssignmentPage() {
           id='assignment_description'
         ></textarea>
 
-        <ToolTip toolText='Add filetypes that will be assessed. Filtypes that are not specified will not be accessed Athea AI.' />
+        <ToolTip toolText='Add filetypes that will be assessed. Filtypes that are not specified will not be accessed LAiLA.' />
         <label htmlFor='assignment_filetypes'>
           Add filetypes to be analyzed
         </label>
@@ -335,7 +335,7 @@ function NewAssignmentPage() {
         />
         <button
           type='submit'
-          className='p-2 bg-green-600 text-white font-bold mt-4 border border-gray-400 w-28 hover:cursor-pointer hover:bg-green-900'
+          className='p-2 mt-4 font-bold text-white bg-green-600 border border-gray-400 w-28 hover:cursor-pointer hover:bg-green-900'
           onClick={handleSubmit}
         >
           Publish Assignment

@@ -254,7 +254,7 @@ function AssignmentCriteriaForm({
       <div className='mb-6'>
         <h2 className='mb-2 text-2xl font-bold'>Assignment Criteria Builder</h2>
         <p className='max-w-4xl mb-4'>
-          Create guidelines for the Athea AI tutor to follow. A section
+          Create guidelines for LAiLA to follow. A section
           references a larger piece of work, while subsections are smaller parts
           of the section.
         </p>
