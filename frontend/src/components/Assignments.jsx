@@ -97,7 +97,7 @@ const Assignments = ({ assignments }) => {
                     onClick={() => handleViewDetails(assignment.assignment_id)}
                     className='flex items-center gap-1 px-3 py-1 text-sm text-black bg-white border border-gray-300 rounded hover:cursor-pointer transition-all duration-300  hover:scale-[1.02]'
                   >
-                    View Details
+                    Open Assignment
                   </button>
                 ) : (
                   <div className='flex gap-3'>
