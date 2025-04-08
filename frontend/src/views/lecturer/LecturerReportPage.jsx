@@ -264,9 +264,10 @@ const LecturerReportPage = () => {
                 {/* Pie Chart */}
                 <Card className='lg:col-span-1'>
                   <CardHeader>
-                    <CardTitle>Pass/Fail Count</CardTitle>
+                    <CardTitle>Suggested Pass/Fail Rate</CardTitle>
                     <CardDescription>
-                      Number of passed and failed students
+                      Number of passed and failed students (suggestion based on
+                      AI feedback)
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -297,7 +298,7 @@ const LecturerReportPage = () => {
                 {/* Overall course suggestions */}
                 <Card className='lg:col-span-2'>
                   <CardHeader>
-                    <CardTitle>Overall Course Suggestions</CardTitle>
+                    <CardTitle>Overall Course Proposals</CardTitle>
                     <CardDescription>
                       Suggestions for improvement across all assignment
                       submissions

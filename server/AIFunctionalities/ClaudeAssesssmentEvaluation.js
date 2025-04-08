@@ -46,7 +46,7 @@ Generate the completed JSON object below, ensuring every required property is pr
                         `,
       },
     ],
-    model: "claude-3-7-sonnet-latest",
+    model: process.env.ANTHROPIC_FEEDBACK_MODEL,
   });
 
   const parsedMessage = message.content[1].input;
