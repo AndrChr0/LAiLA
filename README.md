@@ -10,10 +10,13 @@ MYSQL_HOST = 'nnn.n.n.n' <br>
 MYSQL_USER = 'string' <br>
 MYSQL_PASSWORD = 'string' <br>
 MYSQL_DATABASE = 'string' <br> <br>
-AI_API_KEY = 'string' <br>
-AI_MODEL = 'string' <br> <br>
+GPT_API_KEY = 'string' (if you want to use chatGPT)<br>
+GPT_MODEL = 'string' <br> <br>
 ACCESS_TOKEN_SECRET = 'string' <br>
-REFRESH_TOKEN_SECRET = 'string'
+REFRESH_TOKEN_SECRET = 'string' <br> <br>
+ANTHROPIC_API_KEY = 'string' (if you want to use claude) <br>
+ANTHROPIC_FEEDBACK_MODEL= 'string' <br>
+ANTHROPIC_REPORT_MODEL= 'string' 
 
 ## Root .env Config
 API_PATH = 'string' <br>
@@ -23,3 +26,8 @@ CORS_PORT = nnnn
 
 ## Considerations
 - The project is only designed and tested for local hosting of SQL database
+
+## AI API usage
+- You can switch between the API's for assignment report generation in server/utils/generateAssignmentReport.js - line 109
+- You can switch between the API's for feedback generation in server/contoller/zipController.js - line 136
+

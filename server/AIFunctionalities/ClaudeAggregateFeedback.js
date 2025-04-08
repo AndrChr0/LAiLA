@@ -53,7 +53,7 @@ export async function claudeReportGenerator(
                 `,
       },
     ],
-    model: "claude-3-7-sonnet-latest",
+    model: process.env.ANTHROPIC_REPORT_MODEL,
   });
 
   const parsedMessage = message.content[1].input;
