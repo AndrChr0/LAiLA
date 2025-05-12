@@ -189,7 +189,7 @@ function GradeAssessmentPage() {
               )}
 
               {isSubmitted && (
-                <div className='mt-4 p-3 bg-green-100 border border-green-300 text-green-700 rounded-md'>
+                <div className='mt-4 p-3 bg-green-100 border border-green-300 text-black rounded-md'>
                   <p>Assessment submitted successfully</p>
                   <button
                     className='mt-2 p-2 bg-white border-2 rounded hover:bg-gray-100 hover:cursor-pointer'
