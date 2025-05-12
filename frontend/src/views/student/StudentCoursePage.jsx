@@ -59,21 +59,27 @@ const StudentCoursePage = () => {
     );
   };
 
+  const gradedAssignmentsFiltered = Array.isArray(gradedAssignments)
+    ? gradedAssignments.filter(
+        (assignment) => assignment.is_reviewed === 1
+      )
+    : [];
+
   return (
     <main>
       <BackComponent destination='/home' />
       {currentCourse ? (
-        <div className='flex justify-between w-full mb-[5rem]'>
-          <div className='mb-8'>
+        <div className='flex justify-around w-full mb-[5rem]'>
+          <div >
             <h1 className='text-3xl font-bold text-gray-800'>
               {currentCourse.course_code} {currentCourse.course_name}
             </h1>
-            <p className='mt-2 text-gray-700'>
+            <p className='mt-2 text-gray-700 w-[70%]'>
               {currentCourse.course_description}
             </p>
           </div>
 
-          <div>
+          <div className="w-[40%]">
             <p>
               <span className='font-semibold'>Lecturer:</span>{" "}
               {currentCourse.course_coordinator}
@@ -99,7 +105,7 @@ const StudentCoursePage = () => {
 
       <h2 className='text-2xl font-medium text-gray-800'>My Grades</h2>
 
-      <GradedAssignments assessments={gradedAssignments} />
+      <GradedAssignments assessments={gradedAssignmentsFiltered} />
     </main>
   );
 };

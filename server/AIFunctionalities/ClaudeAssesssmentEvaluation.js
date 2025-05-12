@@ -49,7 +49,7 @@ Generate the completed JSON object below, ensuring every required property is pr
     model: process.env.ANTHROPIC_FEEDBACK_MODEL,
   });
 
-  const parsedMessage = message.content[1].input;
+  const parsedMessage = message.content[0].input || message.content[1].input;
 
   return parsedMessage;
 }

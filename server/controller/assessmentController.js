@@ -105,7 +105,7 @@ export async function getMyAssessments(req, res, next) {
 export async function getCourseAssessments(req, res, next) {
     try {
         const [rows] = await pool.query(`
-            SELECT fa.assessment_id, a.assignment_title, fa.submission_date
+            SELECT fa.assessment_id, a.assignment_title, fa.submission_date, fa.is_reviewed
             FROM final_assessments fa
             LEFT JOIN assignments a ON fa.assignment_id = a.assignment_id
             WHERE fa.student_id = ? AND a.course_id = ?;

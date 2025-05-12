@@ -30,6 +30,12 @@ function StudentHomePage() {
       )
     : [];
 
+    const gradedAssignmentsFiltered = Array.isArray(gradedAssignments)
+    ? gradedAssignments.filter(
+        (assignment) => assignment.is_reviewed === 1
+      )
+    : [];
+
   return (
     <main>
       <div className='mb-16'>
@@ -52,7 +58,7 @@ function StudentHomePage() {
           My Grades
         </h2>
 
-        <GradedAssignments assessments={gradedAssignments} />
+        <GradedAssignments assessments={gradedAssignmentsFiltered} />
       </div>
     </main>
   );

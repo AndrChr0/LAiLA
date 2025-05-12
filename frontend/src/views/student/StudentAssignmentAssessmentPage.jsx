@@ -6,7 +6,8 @@ import { useState, useEffect } from "react";
 import { GetConfig } from "../../utils/GetConfig";
 import FeedbackCard from "../../components/FeedbackCard";
 import BackComponent from "../../components/BackComponent";
-import { Star, Calendar } from "lucide-react";
+import { Star, Calendar, CircleAlert } from "lucide-react";
+
 
 function StudentAssignmentAssessmentPage() {
   const [currentAssignment, setCurrentAssignment] = useState(null);
@@ -96,26 +97,26 @@ function StudentAssignmentAssessmentPage() {
       {feedback && (
         <div className='p-6 mt-10 bg-white border border-gray-300 rounded-lg shadow-md'>
           <h3 className='text-base font-semibold text-gray-800'>
-            Feedback comment:
+            Feedback:
           </h3>
 
           <p className='mb-4 text-gray-600'>{feedback.general_comment}</p>
 
-          <h3 className='mb-2 text-lg font-semibold text-gray-800'>
+          {/* <h3 className='mb-2 text-lg font-semibold text-gray-800'>
             Suggested Grade:
-          </h3>
+          </h3> */}
           {feedback.result_string === "pass" ? (
-            <span className='inline-block px-3 py-1 text-sm font-medium text-green-800 bg-green-100 rounded-full'>
-              PASS
+            <span className='inline-block px-3 py-1 text-sm font-medium  bg-gray-100 rounded-full'>
+              Based on the assignment requirements, your submission might pass during manual review.
             </span>
           ) : (
-            <span className='inline-block px-3 py-1 text-sm font-medium text-red-800 bg-red-100 rounded-full'>
-              FAIL
+            <span className='inline-block px-3 py-1 text-sm font-medium bg-gray-100  rounded-full'>
+              Based on the assignment requirements, your delivery might not be sufficient for a passing grade.
             </span>
           )}
 
-          <p className=' text-sm text-gray-500 italic mt-2'>
-            This feedback is AI generated and not the final assessment.
+          <p className=' text-sm text-gray-500 italic font-semibold mt-2 flex items-center gap-1 '>
+          <CircleAlert />  This feedback is AI generated and not the final assessment.
           </p>
         </div>
       )}

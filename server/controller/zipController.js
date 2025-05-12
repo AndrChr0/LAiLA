@@ -134,17 +134,18 @@ export const getZipcontents = async (req, res, next) => {
     }
 
     // Evaluate - GPT
-    const evaluatedSubmission = await evaluateSubmission(
-      zipContents,
-      criteriaString,
-      description
-    );
-    // Evaluate - CLAUDE
-    // const evaluatedSubmission = await claudeAssessmentEvaluation(
+    // const evaluatedSubmission = await evaluateSubmission(
     //   zipContents,
     //   criteriaString,
     //   description
     // );
+
+    // Evaluate - CLAUDE
+    const evaluatedSubmission = await claudeAssessmentEvaluation(
+      zipContents,
+      criteriaString,
+      description
+    );
 
     if (evaluatedSubmission) {
       deleteZipFileContent();
@@ -180,6 +181,7 @@ export const getZipcontents = async (req, res, next) => {
 
     const totalEvaluationScore = calculateTotalScore(evaluatedSubmission);
 
+    console.log("TOTAL SCORE", totalEvaluationScore)
     // calculate pass/fail
     let resultString;
     if (totalEvaluationScore >= maxScore * passThreshold) {

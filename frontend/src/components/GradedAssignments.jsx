@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 
 function GradedAssignments({ assessments }) {
+
   return (
     <div>
       {assessments &&
@@ -25,6 +26,7 @@ function GradedAssignments({ assessments }) {
             </Link>
           </div>
         ))}
+        {assessments.length == 0 && <p>No assignments found</p>}
     </div>
   );
 }

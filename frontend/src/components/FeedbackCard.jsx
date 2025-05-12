@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronUp, CircleAlert } from 'lucide-react';
 
 function FeedbackCard({ feedback }) {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -25,19 +25,21 @@ function FeedbackCard({ feedback }) {
               <h4 className='text-lg font-medium'>Feedback:</h4>
               <p className='font-light'>{feedback.general_comment}</p>
             </div>
-            <div className=''>
-              <h4 className='text-lg font-medium'>Suggested Result:</h4>
-              <p
-                className={
-                  feedback.suggested_result === "pass"
-                    ? "text-green-500 font-bold"
-                    : feedback.suggested_result === "fail"
-                    ? "text-red-500 font-bold"
-                    : ""
-                }
-              >
-                {feedback.suggested_result.toUpperCase()}
-              </p>
+            <div className='border-t-1 pt-2'>
+              {/* <h4 className='text-lg font-medium'>Suggested Result:</h4> */}
+            
+              {feedback.suggested_result === "pass" ? (
+                <span className='inline-block px-3 py-1 text-sm font-medium  bg-gray-100 rounded-full'>
+                  Based on the assignment requirements, your submission might pass during manual review.
+                </span>
+              ) : (
+                <span className='inline-block px-3 py-1 text-sm font-medium bg-gray-100  rounded-full'>
+                  Based on the assignment requirements, your delivery might not be sufficient for a passing grade.
+                </span>
+              )}
+              <p className=' text-sm text-gray-500 italic font-semibold mt-2 flex items-center gap-1 '>
+          <CircleAlert />  This feedback is AI generated and not the final assessment.
+          </p>
             </div>
           </div>
         </div>
