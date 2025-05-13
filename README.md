@@ -1,4 +1,4 @@
-# AI Tutor Project
+# LAiLA, The AI-Powered Assessment System
 
 ## Requirements
 - NodeJS <br>
