@@ -10,11 +10,13 @@ import { GetConfig } from "../../utils/GetConfig";
 import { useAuth } from "../../context/AuthContext";
 import BackComponent from "../../components/BackComponent";
 import Loading from "../../components/Loading";
+import GradedAssignments from "../../components/GradedAssignments";
 
 const StudentCoursePage = () => {
   const [currentCourse, setCurrentCourse] = useState({});
   const { token } = useAuth();
   const { assignments } = useFetchAssignments(GetConfig(token));
+  const [gradedAssignments, setGradedAssignments] = useState([]);
   const path = useParams();
   const courseId = path.id;
 
@@ -23,6 +25,18 @@ const StudentCoursePage = () => {
       .get(`api/courses/${courseId}`, GetConfig(token))
       .then((response) => {
         setCurrentCourse(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching assignment:", error);
+      });
+  }, [courseId]);
+
+  useEffect(() => {
+    instance
+      .get(`api/assessment/student/${courseId}`, GetConfig(token))
+      .then((response) => {
+        console.log(response.data);
+        setGradedAssignments(response.data);
       })
       .catch((error) => {
         console.error("Error fetching assignment:", error);
@@ -45,16 +59,22 @@ const StudentCoursePage = () => {
     );
   };
 
+  const gradedAssignmentsFiltered = Array.isArray(gradedAssignments)
+    ? gradedAssignments.filter(
+        (assignment) => assignment.is_reviewed === 1
+      )
+    : [];
+
   return (
     <main>
       <BackComponent destination='/home' />
       {currentCourse ? (
         <div className='flex justify-between w-full mb-[5rem]'>
-          <div className='mb-8'>
+          <div >
             <h1 className='text-3xl font-bold text-gray-800'>
               {currentCourse.course_code} {currentCourse.course_name}
             </h1>
-            <p className='mt-2 text-gray-700'>
+            <p className='mt-2 text-gray-700 w-[70%]'>
               {currentCourse.course_description}
             </p>
           </div>
@@ -75,17 +95,17 @@ const StudentCoursePage = () => {
           </div>
         </div>
       ) : (
-        <Loading/>
+        <Loading />
       )}
 
-      <div>
-        <h2 className='text-2xl font-medium text-gray-800'>
-          Active assignments
-        </h2>
-        <Assignments assignments={activeAssignmentInCourse(courseId)} />
-        <h2 className='text-2xl font-medium text-gray-800'>Old assignments</h2>
-        <Assignments assignments={inActiveAssignmentInCourse(courseId)} />
-      </div>
+      <h2 className='text-2xl font-medium text-gray-800'>Active assignments</h2>
+      <Assignments assignments={activeAssignmentInCourse(courseId)} />
+      <h2 className='text-2xl font-medium text-gray-800'>Old assignments</h2>
+      <Assignments assignments={inActiveAssignmentInCourse(courseId)} />
+
+      <h2 className='text-2xl font-medium text-gray-800'>My Grades</h2>
+
+      <GradedAssignments assessments={gradedAssignmentsFiltered} />
     </main>
   );
 };

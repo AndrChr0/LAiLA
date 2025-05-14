@@ -3,28 +3,28 @@ import dotenv from "dotenv";
 import { aggregatedAssignmentFeedbackSchema } from "../utils/aggregatedFeedbackSchema.js";
 dotenv.config({ path: "../.env" }); // load shared env
 dotenv.config(); // load server env
-const openai = new OpenAI({ apiKey: process.env.AI_API_KEY });
+const openai = new OpenAI({ apiKey: process.env.GPT_API_KEY });
 
 export async function aggregateAssignmentFeedback(
-    assignmentDescription,
-    assignmentCriteria,
-    newestStudentFeedback
+  assignmentDescription,
+  assignmentCriteria,
+  newestStudentFeedback
 ) {
-    const completion = await openai.chat.completions.create({
-        model: process.env.AI_MODEL,
-        response_format: {
-            type: "json_schema",
-            json_schema: aggregatedAssignmentFeedbackSchema,
-        },
-        messages: [
-            {
-                role: "system",
-                content: `
+  const completion = await openai.chat.completions.create({
+    model: process.env.GPT_REPORT_MODEL,
+    response_format: {
+      type: "json_schema",
+      json_schema: aggregatedAssignmentFeedbackSchema,
+    },
+    messages: [
+      {
+        role: "system",
+        content: `
                     You are a strict but fair AI assistant that assists lecturers in aggregating feedback for student assignments.
                     You will receive multiple student feedback JSON objects.
                     Your task is to aggregate them into a single JSON object following the "AggregatedAssignmentFeedback" schema exactly:
-                    1) Identify and list the most commonly encountered problems (commonProblems).
-                    2) Suggest actions or improvements (recommendedActions) where necessary.
+                    1) Identify and list the at max 5 most commonly encountered problems (commonProblems).
+                    2) Suggest at max 5 actions or improvements (recommendedActions) based on the most pressing issues.
                     3) Highlight strong areas where students performed well (strongAreas).
                     4) Provide any overall suggestions for the lecturer (overallLecturerSuggestions).
                     5) Place any additional notes into the "additionalNotes" field if needed.
@@ -34,10 +34,10 @@ export async function aggregateAssignmentFeedback(
                     - Do not include any extra keys, text explanations, or markdown formatting.
                     - Output *only* valid JSON that matches the schema.
                 `,
-            },
-            {
-                role: "user",
-                content: `
+      },
+      {
+        role: "user",
+        content: `
                     Here is the asignment description: ${assignmentDescription}
                     Here is the assignment criteria: ${assignmentCriteria}
                     Here are the JSON feedback objects from multiple students: ${newestStudentFeedback}
@@ -51,9 +51,9 @@ export async function aggregateAssignmentFeedback(
 
                     No extra explanations or text outside the JSON, please. Just the final JSON object.
                 `,
-            },
-        ],
-    });
+      },
+    ],
+  });
 
-    return JSON.parse(completion.choices[0].message.content);
+  return JSON.parse(completion.choices[0].message.content);
 }

@@ -43,7 +43,7 @@ function Nav({ role = "" }) {
       <ul className='flex justify-between  p-5 bg-white px-[5dvw] font-semibold text-sm'>
         <div className='flex items-center gap-4 md:gap-8'>
           <Link to='/home'>
-            <img className='h-8' src='/athea_logo_svg.svg' alt='athea logo' />
+            <img className='h-8' src='/athea_logo_svg.svg' alt='LAiLA logo' />
           </Link>
           <li>
             <NavLink

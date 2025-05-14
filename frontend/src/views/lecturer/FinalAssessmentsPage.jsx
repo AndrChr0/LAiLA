@@ -75,19 +75,13 @@ const FinalAssessmentsPage = () => {
           )}
         </div>
 
-        <h2 className='flex items-center gap-3 mb-[20px]'>
-          <span className='text-3xl font-normal'>AI Suggested Grade</span>
-          <div className='w-auto h-auto px-3 py-[0.5px] text-white bg-purple-700 rounded'>
-            AI
-          </div>
+        <h2 className='mb-[20px] text-3xl font-normal'>
+          Not Graded
         </h2>
         <Assessments assessments={isNotReviewed(assignmentId)} />
 
-        <h2 className='flex items-center gap-3 mb-[20px]'>
-          <span className='text-3xl font-normal'>Final Grades</span>
-          <div className='w-auto h-auto px-3 py-[0.5px] text-white bg-blue-400 rounded'>
-            Lecturer
-          </div>
+        <h2 className='mb-[20px] text-3xl font-normal'>
+          Graded
         </h2>
         <Assessments assessments={isReviewed(assignmentId)} />
       </main>

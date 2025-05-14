@@ -69,7 +69,7 @@ function AssessmentFormComponent({
   return (
     <div className='max-w-4xl mx-auto'>
       {allSectionsMarked && (
-        <div className='mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded-md'>
+        <div className='mb-4 p-3 bg-green-100 border border-green-400 text-black rounded-md'>
           All sections have been marked as assessed. You can now submit the
           assessment.
         </div>

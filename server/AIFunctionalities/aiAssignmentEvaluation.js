@@ -2,7 +2,7 @@ import OpenAI from "openai";
 import dotenv from "dotenv";
 dotenv.config({ path: "../.env" }); // load shared env
 dotenv.config(); // load server env
-const openai = new OpenAI({ apiKey: process.env.AI_API_KEY });
+const openai = new OpenAI({ apiKey: process.env.GPT_API_KEY });
 
 export async function evaluateSubmission(submission, criteria, description) {
   const submissionString = submission.join("");
@@ -10,7 +10,7 @@ export async function evaluateSubmission(submission, criteria, description) {
   const jsonCriteria = JSON.parse(criteria);
 
   const completion = await openai.chat.completions.create({
-    model: process.env.AI_MODEL,
+    model: process.env.GPT_FEEDBACK_MODEL,
     reasoning_effort: "medium",
     response_format: { type: "json_schema", json_schema: jsonCriteria },
     messages: [

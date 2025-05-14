@@ -260,13 +260,14 @@ const LecturerReportPage = () => {
 
             {/* Overview Tab */}
             <TabsContent value='overview' className='space-y-6'>
-              <div className='grid grid-cols-1 gap-6 lg:grid-cols-3'>
+              <div className='grid grid-cols-1 gap-6 lg:grid-cols-5'>
                 {/* Pie Chart */}
-                <Card className='lg:col-span-1'>
+                <Card className='lg:col-span-2'>
                   <CardHeader>
-                    <CardTitle>Pass/Fail Count</CardTitle>
+                    <CardTitle>Suggested Pass/Fail Rate</CardTitle>
                     <CardDescription>
-                      Number of passed and failed students
+                      Number of passed and failed students (suggestion based on
+                      AI feedback)
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -295,9 +296,9 @@ const LecturerReportPage = () => {
                 </Card>
 
                 {/* Overall course suggestions */}
-                <Card className='lg:col-span-2'>
+                <Card className='lg:col-span-3'>
                   <CardHeader>
-                    <CardTitle>Overall Course Suggestions</CardTitle>
+                    <CardTitle>Overall Course Proposals</CardTitle>
                     <CardDescription>
                       Suggestions for improvement across all assignment
                       submissions

@@ -89,7 +89,7 @@ function UploadAssignmentAssessment({
         {file && !loading && (
           <button
             disabled={loading}
-            className='h-10 px-5 m-2 text-white transition-colors duration-150 bg-[#2b6cb0] rounded-lg focus:shadow-outline hover:bg-[#2c5282]'
+            className=' w-48 h-10 px-5 mt-2 text-white transition-colors duration-150 bg-[#2b6cb0] rounded-lg focus:shadow-outline hover:bg-[#2c5282]'
             onClick={() => {
               setSubmitModule(true);
             }}
