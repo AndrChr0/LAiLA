@@ -69,7 +69,7 @@ const StudentCoursePage = () => {
     <main>
       <BackComponent destination='/home' />
       {currentCourse ? (
-        <div className='flex justify-around w-full mb-[5rem]'>
+        <div className='flex justify-between w-full mb-[5rem]'>
           <div >
             <h1 className='text-3xl font-bold text-gray-800'>
               {currentCourse.course_code} {currentCourse.course_name}
@@ -79,7 +79,7 @@ const StudentCoursePage = () => {
             </p>
           </div>
 
-          <div className="w-[40%]">
+          <div>
             <p>
               <span className='font-semibold'>Lecturer:</span>{" "}
               {currentCourse.course_coordinator}
